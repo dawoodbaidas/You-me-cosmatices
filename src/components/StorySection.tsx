@@ -1,84 +1,29 @@
 import Image from 'next/image'
-import { HeartIcon } from '@/components/icons'
 
 export default function StorySection({ productCount }: { productCount: number }) {
-  const stats = [
-    { value: `+${productCount}`, label: 'منتجات مختارة' },
-    { value: '100%', label: 'أصلي وآمن' },
-    { value: '24h', label: 'رد سريع واتساب' },
-  ]
+  return <section id="story" className="brand-story">
+    <div className="story-word" aria-hidden="true" dir="ltr">YOU. ME. BEAUTY.</div>
 
-  return (
-    <section id="story" className="relative mx-auto max-w-[1280px] px-4 md:px-8">
-      <div className="relative overflow-hidden rounded-[32px] border border-sand bg-gradient-to-br from-white via-[#FFF8F2] to-[#FFE8DE] p-8 md:p-14">
-        <div
-          aria-hidden
-          className="absolute -bottom-20 -right-20 h-[300px] w-[300px] rounded-full bg-gold/15 blur-[40px]"
-        />
-
-        <div className="grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[12px] font-bold text-rose shadow-sm">
-              <HeartIcon className="h-4 w-4" />
-              قصتنا
-            </div>
-
-            <h2 className="mt-5 text-[28px] font-extrabold leading-[1.25] md:text-[38px]">
-              You &amp; Me Cosmetics…
-              <br />
-              <span className="font-medium text-cocoa/70">لأن جمالك قصة، ونحن نهتم بتفاصيلها.</span>
-            </h2>
-
-            <p className="mt-5 max-w-[55ch] text-[15px] leading-7 text-cocoa/70">
-              بدأنا بشغف بسيط: أن تجد كل سيدة المنتج الذي يشبهها فعلاً. نختار منتجات عناية ومكياج
-              بتركيبات لطيفة، روائح تأخذك لعالم ثاني، وأسعار تناسب يومك.
-            </p>
-
-            <div className="mt-7 grid grid-cols-3 gap-4">
-              {stats.map((stat) => (
-                <div key={stat.label} className="rounded-[18px] bg-white/80 p-4 shadow-sm backdrop-blur">
-                  <div className="text-[20px] font-extrabold text-rose">{stat.value}</div>
-                  <div className="text-[12px] text-cocoa/60">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="relative mx-auto max-w-[420px] rounded-[28px] border border-white bg-white p-3 shadow-[0_24px_60px_rgba(74,46,42,0.12)]">
-              <div className="grid grid-cols-2 gap-3">
-                <Image
-                  src="/products/rose-water.webp"
-                  alt="ماء الورد"
-                  width={300}
-                  height={300}
-                  className="h-[160px] w-full rounded-[18px] object-cover"
-                />
-                <Image
-                  src="/products/aloe-gel.webp"
-                  alt="جل الألوفيرا"
-                  width={300}
-                  height={300}
-                  className="h-[160px] w-full rounded-[18px] object-cover"
-                />
-                <Image
-                  src="/products/primer.webp"
-                  alt="برايمر"
-                  width={600}
-                  height={340}
-                  className="col-span-2 h-[180px] w-full rounded-[18px] object-cover"
-                />
-              </div>
-              <div className="absolute -left-4 -top-4 rounded-full bg-sage px-4 py-2 text-[11px] font-bold text-white shadow">
-                طبيعي 99%
-              </div>
-              <div className="absolute -right-3 bottom-10 rounded-full bg-white px-4 py-2 text-[11px] font-bold shadow">
-                صنع بحب في الأردن 🌸
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="story-grid">
+      <div className="story-portrait">
+        <Image src="/products/hero.webp" alt="تفاصيل من عالم You & Me" fill sizes="(max-width: 767px) 82vw, 42vw" />
+        <span className="story-portrait-caption" dir="ltr">A NOTE ON BEAUTY.</span>
+        <span className="story-portrait-index" dir="ltr">EST. 2019 / AMMAN</span>
       </div>
-    </section>
-  )
+
+      <div className="story-copy">
+        <p className="scene-label">عن العلامة</p>
+        <h2>تفاصيل صغيرة،<br /><em>فرق كبير.</em></h2>
+        <p>اختيارات من العناية والعطور والمكياج، تجمعها فكرة واحدة: أن يكون كل شيء أقرب لذوقك.</p>
+
+        <div className="story-facts">
+          <div><strong>{productCount}</strong><span>اختيار<br />في المجموعة</span></div>
+          <div><strong dir="ltr">24H</strong><span>تجهيز<br />سريع للطلب</span></div>
+          <div><strong>JO</strong><span>توصيل<br />لكل الأردن</span></div>
+        </div>
+
+        <span className="story-signature" dir="ltr">Yours, You &amp; Me</span>
+      </div>
+    </div>
+  </section>
 }

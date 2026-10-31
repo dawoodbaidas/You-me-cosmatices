@@ -1,0 +1,6 @@
+[
+  "desktop hero photograph opens product details; Escape closes",
+  "CTA navigates to catalogue; add to cart; drawer opens; cart persists across reload",
+  "reduced motion leaves desktop scene visible",
+  "resizing back to mobile hides desktop scene and cleans up desktop media context"
+]

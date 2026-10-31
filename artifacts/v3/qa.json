@@ -1,0 +1,8 @@
+{
+  "errors": [],
+  "checks": [
+    "390px overflow and GSAP scroll transforms passed",
+    "1440px overflow and GSAP scroll transforms passed",
+    "38 offline products, category filtering, variant choice, cart add/quantity/remove, intercepted WhatsApp and reduced motion passed"
+  ]
+}

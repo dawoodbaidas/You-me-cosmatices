@@ -1,179 +1,49 @@
 'use client'
-
-import Image from 'next/image'
-import { useState } from 'react'
-import { BagIcon, FacebookIcon, HeartIcon, InstagramIcon, WhatsappIcon } from '@/components/icons'
-import { whatsappLink } from '@/lib/whatsapp'
+import { useEffect, useState } from 'react'
+import { BagIcon, CloseIcon } from './icons'
+import BoutiqueDialog from './BoutiqueDialog'
+import type { Collection } from '@/lib/taxonomy'
 import type { SiteSettings } from '@/types/product'
-import styles from './Hero.module.css'
 
-const NAV = [
-  { id: 'home', label: 'الرئيسية' },
-  { id: 'shop', label: 'المتجر' },
-  { id: 'story', label: 'قصتنا' },
-  { id: 'contact', label: 'تواصل' },
-] as const
-
-interface HeaderProps {
-  settings: SiteSettings
-  cartCount: number
-  favoriteCount: number
-  onOpenCart: () => void
-  onScrollTo: (id: string) => void
-}
-
-export default function Header({
-  settings,
-  cartCount,
-  favoriteCount,
-  onOpenCart,
-  onScrollTo,
-}: HeaderProps) {
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [searchMessage, setSearchMessage] = useState('')
-
-  return (
-    <header className={styles.header}>
-      <div className={styles.headerInner}>
-        <div className={styles.mobileControls}>
-          <details className={styles.mobileMenu}>
-            <summary aria-label="فتح القائمة">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M4 6h16M4 12h12M4 18h16" /></svg>
-            </summary>
-            <nav aria-label="القائمة الرئيسية">
-              {NAV.map(item => <button key={item.id} type="button" onClick={event => {
-                onScrollTo(item.id)
-                event.currentTarget.closest('details')?.removeAttribute('open')
-              }}>{item.label}</button>)}
-            </nav>
-          </details>
-          <button type="button" aria-label="البحث عن منتج" aria-expanded={searchOpen} aria-controls="hero-search" onClick={() => setSearchOpen(!searchOpen)}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
-          </button>
-        </div>
-        <div className={`${styles.brandBlock} flex items-center gap-6`}>
-          <button
-            type="button"
-            onClick={() => onScrollTo('home')}
-            className="flex items-center gap-3"
-            aria-label="الصفحة الرئيسية"
-          >
-            <span className={styles.logo}>
-              <Image
-                src="/brand/logo.jpg"
-                alt="You &amp; Me"
-                width={60}
-                height={60}
-                className="h-full w-full object-cover"
-                loading="eager"
-              />
-            </span>
-            <span className="hidden text-right leading-none sm:block">
-              <span className="block text-[11px] tracking-[0.25em] text-[#B78A4E]">YOU &amp; ME</span>
-              <span className="block text-[17px] font-extrabold tracking-wide text-cocoa">
-                COSMETICS
-              </span>
-            </span>
-          </button>
-
-          <nav className="hidden items-center gap-7 md:flex">
-            {NAV.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                data-testid={`nav-${item.id}`}
-                onClick={() => onScrollTo(item.id)}
-                className="text-[14.5px] font-medium text-cocoa/70 transition hover:text-cocoa"
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        <div className={`${styles.headerActions} flex items-center gap-2 md:gap-3`}>
-          <button
-            type="button"
-            onClick={onOpenCart}
-            aria-label="سلة التسوق"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-sand bg-white shadow-sm transition hover:shadow"
-          >
-            <BagIcon className="h-[18px] w-[18px]" />
-            {cartCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-rose text-[11px] font-bold text-white">
-                {cartCount}
-              </span>
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onScrollTo('shop')}
-            aria-label="المفضلة"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-sand bg-white shadow-sm"
-          >
-            <HeartIcon
-              className={`h-[18px] w-[18px] ${favoriteCount > 0 ? 'fill-rose text-rose' : ''}`}
-            />
-            {favoriteCount > 0 && (
-              <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-rose" />
-            )}
-          </button>
-
-          <div className="hidden items-center gap-2 md:flex">
-            {settings.facebookUrl && (
-              <a
-                href={settings.facebookUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-sand bg-white shadow-sm transition hover:shadow text-cocoa/70 hover:text-[#1877F2]"
-              >
-                <FacebookIcon className="h-4 w-4" />
-              </a>
-            )}
-            {settings.instagramUrl && (
-              <a
-                href={settings.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-sand bg-white shadow-sm transition hover:shadow text-cocoa/70 hover:text-rose"
-              >
-                <InstagramIcon className="h-4 w-4" />
-              </a>
-            )}
-          </div>
-
-          <a
-            href={whatsappLink(settings.whatsappNumber, settings.whatsappMessage)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden items-center gap-2 rounded-full bg-cocoa px-5 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(74,46,42,0.2)] transition hover:bg-rose md:flex"
-          >
-            <WhatsappIcon className="h-4 w-4" />
-            واتساب
-          </a>
-        </div>
-      </div>
-      {searchOpen && <form id="hero-search" role="search" className={styles.searchPanel} onSubmit={event => {
-        event.preventDefault()
-        const query = String(new FormData(event.currentTarget).get('query') ?? '').trim().toLocaleLowerCase('ar')
-        if (!query) return
-        const cards = document.querySelectorAll<HTMLElement>('#shop article')
-        const match = Array.from(cards).find(card => card.textContent?.toLocaleLowerCase('ar').includes(query))
-        if (match) {
-          match.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' })
-          match.setAttribute('tabindex', '-1')
-          match.focus({ preventScroll: true })
-          setSearchOpen(false)
-          setSearchMessage('')
-        } else setSearchMessage('لا توجد نتيجة ضمن المنتجات المعروضة. جرّبي فئة أخرى أو اسمًا آخر.')
-      }}>
-        <label htmlFor="hero-search-input">ابحثي في المنتجات المعروضة</label>
-        <div><input id="hero-search-input" name="query" type="search" required autoFocus placeholder="اسم المنتج" /><button type="submit">بحث</button></div>
-        <p role="status">{searchMessage}</p>
-      </form>}
-    </header>
-  )
+export default function Header({ settings, cartCount, onOpenCart, onScrollTo, groups, selected, onSelect, onSearch }: {
+ onSearch:()=>void; settings: SiteSettings; cartCount: number; favoriteCount: number; onOpenCart:()=>void; onScrollTo:(id:string)=>void
+ groups:Collection[]; selected:string|null; onSelect:(id:string|null)=>void
+}) {
+ const [open,setOpen]=useState(false)
+ const [mega,setMega]=useState(false)
+ const [expanded,setExpanded]=useState<string|null>(null)
+ const [active,setActive]=useState('home')
+ useEffect(()=>{
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)setActive(entry.target.id)}),{rootMargin:'-20% 0px -65% 0px'})
+  for(const id of ['home','bestsellers','shop','contact']) {const section=document.getElementById(id);if(section)observer.observe(section)}
+  return ()=>observer.disconnect()
+ },[])
+ const choose=(id:string|null)=>{ onSelect(id); setOpen(false); setMega(false) }
+ const search=()=>{setOpen(false);setMega(false);onSearch()}
+ return <>
+  <div className="world-header-wrap shop-header">
+   <div className="announcement"><span>{settings.storeAnnouncement}</span><span dir="ltr" className="announcement-tag">YOU &amp; ME / JORDAN</span></div>
+   <header className="world-header">
+    <button className="menu-trigger" aria-label="فتح القائمة" aria-expanded={open} onClick={()=>setOpen(true)}><span/><span/><small>MENU</small></button>
+    <button className="world-brand" dir="ltr" onClick={()=>onScrollTo('home')}>YOU<span>&amp;</span>ME<small>COSMETICS</small></button>
+    <nav className="world-desktop-nav" aria-label="التنقل الرئيسي">
+     <button aria-current={active==='home'?'location':undefined} onClick={()=>onScrollTo('home')}>الرئيسية</button><button aria-current={active==='bestsellers'?'location':undefined} onClick={()=>onScrollTo('bestsellers')}>الأكثر طلبًا</button><button aria-current={active==='shop'?'location':undefined} onClick={()=>choose(null)}>المتجر</button>
+     <div className="mega-anchor" onMouseEnter={()=>setMega(true)} onMouseLeave={()=>setMega(false)} onKeyDown={e=>{if(e.key==='Escape')setMega(false)}}>
+      <button aria-expanded={mega} aria-controls="shop-mega" onClick={()=>setMega(!mega)}>الأقسام ▾</button>
+      {mega && <div id="shop-mega" className="shop-mega">{groups.map(group=><div key={group.id}><button onClick={()=>choose(group.id)}>{group.label} <small>({group.productIds.length})</small></button>{group.children.map(child=><button key={child.id} onClick={()=>choose(child.id)}>{child.label} <small>({child.productIds.length})</small></button>)}</div>)}</div>}
+     </div>
+     {groups.some(g=>g.id==='gifts')&&<button onClick={()=>choose('gifts')}>الهدايا</button>}<button onClick={()=>onScrollTo('contact')}>عن العلامة</button>
+    </nav>
+    <div className="world-nav-actions"><button className="nav-search" aria-label="البحث" onClick={search}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg></button><button className="header-bag" onClick={onOpenCart} aria-label={`السلة، ${cartCount} منتجات`}><BagIcon/>{cartCount>0&&<span>{cartCount}</span>}</button></div>
+   </header>
+   <nav className="mobile-departments" aria-label="أقسام المتجر"><button aria-pressed={!selected} onClick={()=>choose(null)}>الكل</button>{groups.map(g=><button key={g.id} aria-pressed={selected===g.id||g.children.some(c=>c.id===selected)} onClick={()=>choose(g.id)}>{g.label}</button>)}</nav>
+  </div>
+  <BoutiqueDialog open={open} onClose={()=>setOpen(false)} label="قائمة المتجر" className="menu-dialog">
+   <div className="shopping-menu" dir="rtl"><div className="shopping-menu-head"><strong dir="ltr">YOU &amp; ME</strong><button className="icon-button" aria-label="إغلاق القائمة" onClick={()=>setOpen(false)}><CloseIcon/></button></div>
+    <nav aria-label="التنقل"><button onClick={()=>{setOpen(false);onScrollTo('home')}}>الرئيسية</button><button onClick={()=>{setOpen(false);onScrollTo('bestsellers')}}>الأكثر طلبًا</button><button onClick={()=>choose(null)}>جميع المنتجات</button></nav>
+    <p className="shopping-menu-label">تسوق حسب القسم</p>
+    {groups.map(group=><div className="shopping-group" key={group.id}><div><button onClick={()=>group.children.length?setExpanded(expanded===group.id?null:group.id):choose(group.id)} aria-expanded={group.children.length?expanded===group.id:undefined} aria-current={selected===group.id?'page':undefined}>{group.label} <small>{group.productIds.length}</small></button>{group.children.length>0&&<button className="expand-group" aria-label={`عرض أقسام ${group.label}`} aria-expanded={expanded===group.id} onClick={()=>setExpanded(expanded===group.id?null:group.id)}>{expanded===group.id?'−':'+'}</button>}</div>{expanded===group.id&&<div className="shopping-subgroups"><button onClick={()=>setExpanded(null)}>← رجوع إلى الأقسام</button><button onClick={()=>choose(group.id)}>كل {group.label} <small>{group.productIds.length}</small></button>{group.children.map(child=><button key={child.id} aria-current={selected===child.id?'page':undefined} onClick={()=>choose(child.id)}>{child.label} <small>{child.productIds.length}</small></button>)}</div>}</div>)}
+   </div>
+  </BoutiqueDialog>
+ </>
 }

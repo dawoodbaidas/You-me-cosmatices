@@ -1,0 +1,1 @@
+const fs=require('fs');const p='src/components/storefront.css';let s=fs.readFileSync(p,'utf8');s=s.replace('height:min(640px,86dvh)','height:min(560px,86dvh)');s=s.replace(/(\.boutique \.quickview-buy \{[\s\S]*?font-size:) 11px;/,'$1 15px;');fs.writeFileSync(p,s);

@@ -1,0 +1,52 @@
+.boutique .hero-visual { height:490px; align-self:center; }
+.boutique .hero-collage { isolation:isolate; }
+.boutique .hero-collage::before { content:''; position:absolute; width:94%; aspect-ratio:1; left:3%; top:5%; border:1px solid #b3956d45; border-radius:50%; background:radial-gradient(circle,#fffdf8,#e8e2d6); }
+.boutique .hero-frame { width:43%; aspect-ratio:1; padding:0; border-radius:50%; background:#fffdf8; overflow:visible; box-shadow:0 15px 35px #443a271a; }
+.boutique .hero-frame-img { position:absolute; inset:0; aspect-ratio:auto; border-radius:50%; margin:0; background:transparent; overflow:hidden; }
+.boutique .hero-frame-img img { object-fit:cover; padding:0; }
+.boutique .hero-frame-meta { display:none; }
+.boutique .hero-frame-0 { left:0; right:auto; top:39%; bottom:auto; transform:rotate(-8deg); }
+.boutique .hero-frame-1 { left:28%; right:auto; top:0; bottom:auto; width:49%; transform:rotate(0); }
+.boutique .hero-frame-2 { left:59%; right:auto; top:39%; bottom:auto; transform:rotate(8deg); }
+.boutique .best-arc-scene { display:flex; flex-direction:column; height:auto; max-height:none; min-height:690px; padding:38px 0 30px; overflow:hidden; background:#f3f0e8; }
+.boutique .arc-header { position:relative; top:auto; text-align:center; padding:0 20px; }
+.boutique .arc-header h2 { margin:5px 0; font-size:48px; }
+.boutique .arc-header>p:last-child { color:#736e63; font-size:14px; }
+.boutique .arc-rail { display:block; position:relative; width:100%; height:370px; margin:22px 0 0; padding:0; overflow:visible; flex:none; }
+.boutique .arc-card { position:absolute; left:50%; top:34%; width:240px; aspect-ratio:1; margin:0; will-change:transform; }
+.boutique .arc-photo { position:relative; overflow:hidden; border-radius:50%; background:#fffcf6; border:1px solid #ded7c9; box-shadow:0 14px 32px #3e34251a; }
+.boutique .arc-photo img { object-fit:cover; padding:0; }
+.boutique .hero-frame-img img { padding:0; }
+.boutique .hero-cta.primary { opacity:1 !important; transform:none !important; padding:0 24px; font-size:15px; }
+.boutique .arc-guide { position:absolute; width:min(84vw,960px); aspect-ratio:1; left:50%; top:34%; transform:translate(-50%,0); border:1px solid #b3956d55; border-radius:50%; pointer-events:none; }
+.boutique .arc-info-panel { position:relative; inset:auto; width:100%; min-height:156px; padding:0 20px; gap:8px; text-align:center; background:#f3f0e8; }
+.boutique .arc-active-title { font-size:22px; max-width:38ch; line-height:1.5; }
+.boutique .arc-active-purchase strong { font-size:23px; }
+.boutique .arc-active-add { padding:0 22px; border-radius:12px; min-height:46px; }
+.boutique :is(.hero-frame-img,.arc-photo,.object-frame-inner,.editorial-object-photo,.spotlight-photo,.object-photo,.world-frame-photo,.gift-photo-frame,.discovery-photo) {
+ position:relative; overflow:hidden; padding:0; isolation:isolate;
+ border-radius:50% 50% 12px 12px / 38% 38% 12px 12px;
+}
+.boutique :is(.hero-frame-img,.arc-photo,.object-frame-inner,.editorial-object-photo,.spotlight-photo,.object-photo,.world-frame-photo,.gift-photo-frame,.discovery-photo) > img {
+ position:absolute; inset:0; width:100%; height:100%; max-width:none;
+ object-fit:cover; object-position:center; padding:0; display:block;
+}
+.boutique .hero-frame { aspect-ratio:4 / 5; border-radius:50% 50% 12px 12px / 38% 38% 12px 12px; }
+.boutique .hero-frame-img { position:absolute; inset:0; width:100%; height:100%; }
+.boutique .arc-card { aspect-ratio:4 / 5; }
+.boutique .arc-photo { width:100%; height:100%; }
+.boutique .object-frame-inner { width:100%; height:100%; }
+@media(max-width:767px) {
+ .boutique .hero-visual { height:310px; margin:24px 0 0; }
+ .boutique .hero-main { min-height:0; }
+ .boutique .hero-content { padding-top:8px; }
+ .boutique .hero-editorial h1 { font-size:43px; }
+ .boutique .hero-collage::before { width:86%; left:7%; top:0; }
+ .boutique .hero-frame-0,.boutique .hero-frame-2 { top:36%; }
+ .boutique .best-arc-scene { min-height:590px; padding-top:30px; }
+ .boutique .arc-header h2 { font-size:37px; }
+ .boutique .arc-rail { height:300px; margin-top:28px; touch-action:pan-y; }
+ .boutique .arc-card { top:31%; width:172px; }
+ .boutique .arc-guide { top:31%; }
+ .boutique .arc-active-title { font-size:19px; }
+}
