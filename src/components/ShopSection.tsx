@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { CATEGORY_FILTERS } from '@/lib/categories'
 import type { CategoryFilter, Product } from '@/types/product'
 import ProductCard from './ProductCard'
+import { matchesProduct } from '@/lib/search'
 import { ArrowIcon, CloseIcon } from './icons'
 import type { Collection } from '@/lib/taxonomy'
 
@@ -31,10 +32,7 @@ export default function ShopSection({ products, currency, activeFilter, onFilter
   const viewKey = `${collection?.id ?? activeFilter}:${query}`
 
   const visible = useMemo(() => {
-    const term = query.trim().toLocaleLowerCase('ar')
-    return term
-      ? products.filter(product => [product.nameAr, product.nameEn, product.categoryLabel, product.description ?? '', ...product.variants.map(v=>v.label)].some(value => value.toLocaleLowerCase('ar').includes(term)))
-      : products
+    return products.filter(product => matchesProduct(product, query))
   }, [query, products])
 
   const visibleCount = pagination.key === viewKey ? pagination.count : INITIAL_VISIBLE

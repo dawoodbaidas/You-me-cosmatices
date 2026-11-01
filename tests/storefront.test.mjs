@@ -59,8 +59,8 @@ test('WhatsApp order uses selected labels, quantities, exact totals and establis
   const message = buildOrderMessage(lines, { currency: 'JOD', whatsappMessage: 'مرحبا' })
   const expected = [
     'مرحبا', 'أرغب بطلب المنتجات التالية:', '',
-    `1. ${product.nameAr} (${variant.label}) - الكمية: 2 × ${variant.price} JOD = ${(variant.price * 2).toFixed(2)} JOD`,
-    '', `المجموع الكلي: ${(variant.price * 2).toFixed(2)} JOD`, '', 'بيانات التوصيل:', 'الاسم: ', 'العنوان: ', 'رقم الهاتف: ', '', 'شكراً لكم 💕',
+    `1. ${product.nameAr} (${variant.label}) - الكمية: 2 × ${variant.price.toFixed(2)} د.أ = ${(variant.price * 2).toFixed(2)} د.أ`,
+    '', `المجموع الكلي: ${(variant.price * 2).toFixed(2)} د.أ`, '', 'بيانات التوصيل:', 'الاسم: ', 'العنوان: ', 'رقم الهاتف: ', '', 'شكراً لكم 💕',
   ].join('\n')
   assert.equal(message, expected)
   const link = new URL(whatsappLink('+962 7 1234 5678', message))
@@ -74,5 +74,14 @@ test('storefront stylesheet encoding and scope protect the shared admin theme', 
   assert.ok(css.includes('.boutique {'))
   assert.ok(css.includes('prefers-reduced-motion: reduce'))
   assert.ok(!/^(body|html|:root)\s*\{/m.test(css))
+})
+
+test('Arabic search matches variants, mixed words and spelling without diacritics', () => {
+  const { matchesProduct } = helper('search')
+  const product = { ...products[0], nameAr: 'إشراقة للبشرة', nameEn: 'Glow Set', variants: [{ label: 'وَرْد' }] }
+  assert.equal(matchesProduct(product, 'اشراقه ورد'), true)
+  assert.equal(matchesProduct(product, ' GLOW   بشره '), true)
+  assert.equal(matchesProduct(product, 'غيرموجود'), false)
+  assert.equal(matchesProduct({ ...product, isActive: false }, 'glow'), false)
 })
 

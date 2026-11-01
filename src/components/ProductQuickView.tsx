@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
+import ProductImage from './ProductImage'
 import BoutiqueDialog from './BoutiqueDialog'
 import { BagIcon, CloseIcon, HeartIcon, WhatsappIcon } from '@/components/icons'
 import { discountPercent, formatJod } from '@/lib/format'
@@ -51,8 +51,9 @@ export default function ProductQuickView({
           <CloseIcon />
         </button>
 
+        <div className="quickview-body">
         <div className="quickview-media">
-          {product.imageUrl && <Image src={product.imageUrl} alt={product.nameAr} fill sizes="(max-width: 767px) 100vw, 380px" />}
+          <ProductImage key={product.imageUrl} src={product.imageUrl} alt={product.nameAr} sizes="(max-width: 767px) 90vw, 440px" eager />
           <span className="quickview-media-index" dir="ltr">Y&amp;M / THE EDIT</span>
           {product.badge && <span className="quickview-badge">{product.badge}</span>}
         </div>
@@ -88,6 +89,7 @@ export default function ProductQuickView({
             </ul>
           </div>}
 
+        </div>
         </div>
         <div className="quickview-purchase">
           <div className="quantity-stepper"><button aria-label="تقليل الكمية" disabled={quantity === 1} onClick={() => setQuantity(q => q - 1)}>−</button><span aria-live="polite">{quantity}</span><button aria-label="زيادة الكمية" disabled={quantity === 99} onClick={() => setQuantity(q => q + 1)}>+</button></div>

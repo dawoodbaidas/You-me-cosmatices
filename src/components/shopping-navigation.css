@@ -1,5 +1,5 @@
 .boutique .shop-header { position:sticky; top:0; z-index:90; background:#faf8f2; box-shadow:0 2px 12px #2b281b10; }
-.boutique :is(#home,#bestsellers,#shop,#contact) { scroll-margin-top:150px; }
+.boutique :is(#home,#bestsellers,#shop,#contact) { scroll-margin-top:calc(var(--header-height,120px) + 12px); }
 .boutique .world-header { background:#faf8f2; }
 .boutique .shop-breadcrumb { display:flex; align-items:center; gap:10px; color:#777368; margin-bottom:18px; font-size:14px; }
 .boutique .category-tabs { display:none; }
@@ -45,6 +45,24 @@
  .boutique .mobile-departments button[aria-pressed=true] { color:white; background:#30372d; border-color:#30372d; }
  .boutique .menu-dialog { max-width:min(390px,90vw); background:#faf8f2; }
  .boutique .cart-sheet { padding-bottom:calc(18px + env(safe-area-inset-bottom)); }
+}
+
+.boutique .header-bag { position:relative; overflow:visible; }
+.boutique .header-bag > span { position:absolute; inset:auto; top:-4px; right:-5px; min-width:20px; width:auto; height:20px; padding:0 4px; display:grid; place-items:center; border-radius:12px; background:var(--gold); color:var(--ink); font:700 11px/1 var(--font-tajawal),sans-serif; }
+.boutique:has(dialog[open]) .mobile-shopping-bar,.boutique:has(dialog[open]) .boutique-toast-wrap { display:none; }
+@media(max-width:899px) {
+ .boutique .announcement { min-height:24px; padding:3px 10px; font-size:10px; }
+ .boutique .world-header { height:52px; padding-inline:12px; }
+ .boutique .world-brand { font-size:20px; line-height:1; }
+ .boutique .world-brand small { font-size:7px; margin-top:4px; }
+ .boutique .menu-trigger small { display:none; }
+ .boutique .menu-trigger,.boutique .nav-search,.boutique .header-bag { min-width:44px; min-height:44px; }
+ .boutique .mobile-departments { padding:3px 10px; gap:6px; }
+ .boutique .mobile-departments button { min-height:40px; padding:2px 12px; font-size:12px; }
+ .boutique .shopping-menu { padding:14px 16px 24px; }
+ .boutique .shopping-menu nav button,.boutique .shopping-group button { min-height:44px; font-size:14px; }
+ .boutique .shopping-menu-head { padding-bottom:10px; }
+ .boutique .shopping-menu-label { margin-top:12px; }
 }
 @media(min-width:1024px) {
  .boutique .world-desktop-nav button:nth-child(n) { display:block; }

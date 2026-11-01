@@ -11,7 +11,6 @@ import './mobile-hero.css'
 import './cart-phase1.css'
 import './shopping-navigation.css'
 import './orbit.css'
-import './editorial-motion.css'
 import CartDrawer, { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/components/CartDrawer'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
@@ -26,15 +25,6 @@ import { buildTaxonomy, findCollection } from '@/lib/taxonomy'
 import { useCartStore, useFavoritesStore } from '@/lib/stores'
 import { buildOrderMessage, whatsappLink } from '@/lib/whatsapp'
 import type { CategoryFilter, Product, SiteSettings } from '@/types/product'
-
-const SECTION_LABELS: Record<string, string> = {
-  home: 'الرئيسية',
-  bestsellers: 'الأكثر طلبًا',
-  shop: 'المتجر',
-  gifts: 'الهدايا',
-  story: 'عن العلامة',
-  contact: 'تواصل',
-}
 
 interface StorefrontProps {
   products: Product[]
@@ -140,9 +130,8 @@ export default function Storefront({ products, settings }: StorefrontProps) {
     (id: string) => {
       document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
       window.history.replaceState(null, '', `#${id}`)
-      notify(`الانتقال إلى ${SECTION_LABELS[id] ?? id}`)
     },
-    [notify],
+    [],
   )
 
   /* --------------------------------------------------------------- checkout */
@@ -167,8 +156,6 @@ export default function Storefront({ products, settings }: StorefrontProps) {
 
   return (
     <StorefrontMotion>
-      <link rel="preload" href="/fonts/tajawal/Tajawal-Regular.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
-      <link rel="preload" href="/fonts/tajawal/Tajawal-Medium.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
       <a href="#shop" className="skip-link">انتقلي إلى المنتجات</a>
 
       <Header
@@ -189,7 +176,6 @@ export default function Storefront({ products, settings }: StorefrontProps) {
           products={products}
           currency={settings.currency}
           onAddToCart={addProduct}
-          onBrowse={() => { setCollectionId(null); setFilter('all'); scrollTo('shop') }}
           onOpenDetails={setQuickViewId}
         />
 
@@ -251,10 +237,10 @@ export default function Storefront({ products, settings }: StorefrontProps) {
         total={total + (totalCount > 0 && total < FREE_SHIPPING_THRESHOLD ? SHIPPING_FEE : 0)}
         settings={settings}
         onOpenCart={() => { setQuickViewId(null); setCartOpen(true) }}
-        open={cartOpen}
+        open={cartOpen || searchOpen || quickViewId !== null}
       />
 
-      <Toast toast={toast} />
+      <Toast toast={cartOpen || searchOpen || quickViewId !== null ? null : toast} />
     </StorefrontMotion>
   )
 }

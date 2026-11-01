@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BagIcon, CloseIcon } from './icons'
 import BoutiqueDialog from './BoutiqueDialog'
 import type { Collection } from '@/lib/taxonomy'
@@ -13,6 +13,14 @@ export default function Header({ settings, cartCount, onOpenCart, onScrollTo, gr
  const [mega,setMega]=useState(false)
  const [expanded,setExpanded]=useState<string|null>(null)
  const [active,setActive]=useState('home')
+ const header=useRef<HTMLDivElement>(null)
+ useEffect(()=>{
+  const element=header.current,root=element?.closest<HTMLElement>('.boutique')
+  if(!element||!root)return
+  const observer=new ResizeObserver(()=>root.style.setProperty('--header-height',`${element.getBoundingClientRect().height}px`))
+  observer.observe(element)
+  return()=>observer.disconnect()
+ },[])
  useEffect(()=>{
   const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting)setActive(entry.target.id)}),{rootMargin:'-20% 0px -65% 0px'})
   for(const id of ['home','bestsellers','shop','contact']) {const section=document.getElementById(id);if(section)observer.observe(section)}
@@ -21,7 +29,7 @@ export default function Header({ settings, cartCount, onOpenCart, onScrollTo, gr
  const choose=(id:string|null)=>{ onSelect(id); setOpen(false); setMega(false) }
  const search=()=>{setOpen(false);setMega(false);onSearch()}
  return <>
-  <div className="world-header-wrap shop-header">
+  <div ref={header} className="world-header-wrap shop-header">
    <div className="announcement"><span>{settings.storeAnnouncement}</span><span dir="ltr" className="announcement-tag">YOU &amp; ME / JORDAN</span></div>
    <header className="world-header">
     <button className="menu-trigger" aria-label="فتح القائمة" aria-expanded={open} onClick={()=>setOpen(true)}><span/><span/><small>MENU</small></button>

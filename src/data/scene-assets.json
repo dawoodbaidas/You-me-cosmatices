@@ -1,0 +1,112 @@
+{
+  "body-mist": {
+    "src": "/products/cutouts/body-mist.png",
+    "source": "/products/body-mist.webp",
+    "width": 1024,
+    "height": 1536,
+    "bounds": {
+      "x": 273,
+      "y": 64,
+      "width": 593,
+      "height": 1422
+    },
+    "bgA": [
+      246,
+      190,
+      206
+    ],
+    "bgB": [
+      224,
+      119,
+      148
+    ]
+  },
+  "aloe-foam": {
+    "src": "/products/cutouts/aloe-foam.png",
+    "source": "/products/aloe-foam.webp",
+    "width": 1024,
+    "height": 1536,
+    "bounds": {
+      "x": 191,
+      "y": 25,
+      "width": 642,
+      "height": 1488
+    },
+    "bgA": [
+      249,
+      248,
+      249
+    ],
+    "bgB": [
+      241,
+      239,
+      241
+    ]
+  },
+  "foundation": {
+    "src": "/products/cutouts/foundation.png",
+    "source": "/products/foundation.webp",
+    "width": 1024,
+    "height": 1536,
+    "bounds": {
+      "x": 262,
+      "y": 37,
+      "width": 524,
+      "height": 1477
+    },
+    "bgA": [
+      248,
+      247,
+      247
+    ],
+    "bgB": [
+      240,
+      238,
+      238
+    ]
+  },
+  "mascara": {
+    "src": "/products/cutouts/mascara.png",
+    "source": "/products/mascara.webp",
+    "width": 1024,
+    "height": 1536,
+    "bounds": {
+      "x": 387,
+      "y": 17,
+      "width": 251,
+      "height": 1502
+    },
+    "bgA": [
+      250,
+      232,
+      236
+    ],
+    "bgB": [
+      240,
+      206,
+      214
+    ]
+  },
+  "musk-tahara-oil": {
+    "src": "/products/cutouts/musk-tahara-oil.png",
+    "source": "/products/musk-tahara-oil.webp",
+    "width": 1194,
+    "height": 1317,
+    "bounds": {
+      "x": 258,
+      "y": 155,
+      "width": 691,
+      "height": 1114
+    },
+    "bgA": [
+      247,
+      245,
+      246
+    ],
+    "bgB": [
+      237,
+      232,
+      236
+    ]
+  }
+}

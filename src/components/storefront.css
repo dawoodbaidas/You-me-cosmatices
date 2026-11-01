@@ -1,7 +1,4 @@
 /* V4 storefront — every selector is scoped beneath .boutique so the shared admin theme is untouched. */
-@font-face { font-family: 'Boutique Tajawal'; src: url('/fonts/tajawal/Tajawal-Regular.ttf') format('truetype'); font-weight: 400; font-display: swap; }
-@font-face { font-family: 'Boutique Tajawal'; src: url('/fonts/tajawal/Tajawal-Medium.ttf') format('truetype'); font-weight: 500; font-display: swap; }
-@font-face { font-family: 'Boutique Tajawal'; src: url('/fonts/tajawal/Tajawal-Bold.ttf') format('truetype'); font-weight: 700 900; font-display: swap; }
 
 .boutique {
   --paper: #fcfbf7;
@@ -31,7 +28,7 @@
   padding-bottom: calc(76px + env(safe-area-inset-bottom));
   background: var(--paper);
   color: var(--ink);
-  font-family: 'Boutique Tajawal', var(--font-tajawal), system-ui, sans-serif;
+  font-family: var(--font-tajawal), system-ui, sans-serif;
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -1420,7 +1417,7 @@
   border: 0;
   background: transparent;
   color: var(--ink);
-  font-size: 11.5px;
+  font-size: 16px;
   outline: 0;
 }
 .catalog-search input::placeholder { color: var(--muted); }
@@ -2728,3 +2725,47 @@
   .object-price strong { font-size: 14px; }
   .product-add { min-width: 96px; height: 37px; font-size: 10px; }
 }
+
+/* Stable product media and one scrolling surface above the purchase controls. */
+.boutique .quickview-sheet { display:flex; flex-direction:column; width:min(920px,100%); height:auto; max-height:calc(100dvh - 24px); }
+.boutique .quickview-body { min-height:0; overflow:auto; overscroll-behavior:contain; }
+.boutique .quickview-media { height:clamp(240px,36dvh,360px); min-height:240px; width:100%; }
+.boutique .quickview-media > img { object-fit:contain; padding:20px; }
+.boutique .quickview-info { overflow:visible; padding:18px 20px; }
+.boutique .quickview-purchase { flex:none; display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; gap:8px 12px; }
+.boutique .quickview-purchase .quickview-actions { margin:0; }
+.boutique .quickview-note { grid-column:1 / -1; margin:0; font-size:11px; }
+.boutique .quickview-buy,.boutique .quickview-icon-button,.boutique .quickview-close { min-width:44px; min-height:44px; }
+.boutique .quickview-close { z-index:5; background:var(--paper); }
+.boutique .quickview-description { font-size:14px; }
+.boutique .product-image-fallback { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:var(--muted); font-size:12px; background:var(--paper-deep); }
+.boutique .object-frame-inner { overflow:visible; }
+.boutique .object-frame-inner img { padding:8%; object-fit:contain; }
+.boutique .beauty-object:hover .object-frame-inner img { transform:none; }
+.boutique .object-controls-v2 { margin-top:auto; }
+.boutique .object-price-v2 { flex-wrap:wrap; }
+.boutique .object-title-v2 { height:3em; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+.boutique .object-subtitle-v2 { min-height:1.6em; }
+.boutique .catalog-search input { font-size:16px; }
+.boutique { --bottom-space:24px; padding-bottom:var(--bottom-space); }
+.boutique:has(.boutique-toast) { --bottom-space:100px; }
+html:has(.boutique) { scroll-padding-bottom:160px; scrollbar-gutter:stable; }
+.boutique .boutique-toast-wrap { bottom:16px; }
+@media(max-width:767px) {
+ .boutique:has(.mobile-shopping-bar.is-visible) { --bottom-space:calc(100px + env(safe-area-inset-bottom)); }
+ .boutique:has(.mobile-shopping-bar.is-visible):has(.boutique-toast) { --bottom-space:calc(176px + env(safe-area-inset-bottom)); }
+ .boutique:has(.mobile-shopping-bar.is-visible) .boutique-toast-wrap { bottom:calc(88px + env(safe-area-inset-bottom)); }
+ .boutique .quickview-purchase { padding:10px 12px calc(10px + env(safe-area-inset-bottom)); gap:8px; }
+ .boutique .quickview-buy { font-size:13px; }
+ .boutique .quickview-actions { flex-wrap:wrap; }
+ .boutique .object-title-v2 { font-size:16px; }
+ .boutique .object-price-v2 strong { font-size:19px; }
+}
+@media(min-width:768px) {
+ .boutique .quickview-sheet { max-height:calc(100dvh - 48px); }
+ .boutique .quickview-body { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+ .boutique .quickview-media { grid-area:auto; position:sticky; top:0; height:clamp(320px,58dvh,520px); }
+ .boutique .quickview-info { grid-area:auto; padding:24px; }
+ .boutique .quickview-purchase { grid-area:auto; }
+}
+@media(max-height:600px) { .boutique .quickview-media { min-height:200px; height:200px; } }

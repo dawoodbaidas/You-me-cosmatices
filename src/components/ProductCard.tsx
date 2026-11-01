@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import ProductImage from './ProductImage'
 import { useEffect, useRef, useState } from 'react'
 import { BagIcon, CheckIcon, HeartIcon, ArrowIcon } from './icons'
 import { discountPercent, formatJod } from '@/lib/format'
@@ -31,7 +31,7 @@ export default function ProductCard({ product, currency, isFavorite, selectedVar
       <button className="object-frame" onClick={() => onOpenDetails(product.id)} aria-label={`عرض تفاصيل ${product.nameAr}`}>
         <div className="object-frame-inner">
           {product.imageUrl
-            ? <Image src={product.imageUrl} alt={product.nameAr} fill sizes="(max-width: 767px) 46vw, (max-width: 1023px) 30vw, 23vw" />
+            ? <ProductImage src={product.imageUrl} alt={product.nameAr} sizes="(max-width: 767px) 46vw, (max-width: 1023px) 30vw, 23vw" />
             : <span className="object-placeholder"><BagIcon /><span dir="ltr">YOU &amp; ME</span></span>}
         </div>
       </button>

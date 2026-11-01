@@ -11,7 +11,7 @@ export function whatsappLink(number: string, message: string) {
 }
 
 /**
- * Order message, byte-for-byte the format the original prototype sent.
+ * Keep order quantities and prices consistent with the storefront.
  */
 export function buildOrderMessage(
   lines: CartLine[],
@@ -27,7 +27,7 @@ export function buildOrderMessage(
   lines.forEach((line, index) => {
     const name = line.variant ? `${line.product.nameAr} (${line.variant.label})` : line.product.nameAr
     body.push(
-      `${index + 1}. ${name} - الكمية: ${line.quantity} × ${line.unitPrice} ${currency} = ${formatJod(
+      `${index + 1}. ${name} - الكمية: ${line.quantity} × ${formatJod(line.unitPrice, currency)} = ${formatJod(
         line.lineTotal,
         currency,
       )}`,

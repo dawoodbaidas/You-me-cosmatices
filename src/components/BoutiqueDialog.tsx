@@ -26,6 +26,7 @@ export default function BoutiqueDialog({ open, onClose, label, className, childr
     const previous = document.body.style.overflow
     const focused = document.activeElement as HTMLElement | null
     element.showModal()
+    element.querySelector<HTMLElement>('[data-dialog-autofocus]')?.focus({ preventScroll: true })
     const sheet = element.firstElementChild
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
     const from = className === 'cart-dialog' ? 'translateX(100%)' : 'translateY(16px) scale(.97)'
