@@ -1,0 +1,122 @@
+{
+  "label": "after",
+  "mode": "production, isolated local database",
+  "results": [
+    {
+      "device": "desktop",
+      "timings": [
+        {
+          "slug": "perfumes",
+          "ms": 153
+        },
+        {
+          "slug": "care",
+          "ms": 232
+        },
+        {
+          "slug": "all",
+          "ms": 205
+        },
+        {
+          "slug": "perfumes",
+          "ms": 124
+        },
+        {
+          "slug": "care",
+          "ms": 147
+        },
+        {
+          "slug": "all",
+          "ms": 127
+        }
+      ],
+      "detailMs": 334,
+      "homeMs": 147,
+      "documents": 1,
+      "retained": true,
+      "cart": "1",
+      "logos": [
+        {
+          "loaded": true,
+          "width": 64,
+          "height": 64
+        },
+        {
+          "loaded": true,
+          "width": 0,
+          "height": 0
+        },
+        {
+          "loaded": true,
+          "width": 88,
+          "height": 88
+        }
+      ],
+      "menuLogo": null
+    },
+    {
+      "device": "mobile",
+      "timings": [
+        {
+          "slug": "perfumes",
+          "ms": 120
+        },
+        {
+          "slug": "care",
+          "ms": 163
+        },
+        {
+          "slug": "all",
+          "ms": 151
+        },
+        {
+          "slug": "perfumes",
+          "ms": 98
+        },
+        {
+          "slug": "care",
+          "ms": 134
+        },
+        {
+          "slug": "all",
+          "ms": 118
+        }
+      ],
+      "detailMs": 349,
+      "homeMs": 139,
+      "documents": 1,
+      "retained": true,
+      "cart": "1",
+      "logos": [
+        {
+          "loaded": true,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "loaded": true,
+          "width": 0,
+          "height": 0
+        },
+        {
+          "loaded": true,
+          "width": 80,
+          "height": 80
+        }
+      ],
+      "menuLogo": {
+        "loaded": true,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "checks": "cold-category skeleton hides old products; empty category; database stock edit refreshes cached page; original footer logo",
+      "passed": true
+    }
+  ],
+  "stats": {
+    "revisionReads": 67,
+    "catalogueReads": 2
+  }
+}

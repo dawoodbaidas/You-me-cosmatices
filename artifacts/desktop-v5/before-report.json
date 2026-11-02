@@ -1,0 +1,33 @@
+{
+  "phase": "before",
+  "widths": [
+    {
+      "width": 360,
+      "screenshots": [
+        "artifacts/desktop-v5/before-360-hero.png",
+        "artifacts/desktop-v5/before-360-arc.png",
+        "artifacts/desktop-v5/before-360-arc-mid.png",
+        "artifacts/desktop-v5/before-360-cards.png"
+      ]
+    },
+    {
+      "width": 390,
+      "screenshots": [
+        "artifacts/desktop-v5/before-390-hero.png",
+        "artifacts/desktop-v5/before-390-arc.png",
+        "artifacts/desktop-v5/before-390-arc-mid.png",
+        "artifacts/desktop-v5/before-390-cards.png"
+      ]
+    },
+    {
+      "width": 430,
+      "screenshots": [
+        "artifacts/desktop-v5/before-430-hero.png",
+        "artifacts/desktop-v5/before-430-arc.png",
+        "artifacts/desktop-v5/before-430-arc-mid.png",
+        "artifacts/desktop-v5/before-430-cards.png"
+      ]
+    }
+  ],
+  "errors": []
+}

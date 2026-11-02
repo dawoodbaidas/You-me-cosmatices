@@ -1,0 +1,262 @@
+   1: J("div",{dir:"rtl",
+   2: className:"min-h-screen overflow-x-hidden bg-[#FFF6F1] text-[#4A2E2A] antialiased selection:bg-[#E86A92]/20",style:{fontFamily:"'Tajawal', system-ui, sans-serif"},
+   3: children:[J("div",{
+   4: className:"pointer-events-none fixed inset-0 -z-10 overflow-hidden",
+   5: children:[k("div",{
+   6: className:"absolute -top-32 -right-32 h-[520px] w-[520px] rounded-full bg-gradient-to-br from-[#FFD6E3] to-[#FFB0C8] opacity-60 blur-[80px]"}
+   7: ),k("div",{
+   8: className:"absolute top-[30%] -left-40 h-[600px] w-[600px] rounded-full bg-gradient-to-br from-[#FFE8D6] to-[#FFD6C2] opacity-70 blur-[90px]"}
+   9: ),k("div",{
+  10: className:"absolute bottom-0 right-1/3 h-[400px] w-[400px] rounded-full bg-[#E8F5E0] opacity-50 blur-[70px]"})]}),N&&J("div",{
+  11: className:"sticky top-0 z-[55] bg-[#4A2E2A] px-4 py-3 text-white shadow-[0_8px_20px_rgba(0,0,0,0.15)] md:px-8",
+  12: children:[J("div",{
+  13: className:"flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between",
+  14: children:[J("div",{
+  15: className:"flex flex-col gap-1",
+  16: children:[J("div",{
+  17: className:"flex items-center gap-2 text-[13px] font-bold",
+  18: children:[k("span",{
+  19: className:"flex h-7 w-7 items-center justify-center rounded-full bg-[#E86A92]",children:k(yS,{
+  20: className:"h-4 w-4"})}),'وضع المسؤول مفعل - يمكنك تعديل الأسعار الآن. الأسعار لن تُحفظ إلا بعد الضغط على "حفظ الأسعار"']}
+  21: ),k("div",{
+  22: className:"mr-9 text-[11px] font-medium text-white/70",children:"الأسعار محفوظة محلياً - استخدمي تصدير لنقلها لمتصفح آخر • ملف: you-and-me-prices.json"})]}),J("div",{
+  23: className:"flex flex-wrap items-center gap-2",
+  24: children:[J("button",{
+  25: onClick:dW,
+  26: className:"inline-flex items-center gap-1.5 rounded-full bg-[#25D366] px-5 py-2 text-[13px] font-bold text-white shadow hover:brightness-110",
+  27: children:[k(CU,{
+  28: className:"h-4 w-4"})," حفظ الأسعار"]}),J("button",{
+  29: onClick:RW,
+  30: className:"inline-flex items-center gap-1.5 rounded-full bg-[#C9A86A] px-4 py-2 text-[13px] font-bold text-[#3B2316] shadow hover:brightness-110",
+  31: children:[k(zU,{
+  32: className:"h-4 w-4"})," تصدير الأسعار \uD83D\uDCE4"]}),J("button",{
+  33: onClick:FW,
+  34: className:"inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[13px] font-bold text-[#4A2E2A] shadow hover:bg-[#FFF6F1]",
+  35: children:[k(ZU,{
+  36: className:"h-4 w-4"})," استيراد الأسعار \uD83D\uDCE5"]}),J("button",{
+  37: onClick:xW,
+  38: className:"inline-flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-[13px] font-bold text-white ring-1 ring-white/20 hover:bg-white/15",
+  39: children:[k(mU,{
+  40: className:"h-4 w-4"})," نسخ كود الأسعار"]}),J("button",{
+  41: onClick:oW,
+  42: className:"inline-flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-[13px] font-bold text-white ring-1 ring-white/20 hover:bg-white/15",
+  43: children:[k(wU,{
+  44: className:"h-4 w-4"})," خروج"]})]})]}
+  45: ),k("input",{ref:C,type:"file",accept:".json,application/json",
+  46: className:"hidden",onChange:yW})]}
+  47: ),k("header",{ref:X,
+  48: className:"sticky top-0 z-40 overflow-x-hidden border-b border-[#F3E5DC]/80 bg-white/70 backdrop-blur-xl",children:J("div",{
+  49: className:"mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-4 md:px-8",
+  50: children:[J("div",{
+  51: className:"flex items-center gap-6",
+  52: children:[J("button",{
+  53: onClick:()=>St("home"),
+  54: className:"flex items-center gap-3",
+  55: children:[k("div",{
+  56: className:"h-11 w-11 overflow-hidden rounded-full border border-[#F3E5DC] bg-white shadow-sm",children:k("img",{src:OK,alt:"You & Me",
+  57: className:"h-full w-full object-cover"})}),J("div",{
+  58: className:"text-right leading-none hidden sm:block",
+  59: children:[k("div",{
+  60: className:"text-[11px] tracking-[0.25em] text-[#B78A4E]",children:"YOU & ME"}
+  61: ),k("div",{
+  62: className:"text-[17px] font-extrabold tracking-wide text-[#4A2E2A]",children:"COSMETICS"})]})]}
+  63: ),k("nav",{
+  64: className:"hidden items-center gap-7 md:flex",
+  65: children:[{id:"home",label:"الرئيسية"},{id:"shop",label:"المتجر"},{id:"story",label:"قصتنا"},{id:"contact",label:"تواصل"}].map((A)=>k("button",{
+  66: onClick:()=>St(A.id),"data-testid":`nav-${A.id}`,
+  67: className:"text-[14.5px] font-medium text-[#4A2E2A]/70 transition hover:text-[#4A2E2A]",children:A.label},A.id))})]}),J("div",{
+  68: className:"flex items-center gap-2 md:gap-3",
+  69: children:[J("button",{
+  70: onClick:()=>V(!0),
+  71: className:"relative flex h-10 w-10 items-center justify-center rounded-full border border-[#F3E5DC] bg-white shadow-sm transition hover:shadow",
+  72: children:[k(qS,{
+  73: className:"h-[18px] w-[18px]"}),BU>0&&k("span",{
+  74: className:"absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#E86A92] text-[11px] font-bold text-white",children:BU})]}),J("div",{
+  75: className:"relative flex h-10 w-10 items-center justify-center rounded-full border border-[#F3E5DC] bg-white shadow-sm",
+  76: children:[k(it,{
+  77: className:`h-[18px] w-[18px] ${t.size?"fill-[#E86A92] text-[#E86A92]":""}`}),t.size>0&&k("span",{
+  78: className:"absolute -right-1 -top-1 h-2 w-2 rounded-full bg-[#E86A92]"})]}),J("div",{
+  79: className:"hidden items-center gap-2 md:flex",
+  80: children:[k("a",{href:f,target:"_blank",rel:"noopener noreferrer",
+  81: className:"flex h-10 w-10 items-center justify-center rounded-full border border-[#F3E5DC] bg-white shadow-sm transition hover:shadow text-[#4A2E2A]/70 hover:text-[#1877F2]",children:k(MS,{
+  82: className:"h-4 w-4"})}
+  83: ),k("a",{href:op,target:"_blank",rel:"noopener noreferrer",
+  84: className:"flex h-10 w-10 items-center justify-center rounded-full border border-[#F3E5DC] bg-white shadow-sm transition hover:shadow text-[#4A2E2A]/70 hover:text-[#E86A92]",children:k(YS,{
+  85: className:"h-4 w-4"})})]}),J("a",{href:"https://wa.me/962777260622",target:"_blank",
+  86: className:"hidden items-center gap-2 rounded-full bg-[#4A2E2A] px-5 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(74,46,42,0.2)] transition hover:bg-[#E86A92] md:flex",
+  87: children:[k(KS,{
+  88: className:"h-4 w-4"})," واتساب"]})]})]})}
+  89: ),k("section",{id:"home",
+  90: className:"relative mx-auto max-w-[1280px] overflow-hidden px-4 md:px-8",children:J("div",{
+  91: className:"grid items-center gap-8 overflow-hidden py-10 md:grid-cols-[1.1fr_0.9fr] md:py-16 lg:gap-6",
+  92: children:[J("div",{
+  93: className:"relative order-1 md:order-2",
+  94: children:[k("div",{
+  95: className:"pointer-events-none absolute -top-8 -right-6 opacity-20 md:-top-12 md:right-0",children:k("div",{
+  96: className:"h-28 w-28 rotate-12 rounded-[32px] border border-[#C9A86A]/20 bg-gradient-to-br from-white to-[#FFF0EB] p-3 shadow-[0_20px_40px_rgba(201,168,106,0.15)]",children:k("img",{src:OK,alt:"",
+  97: className:"h-full w-full rounded-[20px] object-cover opacity-80"})})}),J("div",{
+  98: className:"inline-flex items-center gap-2 rounded-full border border-[#F3E5DC] bg-white/70 px-4 py-1.5 text-[12px] font-medium text-[#B78A4E] backdrop-blur",
+  99: children:[k(fS,{
+ 100: className:"h-4 w-4 text-[#E86A92]"})," جمالك قصة، ونحن نهتم بتفاصيلها"]}),J("h1",{
+ 101: className:"mt-6 max-w-[22ch] text-[32px] font-[800] leading-[1.15] tracking-tight md:text-[44px]",
+ 102: children:["هنا تبدأ حكاية جمالك...",k("span",{
+ 103: className:"block bg-gradient-to-l from-[#E86A92] to-[#C9A86A] bg-clip-text text-transparent",children:"من رائحة تعبّر عن شخصيتك"}
+ 104: ),k("span",{
+ 105: className:"text-[26px] font-medium leading-[1.35] text-[#4A2E2A]/80 md:text-[28px]",children:"إلى لمسة ترطيب تمنحك إحساسًا بالانتعاش والثقة \uD83D\uDC95"})]}
+ 106: ),k("p",{
+ 107: className:"mt-5 max-w-[48ch] text-[15.5px] leading-7 text-[#4A2E2A]/70",children:"نختار لكِ أجمل منتجات العناية والجمال من العطور، بخاخات الجسم ومرطبات الشفاه، بتصاميم أنيقة وروائح تأخذك إلى أجواء مختلفة؛ صيف مشرق، لحظة رومانسية، مناسبة مميزة أو يوم عادي يستحق القليل من الدلال ✨"}),J("div",{
+ 108: className:"mt-7 flex flex-wrap gap-3",
+ 109: children:[J("button",{
+ 110: onClick:()=>St("shop"),
+ 111: className:"group inline-flex items-center gap-2 rounded-full bg-[#4A2E2A] px-7 py-3.5 text-[15px] font-bold text-white shadow-[0_12px_30px_rgba(74,46,42,0.25)] transition hover:bg-[#E86A92]",
+ 112: children:["اكتشفي مجموعتنا ",k(iU,{
+ 113: className:"h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5"})]}),J("a",{href:"https://wa.me/962777260622",target:"_blank",
+ 114: className:"inline-flex items-center gap-2 rounded-full border border-[#F3E5DC] bg-white px-7 py-3.5 text-[15px] font-bold text-[#4A2E2A] shadow-sm transition hover:border-[#E86A92]/30 hover:text-[#E86A92]",
+ 115: children:[k(KS,{
+ 116: className:"h-4 w-4"})," تواصلي معنا"]})]}),J("div",{
+ 117: className:"mt-8 flex items-center gap-6 text-[13px] text-[#4A2E2A]/60",
+ 118: children:[J("span",{
+ 119: className:"flex items-center gap-2",
+ 120: children:[k("span",{
+ 121: className:"h-1.5 w-1.5 rounded-full bg-[#7FB07F]"})," منتجات أصلية"]}),J("span",{
+ 122: className:"flex items-center gap-2",
+ 123: children:[k("span",{
+ 124: className:"h-1.5 w-1.5 rounded-full bg-[#E86A92]"})," توصيل في الأردن"]}),J("span",{
+ 125: className:"hidden sm:flex items-center gap-2",
+ 126: children:[k(zt,{
+ 127: className:"h-3.5 w-3.5 fill-[#C9A86A] text-[#C9A86A]"})," تقييم 4.9 • ",$S.length," منتج"]})]})]}
+ 128: ),k("div",{
+ 129: className:"relative order-2 md:order-1",children:J("div",{
+ 130: className:"relative mx-auto aspect-[0.95] max-w-[520px]",
+ 131: children:[k("div",{
+ 132: className:"absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#FFD6E3]/70 to-[#FFB8D0]/70 blur-[36px]"}
+ 133: ),k("div",{
+ 134: className:"absolute left-[8%] top-[10%] h-6 w-6 rounded-full bg-white/80 shadow-[0_4px_12px_rgba(232,106,146,0.15)] backdrop-blur"}
+ 135: ),k("div",{
+ 136: className:"absolute right-[12%] top-[18%] h-4 w-4 rounded-full bg-white/70 shadow"}
+ 137: ),k("div",{
+ 138: className:"absolute bottom-[18%] left-[15%] h-3 w-3 rounded-full bg-[#E86A92]/20"}),J("div",{
+ 139: className:"absolute left-1/2 top-1/2 w-[62%] -translate-x-1/2 -translate-y-1/2 rotate-[-2deg] rounded-[28px] border border-white/60 bg-white p-3 shadow-[0_30px_60px_rgba(74,46,42,0.15)] backdrop-blur",
+ 140: children:[k("div",{
+ 141: className:"overflow-hidden rounded-[20px] bg-[#FFF6F1]",children:k("img",{src:CV,alt:"mascara",
+ 142: className:"aspect-[3/4] w-full object-cover"})}),J("div",{
+ 143: className:"px-2 py-3 text-center",
+ 144: children:[k("div",{
+ 145: className:"text-[12px] font-bold text-[#E86A92]",children:"جديد"}
+ 146: ),k("div",{
+ 147: className:"text-[14px] font-bold",children:"ماسكارا مغذية"})]})]}),J("div",{
+ 148: className:"absolute bottom-[6%] left-[2%] w-[38%] rotate-[6deg] rounded-[22px] border border-white/70 bg-white/90 p-2 shadow-[0_20px_40px_rgba(74,46,42,0.12)] backdrop-blur-xl",
+ 149: children:[k("img",{src:ZV,alt:"lip oil",
+ 150: className:"aspect-square w-full rounded-[16px] object-cover"}
+ 151: ),k("div",{
+ 152: className:"mt-2 text-center text-[11px] font-bold",children:"Magic Lip Oil"})]}
+ 153: ),k("div",{
+ 154: className:"absolute right-[4%] top-[4%] w-[34%] rotate-[8deg] rounded-[20px] border border-white/70 bg-white p-2 shadow-[0_18px_36px_rgba(74,46,42,0.12)]",children:k("img",{src:sV,alt:"aloe",
+ 155: className:"aspect-square w-full rounded-[14px] object-cover"})}
+ 156: ),k("div",{
+ 157: className:"absolute bottom-[22%] right-[2%] w-[28%] -rotate-[8deg] rounded-[18px] bg-white p-1.5 shadow-[0_14px_28px_rgba(74,46,42,0.1)]",children:k("img",{src:DV,alt:"foundation",
+ 158: className:"aspect-square w-full rounded-[12px] object-cover"})}
+ 159: ),k("div",{
+ 160: className:"absolute left-[10%] top-[50%] rounded-full bg-[#4A2E2A] px-3.5 py-2 text-[12px] font-bold text-white shadow-lg",children:"من 3 JOD"})]})})]})}
+ 161: ),k("section",{
+ 162: className:"mx-auto max-w-[1280px] px-4 md:px-8",children:k("div",{
+ 163: className:"grid grid-cols-1 gap-3 rounded-[24px] border border-[#F3E5DC] bg-white/70 p-3 backdrop-blur-xl md:grid-cols-3",
+ 164: children:[{icon:sU,title:"توصيل سريع في الأردن",sub:"خلال 24-48 ساعة"},{icon:FS,title:"منتجات أصلية 100%",sub:"مختارة بعناية"},{icon:QU,title:"دفع عند الاستلام",sub:"آمن وسهل"}].map((A)=>J("div",{
+ 165: className:"flex items-center gap-3 rounded-[18px] bg-white px-5 py-4",
+ 166: children:[k("div",{
+ 167: className:"flex h-10 w-10 items-center justify-center rounded-full bg-[#FFF0EB] text-[#E86A92]",children:k(A.icon,{
+ 168: className:"h-5 w-5"})}),J("div",{
+ 169: children:[k("div",{
+ 170: className:"text-[14px] font-bold",children:A.title}
+ 171: ),k("div",{
+ 172: className:"text-[12px] text-[#4A2E2A]/60",children:A.sub})]})]},A.title))})}),J("section",{id:"shop",
+ 173: className:"mx-auto max-w-[1280px] px-4 py-12 md:px-8 md:py-16",
+ 174: children:[J("div",{
+ 175: className:"flex flex-wrap items-end justify-between gap-4",
+ 176: children:[J("div",{
+ 177: children:[J("div",{
+ 178: className:"inline-flex items-center gap-2 text-[12px] font-bold tracking-widest text-[#B78A4E]",
+ 179: children:[k(IU,{
+ 180: className:"h-4 w-4"})," تشكيلتنا المختارة - ",$S.length," منتج"]}
+ 181: ),k("h2",{
+ 182: className:"mt-2 text-[28px] font-extrabold leading-tight md:text-[36px]",children:"اكتشفي المنتج الذي يشبهك \uD83D\uDC84\uD83C\uDF37"})]}
+ 183: ),k("div",{
+ 184: className:"flex flex-wrap gap-2",children:J0.map((A)=>k("button",{
+ 185: onClick:()=>K(A.id),
+ 186: className:`rounded-full border px-5 py-2.5 text-[13.5px] font-bold transition ${a===A.id?"border-[#4A2E2A] bg-[#4A2E2A] text-white shadow":"border-[#F3E5DC] bg-white text-[#4A2E2A]/70 hover:border-[#E86A92]/30 hover:text-[#4A2E2A]"}`,children:A.label},A.id))})]}
+ 187: ),k("div",{
+ 188: className:"mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3",children:PW.map((A)=>{let F=t.has(A.id),x=T[A.id]||A.variants?.[0]?.label,m=mW(A.id),i=zW(A.id),Tp=A.variants?.find((E)=>E.label===x)?.price??A.price,Wp=A.category==="packages";return J("div",{
+ 189: className:`group relative flex flex-col overflow-hidden rounded-[26px] bg-white transition hover:shadow-[0_18px_50px_rgba(74,46,42,0.12)] ${Wp?"border-2 border-[#C9A86A]/70 shadow-[0_16px_50px_rgba(201,168,106,0.22)] lg:col-span-1 lg:row-span-1":"border border-[#F3E5DC] shadow-[0_8px_30px_rgba(74,46,42,0.04)]"}`,
+ 190: children:[Wp&&k("div",{
+ 191: className:"absolute inset-x-0 top-0 h-[5px] bg-gradient-to-r from-[#C9A86A] via-[#E9D5A8] to-[#C9A86A] z-10"}),J("div",{
+ 192: className:`relative overflow-hidden ${Wp?"bg-[#FFFCF5]":"bg-[#FFFBF8]"}`,
+ 193: children:[k("img",{src:A.image,alt:A.nameAr,
+ 194: className:`${Wp?"aspect-[4/3.2]":"aspect-[4/4.6]"} w-full object-cover transition duration-700 group-hover:scale-[1.04]`}),A.badge&&k("div",{
+ 195: className:`absolute right-3 top-3 rounded-full px-3.5 py-1.5 text-[11px] font-extrabold shadow backdrop-blur ${Wp?"bg-gradient-to-r from-[#C9A86A] to-[#E8C99A] text-white border border-white/30":"bg-white/90 text-[#E86A92]"}`,children:A.badge}
+ 196: ),k("button",{
+ 197: onClick:()=>eW(A.id),
+ 198: className:"absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow backdrop-blur transition hover:bg-white",children:k(it,{
+ 199: className:`h-4 w-4 ${F?"fill-[#E86A92] text-[#E86A92]":"text-[#4A2E2A]/50"}`})}
+ 200: ),k("div",{
+ 201: className:"absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5",children:A.benefits.slice(0,Wp?4:3).map((E)=>k("span",{
+ 202: className:`rounded-full px-2.5 py-1 text-[10px] font-bold shadow-sm backdrop-blur ${Wp?"bg-[#3B2316]/90 text-[#FFE8C2] border border-[#C9A86A]/30":"bg-white/90 text-[#4A2E2A]/70"}`,children:E},E))})]}),J("div",{
+ 203: className:`flex flex-1 flex-col ${Wp?"p-5":"p-4"}`,
+ 204: children:[J("div",{
+ 205: className:"flex items-start justify-between gap-3",
+ 206: children:[J("div",{
+ 207: children:[k("div",{
+ 208: className:`font-medium ${Wp?"text-[12px] text-[#C9A86A] tracking-widest font-bold":"text-[13px] text-[#B78A4E]"}`,children:A.categoryLabel}
+ 209: ),k("h3",{
+ 210: className:`mt-1 line-clamp-2 font-bold leading-tight ${Wp?"text-[17px]":"text-[15.5px] line-clamp-1"}`,children:A.nameAr}
+ 211: ),k("div",{
+ 212: className:"text-[12px] text-[#4A2E2A]/50",children:A.nameEn})]}),J("div",{
+ 213: className:"text-left shrink-0",
+ 214: children:[J("div",{
+ 215: className:`${Wp?"text-[18px]":"text-[16px]"} font-extrabold text-[#4A2E2A]`,
+ 216: children:[Tp," JOD"]}),A.oldPrice&&J("div",{
+ 217: className:"text-[11px] text-[#4A2E2A]/40 line-through",
+ 218: children:[A.oldPrice," JOD"]}),Wp&&A.oldPrice&&J("div",{
+ 219: className:"mt-1 inline-flex rounded-full bg-[#E8F5E0] px-2 py-0.5 text-[10px] font-bold text-[#5A8A4A]",
+ 220: children:["توفير ",(A.oldPrice-A.price).toFixed(0)," JOD"]})]})]}
+ 221: ),k("p",{
+ 222: className:`mt-3 leading-5 text-[#4A2E2A]/70 ${Wp?"text-[12.5px] line-clamp-3":"line-clamp-2 text-[12.5px] text-[#4A2E2A]/60"}`,children:A.desc}),A.variants&&k("div",{
+ 223: className:"mt-4 flex flex-wrap gap-2",children:A.variants.map((E)=>{let bK=x===E.label;return J("button",{
+ 224: onClick:()=>j((hW)=>({...hW,[A.id]:E.label})),
+ 225: className:`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11.5px] font-bold transition ${bK?"border-[#E86A92] bg-[#FFF0EB] text-[#E86A92]":"border-[#F3E5DC] bg-white text-[#4A2E2A]/60 hover:border-[#E86A92]/40"}`,
+ 226: children:[E.color&&k("span",{
+ 227: className:"h-3 w-3 rounded-full border border-black/10",style:{background:E.color}}),E.label]},E.label)})}),N&&J("div",{
+ 228: className:"mt-4 rounded-[16px] border border-[#E86A92]/20 bg-[#FFF0EB] p-3",
+ 229: children:[J("div",{
+ 230: className:"mb-2 flex items-center gap-1.5 text-[11px] font-bold text-[#E86A92]",
+ 231: children:[k(XS,{
+ 232: className:"h-3.5 w-3.5"})," تعديل أسعار المسؤول"]}),J("div",{
+ 233: className:"grid grid-cols-2 gap-2",
+ 234: children:[J("div",{
+ 235: children:[k("div",{
+ 236: className:"text-[10px] font-bold text-[#4A2E2A]/60",children:"السعر الحالي"}
+ 237: ),k("input",{type:"number",step:"0.5",value:i?.price??m.price,onChange:(E)=>XW(A.id,E.target.value),
+ 238: className:"mt-1 w-full rounded-full border border-[#F3E5DC] bg-white px-3 py-1.5 text-[12px] font-bold outline-none focus:border-[#E86A92]"})]}),J("div",{
+ 239: children:[k("div",{
+ 240: className:"text-[10px] font-bold text-[#4A2E2A]/60",children:"السعر القديم"}
+ 241: ),k("input",{type:"number",step:"0.5",placeholder:"فارغ = بدون خصم",value:i?.oldPrice===null?"":i?.oldPrice??m.oldPrice??"",onChange:(E)=>fW(A.id,E.target.value),
+ 242: className:"mt-1 w-full rounded-full border border-[#F3E5DC] bg-white px-3 py-1.5 text-[12px] font-bold outline-none focus:border-[#E86A92]"})]})]}),A.variants&&A.variants.length>0&&J("div",{
+ 243: className:"mt-3 space-y-2",
+ 244: children:[k("div",{
+ 245: className:"text-[10px] font-bold text-[#4A2E2A]/60",children:"أسعار الأنواع:"}),m.variants?.map((E)=>J("div",{
+ 246: className:"flex items-center gap-2",
+ 247: children:[k("span",{
+ 248: className:"min-w-[90px] text-[11px] font-medium text-[#4A2E2A]/70 truncate",children:E.label}
+ 249: ),k("input",{type:"number",step:"0.5",value:i?.variantPrices?.[E.label]??E.price,onChange:(bK)=>iW(A.id,E.label,bK.target.value),
+ 250: className:"flex-1 rounded-full border border-[#F3E5DC] bg-white px-3 py-1 text-[11px] font-bold outline-none focus:border-[#E86A92]"})]},E.label))]})]}),J("button",{
+ 251: onClick:()=>NW(A.id),
+ 252: className:`mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full py-3 text-[13.5px] font-bold text-white shadow-[0_8px_20px_rgba(74,46,42,0.15)] transition active:scale-[0.98] ${Wp?"bg-gradient-to-r from-[#4A2E2A] to-[#7A4A3A] hover:from-[#C9A86A] hover:to-[#E8C99A] hover:text-[#3B2316] py-3.5":"bg-[#4A2E2A] hover:bg-[#E86A92]"}`,
+ 253: children:[k(qS,{
+ 254: className:"h-4 w-4"})," ",Wp?"أضيفي الباكيج للسلة ✨":"أضيفي إلى السلة"]})]})]},A.id)})})]}
+ 255: ),k("section",{id:"story",
+ 256: className:"relative mx-auto max-w-[1280px] px-4 md:px-8",children:J("div",{
+ 257: className:"relative overflow-hidden rounded-[32px] border border-[#F3E5DC] bg-gradient-to-br from-white via-[#FFF8F2] to-[#FFE8DE] p-8 md:p-14",
+ 258: children:[k("div",{
+ 259: className:"absolute -left-20 -top-20 h-[300px] w-[300px] rounded-full bg-[#FFD6E3]/40 blur-[40px]"}
+ 260: ),k("div",{
+ 261: className:"absolute -right-20 -bottom-20 h-[300px] w-[300px] rounded-full bg-[#C9A86A]/15 blur-[40px]"}),J("div",{
+ 262: className:"grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]",

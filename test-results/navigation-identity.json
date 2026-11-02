@@ -1,0 +1,90 @@
+{
+  "label": "identity",
+  "mode": "production, isolated local database",
+  "results": [
+    {
+      "device": "desktop",
+      "timings": [
+        {
+          "slug": "perfumes",
+          "ms": 2333
+        },
+        {
+          "slug": "care",
+          "ms": 323
+        },
+        {
+          "slug": "all",
+          "ms": 388
+        },
+        {
+          "slug": "perfumes",
+          "ms": 370
+        },
+        {
+          "slug": "care",
+          "ms": 160
+        },
+        {
+          "slug": "all",
+          "ms": 178
+        }
+      ],
+      "detailMs": 515,
+      "homeMs": 239,
+      "documents": 1,
+      "retained": true,
+      "cart": "1",
+      "brand": "You&Me",
+      "logoImages": 0,
+      "menuLogo": null,
+      "heroWordmark": "YOU&ME"
+    },
+    {
+      "device": "mobile",
+      "timings": [
+        {
+          "slug": "perfumes",
+          "ms": 203
+        },
+        {
+          "slug": "care",
+          "ms": 259
+        },
+        {
+          "slug": "all",
+          "ms": 197
+        },
+        {
+          "slug": "perfumes",
+          "ms": 331
+        },
+        {
+          "slug": "care",
+          "ms": 210
+        },
+        {
+          "slug": "all",
+          "ms": 161
+        }
+      ],
+      "detailMs": 373,
+      "homeMs": 271,
+      "documents": 1,
+      "retained": true,
+      "cart": "1",
+      "brand": "You&Me",
+      "logoImages": 0,
+      "menuLogo": "You&Me",
+      "heroWordmark": "YOU&ME"
+    },
+    {
+      "checks": "cold-category skeleton hides old products; empty category; database stock edit refreshes cached page; English footer wordmark",
+      "passed": true
+    }
+  ],
+  "stats": {
+    "revisionReads": 86,
+    "catalogueReads": 4
+  }
+}

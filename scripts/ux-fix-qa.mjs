@@ -1,0 +1,40 @@
+﻿import assert from 'node:assert/strict'
+import {pathToFileURL} from 'node:url'
+import {mkdir,writeFile} from 'node:fs/promises'
+const {default:puppeteer}=await import(pathToFileURL('C:/Users/ONE BY ONE/AppData/Local/npm-cache/_npx/0f94ee7615faf582/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js').href)
+const browser=await puppeteer.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'})
+const report=[]
+await mkdir('artifacts/ux-fix',{recursive:true})
+try {
+ for(const width of [390,768,1440]){
+ const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message))
+ await page.setViewport({width,height:900});await page.goto('http://localhost:3010',{waitUntil:'networkidle0'})
+ await page.evaluate(()=>localStorage.clear());await page.reload({waitUntil:'networkidle0'});await page.waitForSelector('.editorial-central')
+ await new Promise(r=>setTimeout(r,1600))
+ await page.screenshot({path:`artifacts/ux-fix/hero-${width}.png`})
+ await page.click('.editorial-central');await page.waitForSelector('.quickview-dialog[open]')
+ await new Promise(r=>setTimeout(r,400))
+ assert.equal(await page.$eval('.quickview-sheet',e=>{const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight}),true)
+ await page.screenshot({path:`artifacts/ux-fix/product-${width}.png`})
+ await page.click('.quickview-buy');await page.waitForFunction(()=>!document.querySelector('.quickview-dialog[open]'))
+ await page.$eval('.header-bag, [aria-label*="السلة"]',e=>e.click()).catch(async()=>{await page.$eval('.mobile-shopping-bar button',e=>e.click())})
+ await page.waitForSelector('.cart-dialog[open]');await new Promise(r=>setTimeout(r,400))
+ await page.screenshot({path:`artifacts/ux-fix/cart-${width}.png`})
+ await page.click('.quantity-stepper button:last-child');await page.click('.quantity-stepper button:first-child')
+ await page.click('.cart-remove');await page.waitForSelector('.cart-empty')
+ await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.cart-dialog[open]'))
+ for(let i=0;i<2;i++){await page.$eval('.header-bag',e=>e.click());await page.waitForSelector('.cart-dialog[open]');await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.cart-dialog[open]'))}
+ await page.$eval('.semicircle-card button',e=>e.click());await page.waitForSelector('.quickview-dialog[open]');await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.quickview-dialog[open]'))
+ await page.$eval('#shop',e=>e.scrollIntoView({behavior:'instant'}))
+ await page.click('.object-frame');await page.waitForSelector('.quickview-dialog[open]');await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.quickview-dialog[open]'))
+ await page.click('.object-cart-v2');assert.equal(await page.$('.quickview-dialog[open]'),null)
+ const name=await page.$eval('.object-title-v2 button',e=>e.textContent)
+ await page.type('#catalog-search',name);await new Promise(r=>setTimeout(r,200))
+ await page.screenshot({path:`artifacts/ux-fix/search-${width}.png`})
+ await page.click('.object-title-v2 button');await page.waitForSelector('.quickview-dialog[open]');await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.quickview-dialog[open]'))
+ assert.equal(await page.evaluate(()=>document.body.style.overflow),'')
+ assert.deepEqual(errors,[])
+ report.push({width,passed:true});await page.close()
+ }
+}finally{await writeFile('artifacts/ux-fix/report.json',JSON.stringify(report,null,2));await browser.close()}
+console.log(report)

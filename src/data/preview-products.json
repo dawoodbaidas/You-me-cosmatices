@@ -1,0 +1,1218 @@
+[
+  {
+    "slug": "package-laverne-you-miracle",
+    "nameAr": "باكيج YOU miracle من LAVERNE - عناية وجه وجسم متكاملة",
+    "nameEn": "LAVERNE YOU Miracle Package",
+    "description": "محتويات البكج: غسول الوجه Cleansing Face Wash 150ml + مرطب خفيف Fluid للوجه 100ml + ماسك تقشير للوجه Peel-off Mask Pack 125ml + مقشر الجسم Body Scrub + لوشن الجسم Smooth 260ml - تنظيف ونعومة، ترطيب وإشراق، عناية للوجه والجسم، مكونات مختارة لبشرة ناعمة",
+    "category": "packages",
+    "categoryLabel": "باكيجات مميزة",
+    "price": 12,
+    "oldPrice": 52,
+    "imageUrl": "/products/package-laverne-you-miracle.webp",
+    "badge": "باكيج متكامل",
+    "benefits": [
+      "تنظيف ونعومة",
+      "ترطيب وإشراق",
+      "عناية وجه وجسم",
+      "مكونات مختارة"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 0,
+    "variants": []
+  },
+  {
+    "slug": "package-cherry-trap-boutique",
+    "nameAr": "باكيج Cherry Trap من Boutique - تركيبة منعشة وناعمة",
+    "nameEn": "Cherry Trap Boutique Package",
+    "description": "محتويات: Fine Fragrance Mist 250ml + Body Butter 250ml + Shower Gel Aloe + Vitamin E 400ml + Daily Nourishing Body Lotion 400ml - رائحة منعشة وجذابة، ترطيب عميق، تركيبة غنية بزبدة الشيا وفيتامين E، لبشرة أكثر نعومة ونضارة",
+    "category": "packages",
+    "categoryLabel": "باكيجات مميزة",
+    "price": 10,
+    "oldPrice": 50,
+    "imageUrl": "/products/package-cherry-trap-boutique.webp",
+    "badge": "رائحة كرز منعشة",
+    "benefits": [
+      "رائحة منعشة",
+      "ترطيب عميق",
+      "زبدة الشيا وفيتامين E",
+      "نعومة ونضارة"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 1,
+    "variants": []
+  },
+  {
+    "slug": "vgr-shaver-trimmer-2in1",
+    "nameAr": "ماكينة حلاقة وتحديد 2 في 1 VGR V-361 للرجال والنساء",
+    "nameEn": "VGR Electric Shaver & Trimmer 2in1 V-361",
+    "description": "ماكينة حلاقة وتحديد احترافية - رأس مزدوج للحلاقة والتحديد، بطارية ليثيوم 500mAh، شحن USB، مقاومة للماء IPX6 يمكن استخدامها على البشرة المبللة، شاشة رقمية LED توضح نسبة البطارية، محتويات: رأس الحلاقة والتحديد، رأس تنعيم، سلك شحن USB، فرشاة تنظيف - خفيفة الوزن، صوت منخفض، تصميم مريح، جودة عالية، الأصلي",
+    "category": "packages",
+    "categoryLabel": "أجهزة العناية",
+    "price": 12,
+    "oldPrice": 25,
+    "imageUrl": "/products/vgr-shaver-trimmer-2in1.webp",
+    "badge": "للرجال والنساء",
+    "benefits": [
+      "رأس مزدوج",
+      "بطارية 500mAh",
+      "IPX6 مقاومة للماء",
+      "شاشة LED"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 2,
+    "variants": []
+  },
+  {
+    "slug": "package-naqaa",
+    "nameAr": "باكيج النقاء - روتين الألوفيرا المتكامل",
+    "nameEn": "Al Naqaa Package - Aloe Vera Routine",
+    "description": "محتويات البكج: غسول Aloe Vera من Boutique + ماسك عيون Aloe من SADOER + ماسك يدين Aloe من CQK + مرطب شفاه Kiss Beauty + Nose Strip من CQK - عناية نقية وطبيعية",
+    "category": "packages",
+    "categoryLabel": "باكيجات مميزة",
+    "price": 10,
+    "oldPrice": 30,
+    "imageUrl": "/products/package-naqaa.webp",
+    "badge": "باكيج الأكثر مبيعاً",
+    "benefits": [
+      "روتين متكامل",
+      "ألوفيرا طبيعية",
+      "توفير 27%",
+      "حقيبة شفافة هدية"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 3,
+    "variants": []
+  },
+  {
+    "slug": "package-dalal",
+    "nameAr": "باكيج الدلال - دلال وأناقة",
+    "nameEn": "Al Dalal Package - Pampering",
+    "description": "شاور جل من Boutique + لوشن للجسم من Boutique + سكراب للجسم من CQK + مست للجسم من V.V.LOVE + مزيل عرق رول من نيفيا + هدية من متجرنا",
+    "category": "packages",
+    "categoryLabel": "باكيجات مميزة",
+    "price": 16,
+    "oldPrice": 48,
+    "imageUrl": "/products/package-dalal.webp",
+    "badge": "هدية مجانية",
+    "benefits": [
+      "دلال كامل",
+      "5 منتجات + هدية",
+      "توفير كبير",
+      "علبة فاخرة"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 4,
+    "variants": []
+  },
+  {
+    "slug": "package-muzhla",
+    "nameAr": "باكيج مذهلة - إطلالة متكاملة لأنك مذهلة دائماً",
+    "nameEn": "Mozhla Package - Full Glam Look",
+    "description": "محتويات: باليت كونتور + باليت بلاشر + برايمر + فاونديشن + 2 قلم روج + قلم تحديد شفاه + 2 مرطب شفاه + قلم حواجب + ماسكارا + ماسكارا جل مغذية + هدية من متجرنا",
+    "category": "packages",
+    "categoryLabel": "باكيجات مميزة",
+    "price": 28,
+    "oldPrice": 58,
+    "imageUrl": "/products/package-muzhla.webp",
+    "badge": "إطلالة مذهلة",
+    "benefits": [
+      "مكياج كامل",
+      "11 قطعة + هدية",
+      "مناسبات وهدايا",
+      "بوكس ملكي"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 5,
+    "variants": []
+  },
+  {
+    "slug": "package-nasma",
+    "nameAr": "باكيج نسمة - لأنك تستحقين كل ما هو أجمل",
+    "nameEn": "Nasma Package - Fresh Breeze",
+    "description": "مسك الطهارة + مخمرية للشعر والجسم + مزيل عرق نيفيا + بودي مست + مرطب شفاه - انتعاش يدوم",
+    "category": "packages",
+    "categoryLabel": "باكيجات مميزة",
+    "price": 10,
+    "oldPrice": 38,
+    "imageUrl": "/products/package-nasma.webp",
+    "badge": "باكيج نسمة",
+    "benefits": [
+      "مسك طهارة",
+      "مخمرية فاخرة",
+      "انتعاش طويل",
+      "تغليف هدايا"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 6,
+    "variants": []
+  },
+  {
+    "slug": "musk-ard-alharamain",
+    "nameAr": "مسك أرض الحرمين - معطر للجسم 8 روائح فاخرة",
+    "nameEn": "Ard Al Haramain Musk - Body Mist",
+    "description": "رائحة نقاء تدوم معك طوال اليوم - معطر للجسم، يدوم طويلاً، لطيف على البشرة، روائح فاخرة ومميزة",
+    "category": "mist",
+    "categoryLabel": "عطور ومسك",
+    "price": 1.25,
+    "oldPrice": 17,
+    "imageUrl": "/products/musk-ard-alharamain.webp",
+    "badge": "8 روائح فاخرة",
+    "benefits": [
+      "يدوم طويلاً",
+      "لطيف على البشرة",
+      "روائح فاخرة",
+      "معطر للجسم"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 7,
+    "variants": [
+      {
+        "id": "musk-ard-alharamain::مسك الطهارة",
+        "label": "مسك الطهارة",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "musk-ard-alharamain::مسك البودرة",
+        "label": "مسك البودرة",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "musk-ard-alharamain::مسك الماس",
+        "label": "مسك الماس",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 2
+      },
+      {
+        "id": "musk-ard-alharamain::مسك الذهب",
+        "label": "مسك الذهب",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 3
+      },
+      {
+        "id": "musk-ard-alharamain::مسك روح",
+        "label": "مسك روح",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 4
+      },
+      {
+        "id": "musk-ard-alharamain::مسك غرام",
+        "label": "مسك غرام",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 5
+      },
+      {
+        "id": "musk-ard-alharamain::مسك التوت",
+        "label": "مسك التوت",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 6
+      },
+      {
+        "id": "musk-ard-alharamain::مسك الفانيلا",
+        "label": "مسك الفانيلا",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 7
+      }
+    ]
+  },
+  {
+    "slug": "musk-tahara-oil",
+    "nameAr": "مسك الطهارة - زيوت عطرية مركزة 20مل",
+    "nameEn": "Musk Al Tahara Concentrated Oil 20ml",
+    "description": "زيوت عطرية مركزة - تركيبة مركزة تدوم طويلاً، رائحة نقية ومنعشة، مناسب للاستخدام اليومي، حجم عملي 20 مل",
+    "category": "mist",
+    "categoryLabel": "عطور ومسك",
+    "price": 2,
+    "oldPrice": 12,
+    "imageUrl": "/products/musk-tahara-oil.webp",
+    "badge": "تركيبة مركزة",
+    "benefits": [
+      "تركيبة مركزة",
+      "يدوم طويلاً",
+      "رائحة نقية",
+      "20 مل عملي"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 8,
+    "variants": [
+      {
+        "id": "musk-tahara-oil::مسك البودرة MUSK POWDER",
+        "label": "مسك البودرة MUSK POWDER",
+        "price": 2,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "musk-tahara-oil::مسك الكرز MUSK CHERRY",
+        "label": "مسك الكرز MUSK CHERRY",
+        "price": 2,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "musk-tahara-oil::مسك فانيلا MUSK VANILLA",
+        "label": "مسك فانيلا MUSK VANILLA",
+        "price": 2,
+        "isActive": true,
+        "sortOrder": 2
+      }
+    ]
+  },
+  {
+    "slug": "nivea-deo-72h",
+    "nameAr": "مزيل عرق نيفيا - حماية 72 ساعة انتعاش يدوم",
+    "nameEn": "Nivea Deodorant 72h Active Protection",
+    "description": "انتعاش يدوم 72 ساعة - حماية تدوم 72 ساعة، يقلل من البقع على الملابس، رائحة منعشة تدوم طويلاً، لطيف على البشرة",
+    "category": "skincare",
+    "categoryLabel": "العناية بالجسم",
+    "price": 2.5,
+    "oldPrice": 7.5,
+    "imageUrl": "/products/nivea-deo-72h.webp",
+    "badge": "72 ساعة حماية",
+    "benefits": [
+      "72 ساعة حماية",
+      "يقلل البقع",
+      "رائحة منعشة",
+      "لطيف على البشرة"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 9,
+    "variants": [
+      {
+        "id": "nivea-deo-72h::Black & White Invisible Clear رول",
+        "label": "Black & White Invisible Clear رول",
+        "price": 2.5,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "nivea-deo-72h::Pearl & Beauty رول",
+        "label": "Pearl & Beauty رول",
+        "price": 2.5,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "nivea-deo-72h::Black & White Invisible Clear ستيك",
+        "label": "Black & White Invisible Clear ستيك",
+        "price": 3.5,
+        "isActive": true,
+        "sortOrder": 2
+      }
+    ]
+  },
+  {
+    "slug": "mascara",
+    "nameAr": "ماسكارا مغذية بفيتامين E",
+    "nameEn": "Vitamin E Gel Mascara",
+    "description": "تغذية وتكثيف فوري مع فيتامين E والبانثينول",
+    "category": "makeup",
+    "categoryLabel": "مكياج",
+    "price": 2,
+    "oldPrice": 12,
+    "imageUrl": "/products/mascara.webp",
+    "badge": "الأكثر مبيعاً",
+    "benefits": [
+      "مقاومة للماء",
+      "تغذية الرموش",
+      "لمسة حريرية"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 10,
+    "variants": []
+  },
+  {
+    "slug": "aloe-foam",
+    "nameAr": "غسول الألوفيرا الرغوي",
+    "nameEn": "Aloe Vera Cleansing Foam",
+    "description": "رغوة خفيفة تنقي المسام وتوازن البشرة",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 2.5,
+    "oldPrice": 9,
+    "imageUrl": "/products/aloe-foam.webp",
+    "badge": null,
+    "benefits": [
+      "ألوفيرا 99%",
+      "بشرة نقية",
+      "ترطيب"
+    ],
+    "isActive": true,
+    "isFeatured": false,
+    "sortOrder": 11,
+    "variants": []
+  },
+  {
+    "slug": "lip-oil",
+    "nameAr": "زيت الشفاه السحري Magic",
+    "nameEn": "Magic Lip Oil",
+    "description": "لمعان زجاجي مع ترطيب يدوم 12 ساعة",
+    "category": "lips",
+    "categoryLabel": "شفاه وعيون",
+    "price": 1.25,
+    "oldPrice": null,
+    "imageUrl": "/products/lip-oil.webp",
+    "badge": "4 نكهات",
+    "benefits": [
+      "ترطيب عميق",
+      "لمعان",
+      "نكهات طبيعية"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 12,
+    "variants": [
+      {
+        "id": "lip-oil::خوخ Peach",
+        "label": "خوخ Peach",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "lip-oil::موز Banana",
+        "label": "موز Banana",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "lip-oil::كرز Cherry",
+        "label": "كرز Cherry",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 2
+      },
+      {
+        "id": "lip-oil::توت Blueberry",
+        "label": "توت Blueberry",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 3
+      }
+    ]
+  },
+  {
+    "slug": "foundation",
+    "nameAr": "كريم أساس سائل Emelie",
+    "nameEn": "Liquid Foundation SPF25",
+    "description": "تغطية حريرية مع حماية SPF25",
+    "category": "makeup",
+    "categoryLabel": "مكياج",
+    "price": 3,
+    "oldPrice": 18,
+    "imageUrl": "/products/foundation.webp",
+    "badge": "تغطية كاملة",
+    "benefits": [
+      "SPF25",
+      "يدوم 16 ساعة",
+      "لمسة طبيعية"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 13,
+    "variants": []
+  },
+  {
+    "slug": "aloe-gel",
+    "nameAr": "جل الألوفيرا المهدئ 99%",
+    "nameEn": "Soothing Aloe Gel 99%",
+    "description": "جل متعدد الاستخدامات يهدئ ويرطب",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 1.5,
+    "oldPrice": null,
+    "imageUrl": "/products/aloe-gel.webp",
+    "badge": null,
+    "benefits": [
+      "تهدئة فورية",
+      "99% طبيعي",
+      "للوجه والجسم"
+    ],
+    "isActive": true,
+    "isFeatured": false,
+    "sortOrder": 14,
+    "variants": [
+      {
+        "id": "aloe-gel::120ml",
+        "label": "120ml",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "aloe-gel::270ml",
+        "label": "270ml",
+        "price": 1.5,
+        "isActive": true,
+        "sortOrder": 1
+      }
+    ]
+  },
+  {
+    "slug": "nose-strips",
+    "nameAr": "شرائط تنظيف الأنف CQK",
+    "nameEn": "Nose Pore Strips",
+    "description": "تزيل الرؤوس السوداء بلطف",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 2,
+    "oldPrice": 5,
+    "imageUrl": "/products/nose-strips.webp",
+    "badge": null,
+    "benefits": [
+      "فحم طبيعي",
+      "تنقية المسام",
+      "نتيجة فورية"
+    ],
+    "isActive": true,
+    "isFeatured": false,
+    "sortOrder": 15,
+    "variants": []
+  },
+  {
+    "slug": "primer",
+    "nameAr": "برايمر بالكولاجين",
+    "nameEn": "Collagen Primer",
+    "description": "قاعدة مثالية تملأ المسام وتثبت المكياج",
+    "category": "makeup",
+    "categoryLabel": "مكياج",
+    "price": 3,
+    "oldPrice": 15,
+    "imageUrl": "/products/primer.webp",
+    "badge": "جديد",
+    "benefits": [
+      "كولاجين",
+      "تثبيت",
+      "مسام مخفية"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 16,
+    "variants": []
+  },
+  {
+    "slug": "eye-mask",
+    "nameAr": "ماسك العيون النجمي",
+    "nameEn": "Starry Eye Mask - 60 قطعة",
+    "description": "يقلل الانتفاخ والهالات بلمسة باردة",
+    "category": "lips",
+    "categoryLabel": "شفاه وعيون",
+    "price": 2.5,
+    "oldPrice": null,
+    "imageUrl": "/products/eye-mask.webp",
+    "badge": "60 قطعة",
+    "benefits": [
+      "كولاجين",
+      "يقلل الهالات",
+      "انتعاش"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 17,
+    "variants": []
+  },
+  {
+    "slug": "rose-water",
+    "nameAr": "ماء الورد الأصلي",
+    "nameEn": "Rose Water 250ml",
+    "description": "تونر طبيعي ينعش ويوازن البشرة",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 2,
+    "oldPrice": 7.5,
+    "imageUrl": "/products/rose-water.webp",
+    "badge": null,
+    "benefits": [
+      "ورد طبيعي",
+      "تثبيت مكياج",
+      "انتعاش"
+    ],
+    "isActive": true,
+    "isFeatured": false,
+    "sortOrder": 18,
+    "variants": []
+  },
+  {
+    "slug": "eyebrow-pencil",
+    "nameAr": "قلم حواجب 4 نقاط بمظهر طبيعي Kiss Beauty",
+    "nameEn": "Eyebrow Pencil Four-Point",
+    "description": "حواجب طبيعية ومتناسقة، ثبات طويل، مقاوم للماء والتعرق",
+    "category": "makeup",
+    "categoryLabel": "مكياج",
+    "price": 1,
+    "oldPrice": 6,
+    "imageUrl": "/products/eyebrow-pencil.webp",
+    "badge": "مقاوم للماء",
+    "benefits": [
+      "مظهر طبيعي",
+      "ثبات طويل",
+      "مقاوم للماء"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 19,
+    "variants": [
+      {
+        "id": "eyebrow-pencil::بني غامق",
+        "label": "بني غامق",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "eyebrow-pencil::بني فاتح",
+        "label": "بني فاتح",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 1
+      }
+    ]
+  },
+  {
+    "slug": "blush-palette",
+    "nameAr": "بلاشر باليت 6 ألوان ناعمة",
+    "nameEn": "Blush Palette",
+    "description": "ألوان ناعمة ولمسة طبيعية - SevenCool",
+    "category": "makeup",
+    "categoryLabel": "مكياج",
+    "price": 4,
+    "oldPrice": 13,
+    "imageUrl": "/products/blush-palette.webp",
+    "badge": "ألوان ناعمة",
+    "benefits": [
+      "6 ألوان",
+      "لمسة طبيعية",
+      "ثبات"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 20,
+    "variants": []
+  },
+  {
+    "slug": "contour-palette",
+    "nameAr": "كونتور باليت 8 ألوان",
+    "nameEn": "Contour Palette",
+    "description": "تحديد وإضاءة باحترافية",
+    "category": "makeup",
+    "categoryLabel": "مكياج",
+    "price": 4,
+    "oldPrice": 14,
+    "imageUrl": "/products/contour-palette.webp",
+    "badge": null,
+    "benefits": [
+      "8 ألوان",
+      "تحديد احترافي",
+      "إضاءة"
+    ],
+    "isActive": true,
+    "isFeatured": false,
+    "sortOrder": 21,
+    "variants": []
+  },
+  {
+    "slug": "essence-mascara",
+    "nameAr": "ماسكارا ايسنس - لاش برينسس و اكستريم",
+    "nameEn": "Essence Mascara Duo",
+    "description": "مظهر رموش أطول وكثافة أكبر، تركيبة خفيفة، ثبات طوال اليوم",
+    "category": "makeup",
+    "categoryLabel": "مكياج",
+    "price": 3,
+    "oldPrice": 8.5,
+    "imageUrl": "/products/essence-mascara.webp",
+    "badge": "الأكثر طلباً",
+    "benefits": [
+      "كثافة أكبر",
+      "خفيفة",
+      "ثبات طويل"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 22,
+    "variants": [
+      {
+        "id": "essence-mascara::Lash Princess",
+        "label": "Lash Princess",
+        "price": 3,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "essence-mascara::I Love Extreme Volume",
+        "label": "I Love Extreme Volume",
+        "price": 3,
+        "isActive": true,
+        "sortOrder": 1
+      }
+    ]
+  },
+  {
+    "slug": "sence-lip-balm",
+    "nameAr": "مرطب شفاه Hydro Shock بحمض الهيالورونيك - Sence",
+    "nameEn": "Sence Lip Balm Hydro Shock",
+    "description": "يرطب بعمق، تنعيم الشفاه، حمض الهيالورونيك، تركيبة نباتية VEGAN",
+    "category": "lips",
+    "categoryLabel": "شفاه وعيون",
+    "price": 1.5,
+    "oldPrice": 5,
+    "imageUrl": "/products/sence-lip-balm.webp",
+    "badge": null,
+    "benefits": [
+      "ترطيب عميق",
+      "حمض الهيالورونيك",
+      "Vegan"
+    ],
+    "isActive": true,
+    "isFeatured": false,
+    "sortOrder": 23,
+    "variants": []
+  },
+  {
+    "slug": "lipstick-set",
+    "nameAr": "روج شفاه 6 ألوان غنية",
+    "nameEn": "Lipstick 6 Shades",
+    "description": "تركيبة مريحة، لون غني، يدوم طويلاً",
+    "category": "lips",
+    "categoryLabel": "شفاه وعيون",
+    "price": 0.75,
+    "oldPrice": 7,
+    "imageUrl": "/products/lipstick-set.webp",
+    "badge": "6 ألوان",
+    "benefits": [
+      "لون غني",
+      "يدوم طويلاً",
+      "تركيبة مريحة"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 24,
+    "variants": [
+      {
+        "id": "lipstick-set::Pink Light",
+        "label": "Pink Light",
+        "price": 0.75,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "lipstick-set::Fuchsia",
+        "label": "Fuchsia",
+        "price": 0.75,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "lipstick-set::Nude Brown",
+        "label": "Nude Brown",
+        "price": 0.75,
+        "isActive": true,
+        "sortOrder": 2
+      },
+      {
+        "id": "lipstick-set::Coral",
+        "label": "Coral",
+        "price": 0.75,
+        "isActive": true,
+        "sortOrder": 3
+      },
+      {
+        "id": "lipstick-set::Red",
+        "label": "Red",
+        "price": 0.75,
+        "isActive": true,
+        "sortOrder": 4
+      },
+      {
+        "id": "lipstick-set::Burgundy",
+        "label": "Burgundy",
+        "price": 0.75,
+        "isActive": true,
+        "sortOrder": 5
+      }
+    ]
+  },
+  {
+    "slug": "body-mist",
+    "nameAr": "بودي ميست V.V.LOVE - نفحات منعشة",
+    "nameEn": "V.V.LOVE Body Mist 250ml",
+    "description": "نفحات منعشة لكل لحظة من يومك، تصميم أنيق، مناسب للاستخدام اليومي",
+    "category": "mist",
+    "categoryLabel": "عطور وميست",
+    "price": 2.25,
+    "oldPrice": 12,
+    "imageUrl": "/products/body-mist.webp",
+    "badge": "6 روائح",
+    "benefits": [
+      "رائحة منعشة",
+      "250ml",
+      "تصميم أنيق"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 25,
+    "variants": [
+      {
+        "id": "body-mist::Petal Aurora",
+        "label": "Petal Aurora",
+        "price": 2.25,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "body-mist::Beautiful Summer",
+        "label": "Beautiful Summer",
+        "price": 2.25,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "body-mist::Forever Emotion",
+        "label": "Forever Emotion",
+        "price": 2.25,
+        "isActive": true,
+        "sortOrder": 2
+      },
+      {
+        "id": "body-mist::Fairy Party",
+        "label": "Fairy Party",
+        "price": 2.25,
+        "isActive": true,
+        "sortOrder": 3
+      },
+      {
+        "id": "body-mist::Royal Sweety",
+        "label": "Royal Sweety",
+        "price": 2.25,
+        "isActive": true,
+        "sortOrder": 4
+      },
+      {
+        "id": "body-mist::Dreaming Party",
+        "label": "Dreaming Party",
+        "price": 2.25,
+        "isActive": true,
+        "sortOrder": 5
+      }
+    ]
+  },
+  {
+    "slug": "moist-lip",
+    "nameAr": "مرطب شفاه Moist Lip بالفواكه",
+    "nameEn": "Moist Lip Repair Balm",
+    "description": "ترطيب ونعومة للشفاه بلمسة فواكه لذيذة",
+    "category": "lips",
+    "categoryLabel": "شفاه وعيون",
+    "price": 1.25,
+    "oldPrice": null,
+    "imageUrl": "/products/moist-lip.webp",
+    "badge": "4 نكهات",
+    "benefits": [
+      "ترطيب",
+      "نكهات طبيعية",
+      "ميدالية تعليق"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 26,
+    "variants": [
+      {
+        "id": "moist-lip::Watermelon بطيخ",
+        "label": "Watermelon بطيخ",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "moist-lip::Strawberry فراولة",
+        "label": "Strawberry فراولة",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "moist-lip::Peach خوخ",
+        "label": "Peach خوخ",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 2
+      },
+      {
+        "id": "moist-lip::Cherry كرز",
+        "label": "Cherry كرز",
+        "price": 1.25,
+        "isActive": true,
+        "sortOrder": 3
+      }
+    ]
+  },
+  {
+    "slug": "body-scrub-cqk",
+    "nameAr": "مقشر الجسم الطبيعي CQK - 5 روائح فاخرة",
+    "nameEn": "CQK Body Scrub 500g",
+    "description": "مقشر غني بالمكونات الطبيعية يزيل الخلايا الميتة ويمنحك بشرة ناعمة ومشرقة",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 2.5,
+    "oldPrice": 16,
+    "imageUrl": "/products/body-scrub-cqk.webp",
+    "badge": "500g",
+    "benefits": [
+      "تقشير لطيف",
+      "500g",
+      "5 روائح فاخرة"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 27,
+    "variants": [
+      {
+        "id": "body-scrub-cqk::Rice",
+        "label": "Rice",
+        "price": 2.5,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "body-scrub-cqk::Coffee",
+        "label": "Coffee",
+        "price": 2.5,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "body-scrub-cqk::Avocado",
+        "label": "Avocado",
+        "price": 2.5,
+        "isActive": true,
+        "sortOrder": 2
+      },
+      {
+        "id": "body-scrub-cqk::Peach",
+        "label": "Peach",
+        "price": 2.5,
+        "isActive": true,
+        "sortOrder": 3
+      },
+      {
+        "id": "body-scrub-cqk::24K Gold",
+        "label": "24K Gold",
+        "price": 2.5,
+        "isActive": true,
+        "sortOrder": 4
+      }
+    ]
+  },
+  {
+    "slug": "khamria-pure-sweet",
+    "nameAr": "مخمرية Pure Sweet للشعر والجسم - 5 روائح",
+    "nameEn": "Pure Sweet Khamria",
+    "description": "مخمرية فاخرة للشعر والجسم بتركيبة ثابتة وروائح تأسر الحواس",
+    "category": "mist",
+    "categoryLabel": "عطور وميست",
+    "price": 1,
+    "oldPrice": 13,
+    "imageUrl": "/products/khamria-pure-sweet.webp",
+    "badge": "الأكثر مبيعاً",
+    "benefits": [
+      "ثبات طويل",
+      "للشعر والجسم",
+      "روائح فاخرة"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 28,
+    "variants": [
+      {
+        "id": "khamria-pure-sweet::صبايا",
+        "label": "صبايا",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "khamria-pure-sweet::مانجا",
+        "label": "مانجا",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "khamria-pure-sweet::ورد",
+        "label": "ورد",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 2
+      },
+      {
+        "id": "khamria-pure-sweet::أنا الأبيض",
+        "label": "أنا الأبيض",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 3
+      },
+      {
+        "id": "khamria-pure-sweet::موصوف",
+        "label": "موصوف",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 4
+      }
+    ]
+  },
+  {
+    "slug": "boutique-baby-powder",
+    "nameAr": "مجموعة بودرة الأطفال الوردية - لوشن وجل استحمام",
+    "nameEn": "Boutique Baby Powder Set",
+    "description": "مجموعة متكاملة برائحة بودرة الأطفال الوردية الناعمة - لوشن وجل استحمام",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 7,
+    "oldPrice": 20,
+    "imageUrl": "/products/boutique-baby-powder.webp",
+    "badge": "مجموعة متكاملة",
+    "benefits": [
+      "مجموعة كاملة",
+      "رائحة بودرة الأطفال",
+      "ترطيب فاخر"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 29,
+    "variants": []
+  },
+  {
+    "slug": "hand-mask-aloe",
+    "nameAr": "قناع اليدين بالألوفيرا والنياسيناميد",
+    "nameEn": "Aloe & Niacinamide Hand Mask",
+    "description": "قناع مكثف يغذي ويرطب اليدين في 20 دقيقة فقط",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 1,
+    "oldPrice": 6,
+    "imageUrl": "/products/hand-mask-aloe.webp",
+    "badge": "20 دقيقة",
+    "benefits": [
+      "ألوفيرا",
+      "نياسيناميد",
+      "ترطيب عميق"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 30,
+    "variants": []
+  },
+  {
+    "slug": "hyaluronic-cream",
+    "nameAr": "كريم حمض الهيالورونيك المجدد",
+    "nameEn": "Hyaluronic Acid Renewing Cream",
+    "description": "كريم مجدد بتركيز عالٍ من حمض الهيالورونيك لنضارة وشباب البشرة",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 3.5,
+    "oldPrice": 19,
+    "imageUrl": "/products/hyaluronic-cream.webp",
+    "badge": "هيالورونيك",
+    "benefits": [
+      "هيالورونيك",
+      "تجديد البشرة",
+      "نضارة فورية"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 31,
+    "variants": []
+  },
+  {
+    "slug": "flawless-filter-primer",
+    "nameAr": "برايمر فلتر Flawless Filter لإطلالة مثالية",
+    "nameEn": "Flawless Filter Primer",
+    "description": "برايمر فلتر يمنحك إشراقة فورية وإطلالة مثالية كالفلتر",
+    "category": "makeup",
+    "categoryLabel": "مكياج",
+    "price": 3,
+    "oldPrice": 18,
+    "imageUrl": "/products/flawless-filter-primer.webp",
+    "badge": "إشراقة فورية",
+    "benefits": [
+      "إشراقة فورية",
+      "تغطية ناعمة",
+      "لمسة مثالية"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 32,
+    "variants": []
+  },
+  {
+    "slug": "sheglam-spf90",
+    "nameAr": "واقي شمس Sheglam SPF 90+ لتفتيح وتوحيد اللون",
+    "nameEn": "Sheglam Sunscreen SPF 90+",
+    "description": "حماية قصوى SPF 90+ مع تفتيح وتوحيد لون البشرة",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 7,
+    "oldPrice": 15,
+    "imageUrl": "/products/sheglam-spf90.webp",
+    "badge": "SPF 90+",
+    "benefits": [
+      "SPF 90+",
+      "تفتيح",
+      "توحيد اللون"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 33,
+    "variants": []
+  },
+  {
+    "slug": "lip-liner-marker-rm",
+    "nameAr": "أقلام تحديد الشفاه Lip Liner Marker - ثبات طويل الأمد",
+    "nameEn": "Romantic Matte Lip Liner Marker 6 Shades",
+    "description": "تحديد دقيق وسهل الاستخدام، ثبات طويل الأمد، 6 درجات ألوان غنية من النود إلى الأحمر والبرغندي، مع سواتش للشفاه",
+    "category": "lips",
+    "categoryLabel": "شفاه وعيون",
+    "price": 1,
+    "oldPrice": 8.5,
+    "imageUrl": "/products/lip-liner-marker-rm.webp",
+    "badge": "6 ألوان",
+    "benefits": [
+      "تحديد دقيق",
+      "ثبات طويل",
+      "6 ألوان غنية"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 34,
+    "variants": [
+      {
+        "id": "lip-liner-marker-rm::01 وردي فاتح",
+        "label": "01 وردي فاتح",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 0
+      },
+      {
+        "id": "lip-liner-marker-rm::02 بني محمر",
+        "label": "02 بني محمر",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 1
+      },
+      {
+        "id": "lip-liner-marker-rm::03 بني كراميل",
+        "label": "03 بني كراميل",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 2
+      },
+      {
+        "id": "lip-liner-marker-rm::04 بني غامق",
+        "label": "04 بني غامق",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 3
+      },
+      {
+        "id": "lip-liner-marker-rm::05 أحمر",
+        "label": "05 أحمر",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 4
+      },
+      {
+        "id": "lip-liner-marker-rm::06 برغندي",
+        "label": "06 برغندي",
+        "price": 1,
+        "isActive": true,
+        "sortOrder": 5
+      }
+    ]
+  },
+  {
+    "slug": "cqk-bamboo-charcoal-mask",
+    "nameAr": "قناع الفحم الخيزران الأسود Peel-Off Mask من CQK",
+    "nameEn": "CQK Pure Skin Bamboo Charcoal Peel-Off Mask 120ml",
+    "description": "ينظف المسام بعمق، يساعد على إزالة الشوائب، يمنح البشرة مظهراً أنقى، يترك البشرة ناعمة ومنتعشة - بخلاصة فحم الخيزران و Witch Hazel لتنظيف المسام العميق، الفحم الخيزراني للتقشير الفعال",
+    "category": "skincare",
+    "categoryLabel": "العناية بالبشرة",
+    "price": 2.5,
+    "oldPrice": 10,
+    "imageUrl": "/products/cqk-bamboo-charcoal-mask.webp",
+    "badge": "فحم الخيزران",
+    "benefits": [
+      "ينظف المسام بعمق",
+      "إزالة الشوائب",
+      "مظهر أنقى",
+      "ناعمة ومنتعشة"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 35,
+    "variants": []
+  },
+  {
+    "slug": "you-miracle-sexy-clothes-duo",
+    "nameAr": "رذاذ معطر + لوشن للجسم YOU miracle Very Sexy Clothes",
+    "nameEn": "YOU Miracle Mist & Lotion Duo 250ml Each",
+    "description": "عطري ورطبي بخطوة واحدة - رائحة تدوم طويلاً، ترطيب ناعم للبشرة، يمنحك إحساس بالانتعاش - رذاذ معطر Fine Fragrance Mist + لوشن عطري Fragrance Lotion",
+    "category": "mist",
+    "categoryLabel": "عطور ومسك",
+    "price": 7,
+    "oldPrice": 22,
+    "imageUrl": "/products/you-miracle-sexy-clothes-duo.webp",
+    "badge": "250ml لكل عبوة",
+    "benefits": [
+      "رائحة تدوم طويلاً",
+      "ترطيب ناعم",
+      "إحساس بالانتعاش",
+      "عطري ورطبي"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 36,
+    "variants": []
+  },
+  {
+    "slug": "bb-7in1-foundation",
+    "nameAr": "كريم أساس BB 7 في 1 - تغطية مثالية ولمسة طبيعية",
+    "nameEn": "BB 7 in 1 Cream Flawless Foundation Romantic Bright",
+    "description": "تغطية مثالية ولمسة طبيعية، تركيبة ناعمة ومريحة، يخفي العيوب ويوحد لون البشرة، قوام ناعم وخفيف على البشرة، يرطب البشرة ويمنحها مظهر طبيعي، مناسب لجميع أنواع البشرة، يحمي من أشعة الشمس الضارة، إطلالة طبيعية ومشرقة - بالمعادن والفيتامينات",
+    "category": "makeup",
+    "categoryLabel": "مكياج",
+    "price": 2,
+    "oldPrice": 14,
+    "imageUrl": "/products/bb-7in1-foundation.webp",
+    "badge": "C+ معادن وفيتامينات",
+    "benefits": [
+      "تغطية مثالية",
+      "تركيبة ناعمة",
+      "يخفي العيوب",
+      "يوحد لون البشرة"
+    ],
+    "isActive": true,
+    "isFeatured": true,
+    "sortOrder": 37,
+    "variants": []
+  }
+]

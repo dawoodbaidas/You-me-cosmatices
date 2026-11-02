@@ -1,0 +1,538 @@
+/* Shared artwork for the two pinned scroll scenes. */
+
+.hero {
+  --cream: #fbf6e9;
+  --cream-deep: #efe3cb;
+  --line: #cdba90;
+  --gold: #8a7650;
+  --ink: #2b2620;
+  position: relative;
+  height: calc(100vh + 70vh);
+  overflow: clip;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.heroPin {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100svh;
+  padding: calc(var(--header-height, 120px) + 10px) 0 0;
+  overflow: hidden;
+  background: var(--cream);
+  isolation: isolate;
+}
+
+.curtainTop,
+.curtainBottom {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 30;
+  height: 50%;
+  background: var(--cream-deep);
+  pointer-events: none;
+}
+
+.curtainTop { top: 0; }
+.curtainBottom { bottom: 0; }
+
+.heroTitle {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  max-width: 980px;
+  margin: 0;
+  padding-inline: 16px;
+  text-align: center;
+  font-size: clamp(38px, 10.5vw, 78px);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: normal;
+}
+
+.heroTitle > span {
+  display: block;
+  overflow: hidden;
+  padding-block: 2px;
+}
+
+.heroTitle > span:last-child { color: var(--gold); }
+
+.heroTitle b {
+  display: inline-block;
+  overflow: hidden;
+  font-weight: inherit;
+  vertical-align: bottom;
+}
+
+.heroTitle b + b { margin-inline-start: 0.16em; }
+
+.heroTitle i {
+  display: inline-block;
+  font-style: normal;
+  transform: translateY(112%);
+}
+
+.heroStage {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 0;
+  margin-top: 4px;
+}
+
+.heroWordmark {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  z-index: 0;
+  translate: -50% -50%;
+  color: rgba(120, 101, 65, .14);
+  font: 800 clamp(64px, 19vw, 176px) / 1 var(--font-tajawal), system-ui, sans-serif;
+  letter-spacing: normal;
+  white-space: nowrap;
+  
+  opacity: 0.7;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.heroGlow {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  z-index: 0;
+  width: min(82vw, 500px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, #fff9 34%, transparent 70%);
+  filter: blur(6px);
+  opacity: 0.8;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.shelf {
+  position: absolute;
+  right: 5%;
+  bottom: 20px;
+  left: 5%;
+  z-index: 1;
+  height: 1px;
+  background: var(--line);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+  pointer-events: none;
+}
+
+.heroProduct {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  translate: -50% 0;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.heroProduct .cutout {
+  width: 100%;
+  height: auto;
+}
+
+.heroMain { z-index: 5; width: min(138.88px, calc(100vw * 124 / 390)); }
+.heroMiddle { z-index: 4; width: min(89.6px, calc(100vw * 80 / 390)); }
+.heroOuter { z-index: 3; width: min(58.24px, calc(100vw * 52 / 390)); }
+
+.productShadow {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  z-index: -1;
+  width: 76%;
+  height: 10px;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(92, 72, 42, 0.3), transparent 72%);
+  pointer-events: none;
+}
+
+.shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.heroActions {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding-inline: 16px;
+  margin-top: 2px;
+}
+
+.heroActions button {
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.heroActions button:first-child {
+  background: var(--ink);
+  color: #fff;
+}
+
+.scrollHint {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 34px;
+  margin-top: 2px;
+  pointer-events: none;
+}
+
+.scrollHint > span {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 26px;
+  background: var(--line);
+}
+
+.scrollHint i {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.marquee {
+  position: relative;
+  z-index: 4;
+  flex: none;
+  width: 100%;
+  margin-top: auto;
+  padding: 9px 0;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--cream);
+}
+
+.marquee > div {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee span {
+  display: block;
+  padding-inline-end: 0.6em;
+  color: #6c5c40;
+  font-size: 11px;
+  letter-spacing: normal;
+  white-space: nowrap;
+}
+
+/* Shared transparent cutout frame: the inner box is the uncropped image. */
+.cutout {
+  position: relative;
+  display: block;
+  max-width: none;
+  overflow: visible;
+}
+
+.imageBox {
+  position: absolute;
+  display: block;
+}
+
+.plainImage { object-fit: contain; }
+
+/* ------------------------------------------------------------------ showcase */
+
+.showcase {
+  position: relative;
+  display: block;
+  height: calc(100svh + (var(--count, 5) - 1) * 24svh);
+  overflow: clip;
+  background: #f8f5ef;
+  color: #2b2620;
+}
+
+.showcasePin {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  overflow: clip;
+  isolation: isolate;
+}
+
+.showcaseBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(165deg, #f8f5ef, #ece5d8);
+  pointer-events: none;
+}
+
+.showcaseHeading {
+  position: absolute;
+  top: calc(var(--header-height, 120px) + 6px);
+  right: 0;
+  left: 0;
+  z-index: 5;
+  text-align: center;
+  pointer-events: none;
+}
+
+.showcaseHeading p {
+  color: #6c5c40;
+  font-size: 10px;
+  letter-spacing: normal;
+}
+
+.showcaseHeading h2 {
+  font-size: clamp(30px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.showcaseStage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.showcaseGlow {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  z-index: 0;
+  width: min(78vw, 560px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, #fff8 38%, transparent 70%);
+  filter: blur(10px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.showcaseItem {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  z-index: 2;
+  height: clamp(200px, 38svh, 320px);
+  translate: -50% -50%;
+  visibility: hidden;
+  opacity: 0;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+.showcaseProduct {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.showcaseProduct .cutout {
+  width: 100%;
+  height: 100%;
+}
+
+.showcaseShadow {
+  position: absolute;
+  bottom: -4%;
+  left: 50%;
+  z-index: -1;
+  width: 72%;
+  height: 7%;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(72, 55, 30, 0.32), transparent 70%);
+  pointer-events: none;
+}
+
+.showcaseInfo {
+  position: absolute;
+  right: 0;
+  bottom: calc(84px + env(safe-area-inset-bottom));
+  left: 0;
+  z-index: 4;
+  height: clamp(150px, 22svh, 190px);
+}
+
+.showcaseInfoItem {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  padding-inline: 20px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.showcaseCategory {
+  color: #655c50;
+  font-size: 10px;
+  letter-spacing: normal;
+}
+
+.showcaseInfoItem h3 {
+  display: -webkit-box;
+  max-width: 38ch;
+  overflow: hidden;
+  font-size: clamp(18px, 2.2vw, 26px);
+  font-weight: 700;
+  line-height: 1.32;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.showcaseInfoItem p {
+  display: -webkit-box;
+  max-width: 46ch;
+  overflow: hidden;
+  color: #554c40;
+  font-size: 12.5px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.showcaseBuy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 16px;
+  margin-top: 3px;
+}
+
+.showcaseBuy strong {
+  font-size: 20px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.showcaseBuy button {
+  width: 220px;
+  max-width: calc(100vw - 150px);
+  height: 50px;
+  border-radius: 25px;
+  background: #2b2620;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.showcaseDots {
+  position: absolute;
+  right: 0;
+  bottom: calc(30px + env(safe-area-inset-bottom));
+  left: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+}
+
+.showcaseDots button {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+}
+
+.showcaseDots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 8px;
+  background: rgba(43, 38, 32, 0.32);
+  transition: width 0.25s, background-color 0.25s;
+}
+
+.showcaseDots [aria-current='true'] span {
+  width: 32px;
+  background: #2b2620;
+}
+
+.showcaseHint {
+  position: absolute;
+  right: 0;
+  bottom: calc(6px + env(safe-area-inset-bottom));
+  left: 0;
+  z-index: 5;
+  color: #655c50;
+  font-size: 11px;
+  text-align: center;
+  transition: opacity 0.25s;
+}
+
+@media (max-height: 700px) {
+  .heroTitle { font-size: clamp(32px, 9vw, 58px); }
+  .heroTitle > span { padding-block: 1px; }
+  .scrollHint { display: none; }
+  .showcaseHeading { top: calc(var(--header-height, 110px) + 2px); }
+  .showcaseHeading p { display: none; }
+  .showcaseHeading h2 { font-size: 28px; }
+  .showcaseItem { top: 44%; height: clamp(180px, 32svh, 260px); }
+  .showcaseInfo { bottom: calc(78px + env(safe-area-inset-bottom)); height: 132px; }
+  .showcaseInfoItem p { display: none; }
+  .showcaseHint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero { height: auto; }
+  .heroPin { position: relative; height: 100svh; }
+  .curtainTop,
+  .curtainBottom { display: none; }
+  .heroTitle i { transform: none; }
+  .showcase { height: auto; }
+  .showcasePin { position: relative; height: 100svh; }
+  .showcaseHint { display: none; }
+  .showcaseDots span { transition: none; }
+}

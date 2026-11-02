@@ -1,0 +1,1005 @@
+{
+  "base": "http://localhost:3000",
+  "widths": [
+    {
+      "width": 360,
+      "height": 844,
+      "document": {
+        "bodyWidth": 360,
+        "rootWidth": 360,
+        "height": 9696
+      },
+      "hero": {
+        "x": 0,
+        "y": 93,
+        "w": 360,
+        "h": 695
+      },
+      "cue": {
+        "x": 20,
+        "y": 738,
+        "w": 320,
+        "h": 30
+      },
+      "visibleCards": 12,
+      "hiddenCards": 0,
+      "firstCard": {
+        "x": 185,
+        "y": 4856,
+        "w": 160,
+        "h": 329
+      },
+      "firstImage": {
+        "natural": [
+          165,
+          165
+        ],
+        "loaded": true,
+        "fit": "contain",
+        "box": {
+          "x": 186,
+          "y": 4857,
+          "w": 158,
+          "h": 197
+        }
+      },
+      "overflow": [
+        {
+          "tag": "A",
+          "cls": "skip-link",
+          "x": -13,
+          "y": -29,
+          "w": 129,
+          "h": 39
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "editorial-object",
+          "x": -234,
+          "y": 3070,
+          "w": 281,
+          "h": 486
+        },
+        {
+          "tag": "DIV",
+          "cls": "editorial-object-top",
+          "x": -223,
+          "y": 3081,
+          "w": 259,
+          "h": 21
+        },
+        {
+          "tag": "SPAN",
+          "cls": "",
+          "x": -15,
+          "y": 3082,
+          "w": 49,
+          "h": 11
+        },
+        {
+          "tag": "SPAN",
+          "cls": "",
+          "x": -221,
+          "y": 3082,
+          "w": 31,
+          "h": 11
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "editorial-object-photo",
+          "x": -223,
+          "y": 3103,
+          "w": 259,
+          "h": 323
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "x": -223,
+          "y": 3103,
+          "w": 259,
+          "h": 323
+        },
+        {
+          "tag": "DIV",
+          "cls": "editorial-object-info",
+          "x": -223,
+          "y": 3426,
+          "w": 259,
+          "h": 83
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "x": -162,
+          "y": 3440,
+          "w": 197,
+          "h": 58
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "x": -162,
+          "y": 3440,
+          "w": 197,
+          "h": 42
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "x": -162,
+          "y": 3484,
+          "w": 197,
+          "h": 14
+        },
+        {
+          "tag": "STRONG",
+          "cls": "",
+          "x": -221,
+          "y": 3440,
+          "w": 46,
+          "h": 21
+        }
+      ],
+      "smallTargets": [
+        {
+          "label": "اكتشفي الحكاية التالية",
+          "tag": "BUTTON",
+          "cls": "world-scroll",
+          "x": 14,
+          "y": 750,
+          "w": 194,
+          "h": 24
+        },
+        {
+          "label": "فرانكل بلاك إليكسير للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 201,
+          "y": 6131,
+          "w": 141,
+          "h": 24
+        },
+        {
+          "label": "وايلد كولت عسّاف للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 44,
+          "y": 6131,
+          "w": 129,
+          "h": 24
+        },
+        {
+          "label": "تونر الكرز المرطب والمهدئ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 35,
+          "y": 6482,
+          "w": 139,
+          "h": 24
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "document": {
+        "bodyWidth": 390,
+        "rootWidth": 390,
+        "height": 10013
+      },
+      "hero": {
+        "x": 0,
+        "y": 93,
+        "w": 390,
+        "h": 706
+      },
+      "cue": {
+        "x": 20,
+        "y": 749,
+        "w": 350,
+        "h": 30
+      },
+      "visibleCards": 12,
+      "hiddenCards": 0,
+      "firstCard": {
+        "x": 200,
+        "y": 4984,
+        "w": 175,
+        "h": 348
+      },
+      "firstImage": {
+        "natural": [
+          179,
+          179
+        ],
+        "loaded": true,
+        "fit": "contain",
+        "box": {
+          "x": 201,
+          "y": 4985,
+          "w": 173,
+          "h": 216
+        }
+      },
+      "overflow": [
+        {
+          "tag": "ARTICLE",
+          "cls": "editorial-object",
+          "x": -250,
+          "y": 3141,
+          "w": 304,
+          "h": 494
+        },
+        {
+          "tag": "DIV",
+          "cls": "editorial-object-top",
+          "x": -239,
+          "y": 3152,
+          "w": 282,
+          "h": 21
+        },
+        {
+          "tag": "SPAN",
+          "cls": "",
+          "x": -8,
+          "y": 3153,
+          "w": 49,
+          "h": 11
+        },
+        {
+          "tag": "SPAN",
+          "cls": "",
+          "x": -237,
+          "y": 3153,
+          "w": 31,
+          "h": 11
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "editorial-object-photo",
+          "x": -239,
+          "y": 3173,
+          "w": 282,
+          "h": 353
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "x": -239,
+          "y": 3173,
+          "w": 282,
+          "h": 353
+        },
+        {
+          "tag": "DIV",
+          "cls": "editorial-object-info",
+          "x": -239,
+          "y": 3526,
+          "w": 282,
+          "h": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "x": -159,
+          "y": 3540,
+          "w": 200,
+          "h": 37
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "x": -159,
+          "y": 3540,
+          "w": 200,
+          "h": 21
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "x": -159,
+          "y": 3563,
+          "w": 200,
+          "h": 14
+        },
+        {
+          "tag": "STRONG",
+          "cls": "",
+          "x": -237,
+          "y": 3540,
+          "w": 46,
+          "h": 21
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "editorial-open",
+          "x": -239,
+          "y": 3588,
+          "w": 282,
+          "h": 36
+        }
+      ],
+      "smallTargets": [
+        {
+          "label": "اكتشفي الحكاية التالية",
+          "tag": "BUTTON",
+          "cls": "world-scroll",
+          "x": 20,
+          "y": 761,
+          "w": 194,
+          "h": 24
+        },
+        {
+          "label": "قناع اليدين بالبابايا والنيا",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 205,
+          "y": 5224,
+          "w": 167,
+          "h": 24
+        },
+        {
+          "label": "فرانكل بلاك إليكسير للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 231,
+          "y": 6334,
+          "w": 141,
+          "h": 24
+        },
+        {
+          "label": "وايلد كولت عسّاف للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 59,
+          "y": 6334,
+          "w": 129,
+          "h": 24
+        },
+        {
+          "label": "تونر الكرز المرطب والمهدئ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 50,
+          "y": 6704,
+          "w": 139,
+          "h": 24
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "height": 844,
+      "document": {
+        "bodyWidth": 430,
+        "rootWidth": 430,
+        "height": 10452
+      },
+      "hero": {
+        "x": 0,
+        "y": 93,
+        "w": 430,
+        "h": 745
+      },
+      "cue": {
+        "x": 20,
+        "y": 788,
+        "w": 390,
+        "h": 30
+      },
+      "visibleCards": 12,
+      "hiddenCards": 0,
+      "firstCard": {
+        "x": 220,
+        "y": 5206,
+        "w": 195,
+        "h": 373
+      },
+      "firstImage": {
+        "natural": [
+          197,
+          197
+        ],
+        "loaded": true,
+        "fit": "contain",
+        "box": {
+          "x": 221,
+          "y": 5207,
+          "w": 193,
+          "h": 241
+        }
+      },
+      "overflow": [
+        {
+          "tag": "ARTICLE",
+          "cls": "editorial-object",
+          "x": -273,
+          "y": 3258,
+          "w": 335,
+          "h": 533
+        },
+        {
+          "tag": "DIV",
+          "cls": "editorial-object-top",
+          "x": -262,
+          "y": 3269,
+          "w": 313,
+          "h": 21
+        },
+        {
+          "tag": "SPAN",
+          "cls": "",
+          "x": -260,
+          "y": 3270,
+          "w": 31,
+          "h": 11
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "editorial-object-photo",
+          "x": -262,
+          "y": 3290,
+          "w": 313,
+          "h": 392
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "x": -262,
+          "y": 3290,
+          "w": 313,
+          "h": 392
+        },
+        {
+          "tag": "DIV",
+          "cls": "editorial-object-info",
+          "x": -262,
+          "y": 3682,
+          "w": 313,
+          "h": 62
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "x": -150,
+          "y": 3696,
+          "w": 200,
+          "h": 37
+        },
+        {
+          "tag": "H3",
+          "cls": "",
+          "x": -150,
+          "y": 3696,
+          "w": 200,
+          "h": 21
+        },
+        {
+          "tag": "P",
+          "cls": "",
+          "x": -150,
+          "y": 3719,
+          "w": 200,
+          "h": 14
+        },
+        {
+          "tag": "STRONG",
+          "cls": "",
+          "x": -260,
+          "y": 3696,
+          "w": 46,
+          "h": 21
+        },
+        {
+          "tag": "BUTTON",
+          "cls": "editorial-open",
+          "x": -262,
+          "y": 3744,
+          "w": 313,
+          "h": 36
+        },
+        {
+          "tag": "svg",
+          "cls": "[object SVGAnimatedString]",
+          "x": -262,
+          "y": 3755,
+          "w": 14,
+          "h": 14
+        }
+      ],
+      "smallTargets": [
+        {
+          "label": "اكتشفي الحكاية التالية",
+          "tag": "BUTTON",
+          "cls": "world-scroll",
+          "x": 20,
+          "y": 800,
+          "w": 194,
+          "h": 24
+        },
+        {
+          "label": "قناع اليدين بالبابايا والنيا",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 245,
+          "y": 5472,
+          "w": 167,
+          "h": 24
+        },
+        {
+          "label": "فرانكل بلاك إليكسير للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 271,
+          "y": 6657,
+          "w": 141,
+          "h": 24
+        },
+        {
+          "label": "وايلد كولت عسّاف للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 79,
+          "y": 6657,
+          "w": 129,
+          "h": 24
+        },
+        {
+          "label": "تونر الكرز المرطب والمهدئ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 70,
+          "y": 7051,
+          "w": 139,
+          "h": 24
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "height": 1000,
+      "document": {
+        "bodyWidth": 768,
+        "rootWidth": 768,
+        "height": 8497
+      },
+      "hero": {
+        "x": 0,
+        "y": 97,
+        "w": 768,
+        "h": 900
+      },
+      "cue": {
+        "x": 34,
+        "y": 947,
+        "w": 700,
+        "h": 30
+      },
+      "visibleCards": 12,
+      "hiddenCards": 0,
+      "firstCard": {
+        "x": 511,
+        "y": 4640,
+        "w": 223,
+        "h": 417
+      },
+      "firstImage": {
+        "natural": [
+          230,
+          230
+        ],
+        "loaded": true,
+        "fit": "contain",
+        "box": {
+          "x": 512,
+          "y": 4641,
+          "w": 221,
+          "h": 276
+        }
+      },
+      "overflow": [],
+      "smallTargets": [
+        {
+          "label": "اكتشفي الحكاية التالية",
+          "tag": "BUTTON",
+          "cls": "world-scroll",
+          "x": 34,
+          "y": 959,
+          "w": 194,
+          "h": 24
+        },
+        {
+          "label": "قناع اليدين بالبابايا والنيا",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 559,
+          "y": 4944,
+          "w": 173,
+          "h": 24
+        },
+        {
+          "label": "كريم دوس لوناس المرطب بالكول",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 292,
+          "y": 5391,
+          "w": 201,
+          "h": 24
+        },
+        {
+          "label": "فرانكل بلاك إليكسير للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 585,
+          "y": 5838,
+          "w": 147,
+          "h": 24
+        },
+        {
+          "label": "وايلد كولت عسّاف للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 359,
+          "y": 5838,
+          "w": 135,
+          "h": 24
+        },
+        {
+          "label": "مجموعة العناية والانتعاش من ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 55,
+          "y": 5838,
+          "w": 199,
+          "h": 24
+        },
+        {
+          "label": "تونر الكرز المرطب والمهدئ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 588,
+          "y": 6285,
+          "w": 144,
+          "h": 24
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 1000,
+      "document": {
+        "bodyWidth": 1024,
+        "rootWidth": 1024,
+        "height": 8233
+      },
+      "hero": {
+        "x": 0,
+        "y": 97,
+        "w": 1024,
+        "h": 903
+      },
+      "cue": {
+        "x": 46,
+        "y": 967,
+        "w": 932,
+        "h": 13
+      },
+      "visibleCards": 12,
+      "hiddenCards": 0,
+      "firstCard": {
+        "x": 760,
+        "y": 4747,
+        "w": 221,
+        "h": 418
+      },
+      "firstImage": {
+        "natural": [
+          235,
+          235
+        ],
+        "loaded": true,
+        "fit": "contain",
+        "box": {
+          "x": 761,
+          "y": 4748,
+          "w": 219,
+          "h": 274
+        }
+      },
+      "overflow": [],
+      "smallTargets": [
+        {
+          "label": "المتجر",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 531,
+          "y": 58,
+          "w": 26,
+          "h": 40
+        },
+        {
+          "label": "الهدايا",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 482,
+          "y": 58,
+          "w": 27,
+          "h": 40
+        },
+        {
+          "label": "حكايتنا",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 433,
+          "y": 58,
+          "w": 28,
+          "h": 40
+        },
+        {
+          "label": "اكتشفي الحكاية التالية",
+          "tag": "BUTTON",
+          "cls": "world-scroll",
+          "x": 46,
+          "y": 962,
+          "w": 194,
+          "h": 24
+        },
+        {
+          "label": "قناع اليدين بالبابايا والنيا",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 799,
+          "y": 5049,
+          "w": 180,
+          "h": 24
+        },
+        {
+          "label": "كريم دوس لوناس المرطب بالكول",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 770,
+          "y": 5500,
+          "w": 209,
+          "h": 24
+        },
+        {
+          "label": "فرانكل بلاك إليكسير للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 349,
+          "y": 5500,
+          "w": 152,
+          "h": 24
+        },
+        {
+          "label": "وايلد كولت عسّاف للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 122,
+          "y": 5500,
+          "w": 140,
+          "h": 24
+        },
+        {
+          "label": "مجموعة العناية والانتعاش من ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 772,
+          "y": 5952,
+          "w": 207,
+          "h": 24
+        },
+        {
+          "label": "تونر الكرز المرطب والمهدئ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 590,
+          "y": 5952,
+          "w": 150,
+          "h": 24
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "document": {
+        "bodyWidth": 1440,
+        "rootWidth": 1440,
+        "height": 9382
+      },
+      "hero": {
+        "x": 0,
+        "y": 97,
+        "w": 1440,
+        "h": 903
+      },
+      "cue": {
+        "x": 86,
+        "y": 967,
+        "w": 1267,
+        "h": 13
+      },
+      "visibleCards": 12,
+      "hiddenCards": 0,
+      "firstCard": {
+        "x": 1053,
+        "y": 5203,
+        "w": 300,
+        "h": 521
+      },
+      "firstImage": {
+        "natural": [
+          331,
+          331
+        ],
+        "loaded": true,
+        "fit": "contain",
+        "box": {
+          "x": 1054,
+          "y": 5204,
+          "w": 298,
+          "h": 373
+        }
+      },
+      "overflow": [],
+      "smallTargets": [
+        {
+          "label": "المتجر",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 743,
+          "y": 109,
+          "w": 26,
+          "h": 40
+        },
+        {
+          "label": "الهدايا",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 686,
+          "y": 109,
+          "w": 27,
+          "h": 40
+        },
+        {
+          "label": "حكايتنا",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 628,
+          "y": 109,
+          "w": 28,
+          "h": 40
+        },
+        {
+          "label": "اكتشفي الحكاية التالية",
+          "tag": "BUTTON",
+          "cls": "world-scroll",
+          "x": 86,
+          "y": 962,
+          "w": 194,
+          "h": 24
+        },
+        {
+          "label": "قناع اليدين بالبابايا والنيا",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 1158,
+          "y": 5604,
+          "w": 193,
+          "h": 24
+        },
+        {
+          "label": "كريم تفتيح وترطيب البشرة بيب",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 784,
+          "y": 5604,
+          "w": 246,
+          "h": 24
+        },
+        {
+          "label": "مقشر جل الاستحمام برائحة بود",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 411,
+          "y": 5604,
+          "w": 296,
+          "h": 24
+        },
+        {
+          "label": "بخاخ مرطب ومفتح للجسم برائحة",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 133,
+          "y": 5604,
+          "w": 251,
+          "h": 24
+        },
+        {
+          "label": "كريم دوس لوناس المرطب بالكول",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 1127,
+          "y": 6165,
+          "w": 225,
+          "h": 24
+        },
+        {
+          "label": "باكج روتين العناية المتكامل ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 746,
+          "y": 6165,
+          "w": 283,
+          "h": 24
+        },
+        {
+          "label": "فرانكل بلاك إليكسير للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 543,
+          "y": 6165,
+          "w": 164,
+          "h": 24
+        },
+        {
+          "label": "وايلد كولت عسّاف للرجال",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 235,
+          "y": 6165,
+          "w": 150,
+          "h": 24
+        },
+        {
+          "label": "مجموعة العناية والانتعاش من ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 1129,
+          "y": 6725,
+          "w": 222,
+          "h": 24
+        },
+        {
+          "label": "تونر الكرز المرطب والمهدئ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 869,
+          "y": 6725,
+          "w": 161,
+          "h": 24
+        },
+        {
+          "label": "مجموعة معطرات الجسم – 3 روائ",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 453,
+          "y": 6725,
+          "w": 254,
+          "h": 24
+        },
+        {
+          "label": "لوشن الجسم برائحة بودرة الأط",
+          "tag": "BUTTON",
+          "cls": "",
+          "x": 134,
+          "y": 6725,
+          "w": 251,
+          "h": 24
+        }
+      ]
+    }
+  ],
+  "checks": [
+    "360px width, 12 rendered products, uncropped images, visible hero cue and 24px minimum targets passed",
+    "390px width, 12 rendered products, uncropped images, visible hero cue and 24px minimum targets passed",
+    "430px width, 12 rendered products, uncropped images, visible hero cue and 24px minimum targets passed",
+    "768px width, 12 rendered products, uncropped images, visible hero cue and 24px minimum targets passed",
+    "1024px width, 12 rendered products, uncropped images, visible hero cue and 24px minimum targets passed",
+    "1440px width, 12 rendered products, uncropped images, visible hero cue and 24px minimum targets passed",
+    "no console, runtime or non-aborted request errors"
+  ],
+  "errors": []
+}

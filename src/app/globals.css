@@ -1,0 +1,99 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-cream: #fff6f1;
+  --color-cocoa: #4a2e2a;
+  --color-espresso: #3b2316;
+  --color-rose: #e86a92;
+  --color-rose-deep: #d94f7e;
+  --color-blush: #fff0eb;
+  --color-sand: #f3e5dc;
+  --color-gold: #c9a86a;
+  --color-sage: #7fb07f;
+  --color-cream-dark: #ffedf8;
+  --color-whatsapp: #25d366;
+
+  --font-sans: var(--font-tajawal), system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-cocoa);
+    font-family: var(--font-tajawal), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Arabic storefront: keep numerals and codes left-to-right. */
+  [dir='rtl'] .ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  ::selection {
+    background-color: var(--color-rose);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-rose);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+/* Original prototype motion, preserved verbatim. */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.35s ease both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
