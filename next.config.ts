@@ -2,8 +2,8 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   images: {
-    qualities: [75, 90],
-    formats: ['image/avif', 'image/webp'],
+    qualities: [70, 75, 90],
+    formats: ['image/webp'],
     remotePatterns: process.env.NEXT_PUBLIC_SUPABASE_URL
       ? [new URL('/storage/v1/object/public/product-images/**', process.env.NEXT_PUBLIC_SUPABASE_URL)]
       : [],

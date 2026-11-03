@@ -85,13 +85,13 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
         <h2 id="bestsellers-title">الأكثر طلباً.</h2>
       </header>
       <div className={styles.showcaseStage}>
-        {items.map(item => {
+        {items.map((item, index) => {
           const asset = sceneAssets[item.slug]
           const ratio = asset ? asset.bounds.width / asset.bounds.height : 4 / 5
           return <div key={item.id} className={styles.showcaseItem} data-showcase-item style={{ aspectRatio: String(ratio) }}>
             <span className={styles.showcaseShadow} aria-hidden="true" />
             <button className={styles.showcaseProduct} aria-label={`عرض تفاصيل ${item.nameAr}`} onClick={() => onOpenDetails(item.id)}>
-              <SceneProductImage product={item} sizes="(max-width:599px) 60vw, 320px" />
+              {Math.abs(index - active) <= 1 && <SceneProductImage product={item} sizes="(max-width:599px) 60vw, 320px" />}
             </button>
           </div>
         })}

@@ -121,7 +121,8 @@ export default function ShopSection({ groups, initialCategory = 'all', cart, pro
             {rendered.map((product, index) => <ProductCard
               key={product.id}
               product={product}
-              eager={index < 2}
+              eager={Boolean(pageTitle) && index < 2}
+              deferImage={!pageTitle || index >= 4}
               quantity={cart.find(item => item.productId === product.id && item.variantId === (selectedVariants[product.id] ?? product.variants[0]?.id ?? null))?.quantity ?? 0}
               currency={currency}
               isFavorite={favoriteSet.has(product.id)}

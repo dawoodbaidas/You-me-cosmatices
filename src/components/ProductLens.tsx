@@ -5,7 +5,7 @@ import ProductImage from './ProductImage'
 import { coverLens } from '@/lib/cover-lens'
 import styles from './ProductCard.module.css'
 
-export default function ProductLens({ src, name, eager, onOpen }: { src: string | null; name: string; eager: boolean; onOpen: () => void }) {
+export default function ProductLens({ src, name, eager, onOpen, defer = false }: { src: string | null; name: string; eager: boolean; defer?: boolean; onOpen: () => void }) {
   const area = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const root = area.current!
@@ -77,7 +77,7 @@ export default function ProductLens({ src, name, eager, onOpen }: { src: string 
     }
   }, [src])
   return <><div ref={area} className={styles.imageArea}>
-    <button className={styles.imageButton} onClick={onOpen} aria-label={`عرض تفاصيل ${name}`}><ProductImage src={src} alt={name} eager={eager} listing sizes="(max-width: 599px) calc((100vw - 30px) / 2), (max-width: 767px) calc((100vw - 40px) / 3), (max-width: 1199px) calc((100vw - 52px) / 2), (max-width: 1439px) calc((100vw - 76px) / 3), 455px" /></button>
+    <button className={styles.imageButton} onClick={onOpen} aria-label={`عرض تفاصيل ${name}`}><ProductImage src={src} alt={name} eager={eager} defer={defer} listing sizes="(max-width: 599px) calc((100vw - 30px) / 2), (max-width: 767px) calc((100vw - 40px) / 3), (max-width: 1199px) calc((100vw - 52px) / 2), (max-width: 1439px) calc((100vw - 76px) / 3), 455px" /></button>
     <span data-lens hidden className={styles.lens}><span className={styles.magnified} /></span>
   </div></>
 }

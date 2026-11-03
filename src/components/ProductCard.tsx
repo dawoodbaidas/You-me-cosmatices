@@ -10,6 +10,7 @@ import styles from './ProductCard.module.css'
 interface ProductCardProps {
   product: Product
   currency: string
+  deferImage?: boolean
   eager: boolean
   quantity: number
   isFavorite: boolean
@@ -20,7 +21,7 @@ interface ProductCardProps {
   onOpenDetails: (productId: string) => void
 }
 
-export default function ProductCard({ product, currency, eager, quantity, isFavorite, selectedVariantId, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ProductCardProps) {
+export default function ProductCard({ product, currency, eager, deferImage = false, quantity, isFavorite, selectedVariantId, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ProductCardProps) {
   const [added, setAdded] = useState(false)
   const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const card = useRef<HTMLElement>(null)
@@ -70,7 +71,7 @@ export default function ProductCard({ product, currency, eager, quantity, isFavo
   return <article ref={card} dir="rtl" className={styles.card} data-testid={`product-${product.slug}`} data-category={product.category}>
     <div className={styles.visual}>
       <div className={styles.tile}>
-        <ProductLens src={product.imageUrl} name={product.nameAr} eager={eager} onOpen={() => onOpenDetails(product.id)} />
+        <ProductLens src={product.imageUrl} name={product.nameAr} eager={eager} defer={deferImage} onOpen={() => onOpenDetails(product.id)} />
         {product.badge && <span className={styles.badge}>{product.badge.toLowerCase() === 'new' ? 'جديد' : product.badge}</span>}
         <button className={styles.wishlist} aria-label={isFavorite ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={isFavorite} onClick={() => onToggleFavorite(product.id)}><HeartIcon /></button>
       </div>

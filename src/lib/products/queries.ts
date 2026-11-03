@@ -1,5 +1,5 @@
-import { createClient } from '@/lib/supabase/server'
-import { mapProduct, mapSettings, FALLBACK_SETTINGS } from '@/lib/products/map'
+import { getStoreCatalogue } from '@/lib/store-catalogue'
+import { FALLBACK_SETTINGS } from '@/lib/products/map'
 import type { CatalogueResult, Product } from '@/types/product'
 
 /** Shape emitted by the preview snapshot (`npm run seed:build`). */
@@ -56,47 +56,9 @@ export async function getCatalogue(): Promise<CatalogueResult> {
     }
   }
 
-  try {
-    const supabase = await createClient()
-
-    const [productsResult, settingsResult] = await Promise.all([
-      supabase
-        .from('products')
-        .select(
-          'id, slug, name_ar, name_en, description, category, category_label, price, old_price, image_url, badge, benefits, is_active, is_featured, sort_order, product_variants(id, product_id, label, price, is_active, sort_order)',
-        )
-        .eq('is_active', true)
-        .order('sort_order', { ascending: true }),
-      supabase.from('site_settings').select('key, value'),
-    ])
-
-    if (productsResult.error) {
-      if (previewEnabled()) return previewCatalogue()
-      return {
-        status: 'error',
-        message: `تعذّر تحميل المنتجات من Supabase: ${productsResult.error.message}`,
-      }
-    }
-
-    const products = (productsResult.data ?? []).map((row) =>
-      mapProduct(row as Parameters<typeof mapProduct>[0]),
-    )
-
-    return {
-      status: 'ok',
-      products,
-      settings: settingsResult.error ? FALLBACK_SETTINGS : mapSettings(settingsResult.data),
-      source: 'supabase',
-    }
-  } catch (error) {
-    if (previewEnabled()) return previewCatalogue()
-    return {
-      status: 'error',
-      message:
-        error instanceof Error
-          ? `تعذّر الاتصال بـ Supabase: ${error.message}`
-          : 'تعذّر الاتصال بـ Supabase.',
-    }
+  const store = await getStoreCatalogue()
+  return store.unavailable ? { status: 'error', message: 'Catalogue unavailable' } : {
+    status: 'ok', products: store.products, settings: store.settings, source: 'supabase',
   }
 }
 

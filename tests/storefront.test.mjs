@@ -18,6 +18,19 @@ const { filterProducts, CATEGORY_FILTERS } = helper('categories')
 const snapshot = JSON.parse(readFileSync(new URL('../src/data/preview-products.json', import.meta.url), 'utf8'))
 const products = snapshot.map(product => ({ ...product, id: product.slug }))
 
+test('server checkout uses current prices and rejects stale stock, removed variants and malformed carts', () => {
+  const { checkoutLines } = helper('checkout')
+  const product = { ...products[0], id: 'p', price: 7, stockQuantity: 2, variants: [] }
+  const items = [{ productId: 'p', variantId: null, quantity: 2 }]
+  assert.equal(checkoutLines(items, [product])[0].lineTotal, 14)
+  assert.equal(checkoutLines(items, [{ ...product, price: 9 }])[0].lineTotal, 18)
+  assert.throws(() => checkoutLines(items, [{ ...product, stockQuantity: 1 }]))
+  assert.throws(() => checkoutLines(items, []))
+  assert.throws(() => checkoutLines([...items, ...items], [product]))
+  assert.throws(() => checkoutLines([{ ...items[0], quantity: 1.5 }], [product]))
+  assert.throws(() => checkoutLines([{ ...items[0], variantId: 'removed' }], [product]))
+})
+
 test('untracked stock remains purchasable; recorded stock limits all variants and sold-out products cannot checkout', () => {
   const original = products.find(product => product.variants.length > 1)
   const product = { ...original, stockQuantity: null }

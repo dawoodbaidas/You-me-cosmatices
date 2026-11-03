@@ -27,14 +27,14 @@ export async function readStoreRevision(): Promise<string | null> {
   return String(rows[0].version)
 }
 
-export const getStoreCatalogue = cache(async (): Promise<StoreCatalogue> => {
+export async function readStoreCatalogue(fresh = false): Promise<StoreCatalogue> {
   const empty: StoreCatalogue = { products: [], categories: [], settings: EMPTY_STORE_SETTINGS, revision: null, unavailable: false }
   const config = publicDatabaseConfig()
   if (!config) return empty
   try {
     const revision = await readStoreRevision()
     const response = await fetch(`${config.url}/rest/v1/rpc/get_store_catalogue?p_revision=${encodeURIComponent(revision!)}`, {
-      headers: config.headers, cache: 'force-cache', next: { revalidate: 300, tags: [STORE_CATALOGUE_TAG] },
+      headers: config.headers, ...(fresh ? { cache: 'no-store' as const } : { cache: 'force-cache' as const, next: { revalidate: 300, tags: [STORE_CATALOGUE_TAG] } }),
     })
     if (!response.ok) throw new Error('Store catalogue unavailable')
     const data = await response.json() as {
@@ -53,4 +53,6 @@ export const getStoreCatalogue = cache(async (): Promise<StoreCatalogue> => {
     // No demo catalogue, inferred departments, replacement images or invented prices.
     return { ...empty, unavailable: true }
   }
-})
+}
+
+export const getStoreCatalogue = cache(() => readStoreCatalogue())

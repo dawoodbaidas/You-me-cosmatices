@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import SearchOverlay from './SearchOverlay'
+import dynamic from 'next/dynamic'
+const SearchOverlay = dynamic(() => import('./SearchOverlay'))
 import BestSellers from '@/components/BestSellers'
 import StorefrontMotion from '@/components/StorefrontMotion'
 import './storefront.css'
@@ -19,17 +20,17 @@ import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
 import MobileCartBar from '@/components/MobileCartBar'
-import ProductQuickView from '@/components/ProductQuickView'
+const ProductQuickView = dynamic(() => import('./ProductQuickView'))
 import ShopSection from '@/components/ShopSection'
 import Toast, { type ToastMessage } from '@/components/Toast'
-import { canCheckoutCart, cartLineLimit, cartCount as countItems, cartTotal as sumTotal, resolveCart } from '@/lib/cart'
+import { cartLineLimit, cartCount as countItems, cartTotal as sumTotal, resolveCart } from '@/lib/cart'
 import { arabicStoreProduct } from '@/lib/storefront-arabic'
 import { storeCollections, findCollection } from '@/lib/store-categories'
 import type { StoreCategory } from '@/types/store'
 import { useStoreRefresh } from './useStoreRefresh'
 import StoreScroll from './StoreScroll'
 import { useCartStore, useFavoritesStore } from '@/lib/stores'
-import { buildOrderMessage, whatsappLink } from '@/lib/whatsapp'
+import { prepareCheckout } from '@/app/checkout'
 import type { Product, SiteSettings } from '@/types/product'
 
 interface StorefrontProps {
@@ -197,18 +198,22 @@ export default function Storefront({ products, settings, categoryId, categories,
 
   /* --------------------------------------------------------------- checkout */
 
-  const checkout = useCallback(() => {
-    const currentLines = resolveCart(cartActions.snapshot(), products)
-    if (currentLines.length === 0) return
-    if (!canCheckoutCart(currentLines)) {
-      notify('تغيّر المخزون. راجع الكميات في السلة قبل إرسال الطلب.', 'error')
-      return
-    }
-    if (!settings.whatsappNumber) { notify('خدمة الطلب غير متاحة حالياً.', 'error'); return }
-    const message = buildOrderMessage(currentLines, settings)
-    window.open(whatsappLink(settings.whatsappNumber, message), '_blank', 'noopener,noreferrer')
-    notify('تم فتح واتساب برسالة طلبك')
-  }, [cartActions, notify, settings, products])
+  const checkoutPending = useRef(false)
+  const checkout = useCallback(async () => {
+    if (checkoutPending.current) return
+    checkoutPending.current = true
+    const target = window.open('about:blank', '_blank')
+    if (target) target.opener = null
+    try {
+      const result = await prepareCheckout(cartActions.snapshot())
+      if (!result.url) { target?.close(); notify(result.error!, 'error'); router.refresh(); return }
+      if (target) target.location.replace(result.url)
+      else window.location.assign(result.url)
+    } catch {
+      target?.close()
+      notify('تعذّر الاتصال. حاول مجددًا.', 'error')
+    } finally { checkoutPending.current = false }
+  }, [cartActions, notify, router])
 
   const browse = useCallback(() => {
     setCartOpen(false)
@@ -290,7 +295,7 @@ export default function Storefront({ products, settings, categoryId, categories,
         onBrowse={browse}
       />
 
-      <ProductQuickView
+      {quickViewProduct && <ProductQuickView
         key={quickViewId}
         product={quickViewProduct}
         cartItems={cart}
@@ -306,7 +311,7 @@ export default function Storefront({ products, settings, categoryId, categories,
           if (sceneQuickView) { cartActions.add(product.id, variantId, quantity); return true }
           return addProduct(product.id, variantId, quantity)
         }}
-      />
+      />}
 
       <MobileCartBar
         count={totalCount}

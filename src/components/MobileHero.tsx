@@ -84,7 +84,7 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
         {items.map((product, index) => <button key={product.id} className={`${styles.heroProduct} ${index === 0 ? styles.heroMain : index < 3 ? styles.heroMiddle : styles.heroOuter}`} data-hero-product
           aria-label={`عرض تفاصيل ${product.nameAr}`} onClick={() => onOpenDetails(product.id)}>
           <span className={styles.productShadow} aria-hidden="true" />
-          <SceneProductImage product={product} preload={index === 0} eager sizes="(max-width:599px) 130px, 180px" />
+          <SceneProductImage product={product} preload={index === 0} sizes="(max-width:599px) 130px, 180px" />
           {index === 0 && asset && <svg className={styles.shine} viewBox={`${asset.bounds.x} ${asset.bounds.y} ${asset.bounds.width} ${asset.bounds.height}`} preserveAspectRatio="none" aria-hidden="true">
             <defs><clipPath id={`${maskId}-clip`}><rect x={asset.bounds.x} y={asset.bounds.y} width={asset.bounds.width} height={asset.bounds.height} /></clipPath>
               <mask id={`${maskId}-mask`} maskUnits="userSpaceOnUse" x="0" y="0" width={asset.width} height={asset.height} style={{ maskType: 'alpha' }}><image href={maskSrc} width={asset.width} height={asset.height} /></mask></defs>

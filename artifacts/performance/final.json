@@ -1,0 +1,738 @@
+[
+  {
+    "route": "/",
+    "visit": "cold",
+    "lcp": 1536,
+    "cls": 0.06676528686998905,
+    "events": [
+      208,
+      208,
+      208
+    ],
+    "lcpElement": {
+      "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=384&q=75",
+      "tag": "IMG",
+      "renderTime": 1536,
+      "loadTime": 1512.1000000005588
+    },
+    "inpObserved": 208,
+    "images": 91762,
+    "js": 240115,
+    "requests": 27,
+    "ttfb": 181.1000000005588,
+    "resources": [
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/38fdab5a63731c6d.css",
+        "bytes": 6869,
+        "duration": 328.20000000018626
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/530e066c2f66323f.css",
+        "bytes": 16018,
+        "duration": 406
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/976fde147e1a990c.css",
+        "bytes": 10952,
+        "duration": 373.79999999981374
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/13146e9ffac535cc.css",
+        "bytes": 3368,
+        "duration": 262.09999999962747
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/webpack-0db57a5994bbd552.js",
+        "bytes": 2551,
+        "duration": 245.70000000018626
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/8400bb48-b012b1810f992f55.js",
+        "bytes": 63598,
+        "duration": 1562.1000000005588
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/886-be5c95434d5cbff6.js",
+        "bytes": 66399,
+        "duration": 1904.7000000001863
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/main-app-e46e1e6638c001f5.js",
+        "bytes": 813,
+        "duration": 547.4000000003725
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/error-fcdd941373577f27.js",
+        "bytes": 2070,
+        "duration": 611
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/694-be373b71da2bad89.js",
+        "bytes": 3881,
+        "duration": 895.2000000001863
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-cfcfc23a9fa1b722.js",
+        "bytes": 483,
+        "duration": 1084.1000000005588
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=384&q=75",
+        "bytes": 29120,
+        "duration": 1139.7000000001863
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=640&q=75",
+        "bytes": 60730,
+        "duration": 1849.7999999998137
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf",
+        "bytes": 29513,
+        "duration": 1048
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf",
+        "bytes": 29466,
+        "duration": 1218.2999999998137
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf",
+        "bytes": 29479,
+        "duration": 1249.3999999994412
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=96&q=75",
+        "bytes": 1912,
+        "duration": 225.90000000037253
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/09c9d68a-9abd440305f77b2a.js",
+        "bytes": 14603,
+        "duration": 416.29999999981374
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/389-5503c3dc48814ab4.js",
+        "bytes": 5922,
+        "duration": 303.40000000037253
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/736-e4fe98840aa9ad81.js",
+        "bytes": 56064,
+        "duration": 683.7000000001863
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/205-5c2942603d14f783.js",
+        "bytes": 23279,
+        "duration": 524.2000000001863
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/page-2fbaef6306b7384e.js",
+        "bytes": 452,
+        "duration": 186.29999999981374
+      },
+      {
+        "name": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "bytes": 26231,
+        "duration": 304.1000000005588
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 4.400000000372529
+      },
+      {
+        "name": "http://127.0.0.1:5090/?_rsc=oHqtJKAMOR6AoevE",
+        "bytes": 1338,
+        "duration": 167.59999999962747
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 3.2999999998137355
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 3.3999999994412065
+      }
+    ]
+  },
+  {
+    "route": "/",
+    "visit": "warm",
+    "lcp": 784,
+    "cls": 0.05076567151543006,
+    "events": [
+      168,
+      168,
+      168
+    ],
+    "lcpElement": {
+      "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=640&q=75",
+      "tag": "IMG",
+      "renderTime": 784,
+      "loadTime": 671
+    },
+    "inpObserved": 168,
+    "images": 0,
+    "js": 0,
+    "requests": 27,
+    "ttfb": 27.799999999813735,
+    "resources": [
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/38fdab5a63731c6d.css",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/530e066c2f66323f.css",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/976fde147e1a990c.css",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/13146e9ffac535cc.css",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/webpack-0db57a5994bbd552.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/8400bb48-b012b1810f992f55.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/886-be5c95434d5cbff6.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/main-app-e46e1e6638c001f5.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/error-fcdd941373577f27.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/694-be373b71da2bad89.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-cfcfc23a9fa1b722.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=384&q=75",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=96&q=75",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/09c9d68a-9abd440305f77b2a.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/389-5503c3dc48814ab4.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/736-e4fe98840aa9ad81.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/205-5c2942603d14f783.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/page-2fbaef6306b7384e.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=640&q=75",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "bytes": 26231,
+        "duration": 293.40000000037253
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 3.400000000372529
+      },
+      {
+        "name": "http://127.0.0.1:5090/?_rsc=oHqtJKAMOR6AoevE",
+        "bytes": 1338,
+        "duration": 169.09999999962747
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 3
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 3
+      }
+    ]
+  },
+  {
+    "route": "/category/all",
+    "visit": "cold",
+    "lcp": 2500,
+    "cls": 0.004621610846080846,
+    "events": [
+      160,
+      160,
+      160
+    ],
+    "lcpElement": {
+      "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-naqaa.webp&w=384&q=70",
+      "tag": "IMG",
+      "renderTime": 2500,
+      "loadTime": 2436.399999999441
+    },
+    "inpObserved": 160,
+    "images": 191378,
+    "js": 240567,
+    "requests": 37,
+    "ttfb": 28,
+    "resources": [
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/38fdab5a63731c6d.css",
+        "bytes": 6869,
+        "duration": 289.5
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/530e066c2f66323f.css",
+        "bytes": 16018,
+        "duration": 497
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/976fde147e1a990c.css",
+        "bytes": 10952,
+        "duration": 400.59999999962747
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/13146e9ffac535cc.css",
+        "bytes": 3368,
+        "duration": 288.79999999981374
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/webpack-0db57a5994bbd552.js",
+        "bytes": 2551,
+        "duration": 226.20000000018626
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/8400bb48-b012b1810f992f55.js",
+        "bytes": 63598,
+        "duration": 1968.9000000003725
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/886-be5c95434d5cbff6.js",
+        "bytes": 66399,
+        "duration": 2032.4000000003725
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/main-app-e46e1e6638c001f5.js",
+        "bytes": 813,
+        "duration": 586
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/error-fcdd941373577f27.js",
+        "bytes": 2070,
+        "duration": 731.9000000003725
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/694-be373b71da2bad89.js",
+        "bytes": 3881,
+        "duration": 1000.1999999992549
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-cfcfc23a9fa1b722.js",
+        "bytes": 483,
+        "duration": 1015.5999999996275
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-laverne-you-miracle.webp&w=384&q=70",
+        "bytes": 27656,
+        "duration": 773.5
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-cherry-trap-boutique.webp&w=384&q=70",
+        "bytes": 40680,
+        "duration": 1249.5
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf",
+        "bytes": 29513,
+        "duration": 909.4000000003725
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf",
+        "bytes": 29466,
+        "duration": 1376.7999999998137
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf",
+        "bytes": 29479,
+        "duration": 1381
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=96&q=75",
+        "bytes": 1912,
+        "duration": 231.8999999994412
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fvgr-shaver-trimmer-2in1.webp&w=384&q=70",
+        "bytes": 39058,
+        "duration": 1159.300000000745
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-naqaa.webp&w=384&q=70",
+        "bytes": 24320,
+        "duration": 1145.9000000003725
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/09c9d68a-9abd440305f77b2a.js",
+        "bytes": 14603,
+        "duration": 402.70000000018626
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/389-5503c3dc48814ab4.js",
+        "bytes": 5922,
+        "duration": 277.30000000074506
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/736-e4fe98840aa9ad81.js",
+        "bytes": 56064,
+        "duration": 700.9000000003725
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/205-5c2942603d14f783.js",
+        "bytes": 23279,
+        "duration": 528.4000000003725
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/category/%5Bslug%5D/page-dabe268f4b482de3.js",
+        "bytes": 452,
+        "duration": 234
+      },
+      {
+        "name": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "bytes": 26231,
+        "duration": 285.09999999962747
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 4.5
+      },
+      {
+        "name": "http://127.0.0.1:5090/?_rsc=n0B2BZYuxSyps2yo",
+        "bytes": 457,
+        "duration": 182.5
+      },
+      {
+        "name": "http://127.0.0.1:5090/category/all?_rsc=lI3Wmn6c9NoqcTqR",
+        "bytes": 1368,
+        "duration": 196.8999999994412
+      },
+      {
+        "name": "http://127.0.0.1:5090/category/perfumes?_rsc=2xawvLJsDDspP8db",
+        "bytes": 12561,
+        "duration": 435.59999999962747
+      },
+      {
+        "name": "http://127.0.0.1:5090/category/care?_rsc=YlhGTJGOWw5Xw1oH",
+        "bytes": 12555,
+        "duration": 451.30000000074506
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-dalal.webp&w=384&q=70",
+        "bytes": 29132,
+        "duration": 699.8000000007451
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-muzhla.webp&w=384&q=70",
+        "bytes": 28620,
+        "duration": 700
+      },
+      {
+        "name": "http://127.0.0.1:5090/?_rsc=PRdMvOdXrcnyT3CS",
+        "bytes": 11451,
+        "duration": 439.1000000005588
+      },
+      {
+        "name": "http://127.0.0.1:5090/category/empty?_rsc=58YXQwC00l5RsUFv",
+        "bytes": 12562,
+        "duration": 460.3999999994412
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/page-2fbaef6306b7384e.js",
+        "bytes": 452,
+        "duration": 185.19999999925494
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 3.7999999998137355
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 4.5
+      }
+    ]
+  },
+  {
+    "route": "/category/all",
+    "visit": "warm",
+    "lcp": 708,
+    "cls": 0,
+    "events": [
+      136,
+      136,
+      136
+    ],
+    "lcpElement": {
+      "url": "",
+      "tag": "H1",
+      "renderTime": 708,
+      "loadTime": 0
+    },
+    "inpObserved": 136,
+    "images": 0,
+    "js": 0,
+    "requests": 37,
+    "ttfb": 24.299999999813735,
+    "resources": [
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/38fdab5a63731c6d.css",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/530e066c2f66323f.css",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/976fde147e1a990c.css",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/css/13146e9ffac535cc.css",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/webpack-0db57a5994bbd552.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/8400bb48-b012b1810f992f55.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/886-be5c95434d5cbff6.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/main-app-e46e1e6638c001f5.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/error-fcdd941373577f27.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/694-be373b71da2bad89.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-cfcfc23a9fa1b722.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/09c9d68a-9abd440305f77b2a.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/389-5503c3dc48814ab4.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/736-e4fe98840aa9ad81.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/205-5c2942603d14f783.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/category/%5Bslug%5D/page-dabe268f4b482de3.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-laverne-you-miracle.webp&w=384&q=70",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-cherry-trap-boutique.webp&w=384&q=70",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=96&q=75",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fvgr-shaver-trimmer-2in1.webp&w=384&q=70",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-naqaa.webp&w=384&q=70",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "bytes": 26231,
+        "duration": 301.79999999981374
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 3.6000000005587935
+      },
+      {
+        "name": "http://127.0.0.1:5090/?_rsc=n0B2BZYuxSyps2yo",
+        "bytes": 457,
+        "duration": 176.59999999962747
+      },
+      {
+        "name": "http://127.0.0.1:5090/category/all?_rsc=lI3Wmn6c9NoqcTqR",
+        "bytes": 1368,
+        "duration": 205.29999999981374
+      },
+      {
+        "name": "http://127.0.0.1:5090/category/perfumes?_rsc=2xawvLJsDDspP8db",
+        "bytes": 12562,
+        "duration": 307.5
+      },
+      {
+        "name": "http://127.0.0.1:5090/category/care?_rsc=YlhGTJGOWw5Xw1oH",
+        "bytes": 12552,
+        "duration": 312.8999999994412
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-dalal.webp&w=384&q=70",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-muzhla.webp&w=384&q=70",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:5090/?_rsc=PRdMvOdXrcnyT3CS",
+        "bytes": 11450,
+        "duration": 273.6000000005588
+      },
+      {
+        "name": "http://127.0.0.1:5090/category/empty?_rsc=58YXQwC00l5RsUFv",
+        "bytes": 12559,
+        "duration": 280.5
+      },
+      {
+        "name": "http://127.0.0.1:5090/_next/static/chunks/app/page-2fbaef6306b7384e.js",
+        "bytes": 0,
+        "duration": 0
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 3.7000000001862645
+      },
+      {
+        "name": "http://127.0.0.1:8510/rest/v1/store_revision?select=version&id=eq.1",
+        "bytes": 0,
+        "duration": 3.5
+      }
+    ]
+  }
+]
