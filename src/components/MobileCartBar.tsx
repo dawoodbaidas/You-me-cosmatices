@@ -5,7 +5,7 @@ import { formatJod } from '@/lib/format'
 import type { SiteSettings } from '@/types/product'
 
 export default function MobileCartBar({ count, total, settings, open, onOpenCart }: {
-  count: number; total: number; settings: SiteSettings; open:boolean; onOpenCart: () => void
+  count: number; total: number; settings: SiteSettings; open:boolean; onOpenCart: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) {
   return <div className={`mobile-shopping-bar ${count > 0 && !open ? 'is-visible' : ''}`} aria-hidden={count === 0 || open} inert={count === 0 || open}>
     <button key={count} onClick={onOpenCart} aria-label={`عرض السلة، ${count} منتجات، ${formatJod(total, settings.currency)}`}>

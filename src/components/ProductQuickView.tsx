@@ -38,7 +38,6 @@ export default function ProductQuickView({
   onAddToCart,
 }: ProductQuickViewProps) {
   const [expanded, setExpanded] = useState(false)
-  const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current) }, [])
@@ -51,10 +50,10 @@ export default function ProductQuickView({
   const existingQuantity = cartItems.find(item => item.productId === product.id && item.variantId === variantId)?.quantity ?? 0
   const maxAddition = inventory ? Math.max(0, cartLineLimit(product, cartItems, variantId) - existingQuantity) : 99
   const soldOut = inventory && product.stockQuantity != null && product.stockQuantity <= 0
-  const unavailable = inventory && quantity > maxAddition
+  const unavailable = inventory && maxAddition < 1
 
   const buy = () => {
-    if (unavailable || onAddToCart(product, defaultVariant?.id ?? null, quantity) === false) return
+    if (unavailable || onAddToCart(product, defaultVariant?.id ?? null, 1) === false) return
     if (!inventory) { onClose(); return }
     setAdded(true)
     if (timer.current) clearTimeout(timer.current)
@@ -71,7 +70,6 @@ export default function ProductQuickView({
         <div className="quickview-body">
         <div className="quickview-media">
           <ProductImage key={product.imageUrl} src={product.imageUrl} alt={product.nameAr} sizes="(max-width: 767px) 90vw, 440px" eager />
-          <span className="quickview-media-index" dir="ltr">You&amp;Me / اختياراتنا</span>
           {product.badge && <span className="quickview-badge">{product.badge}</span>}
         </div>
 
@@ -110,7 +108,6 @@ export default function ProductQuickView({
         </div>
         </div>
         <div className="quickview-purchase">
-          <div className="quantity-stepper"><button aria-label="تقليل الكمية" disabled={quantity === 1} onClick={() => setQuantity(q => q - 1)}>−</button><span aria-live="polite">{quantity}</span><button aria-label="زيادة الكمية" disabled={quantity >= Math.max(1, maxAddition)} onClick={() => setQuantity(q => q + 1)}>+</button></div>
           <div className="quickview-actions">
             <button type="button" onClick={buy} disabled={unavailable} data-added={inventory && added} className="quickview-buy">
               {inventory && added ? <CheckIcon /> : <BagIcon />}

@@ -76,7 +76,7 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
   return <section id="home" ref={root} className={styles.hero} aria-label="الرئيسية">
     <div className={styles.heroPin} data-scene-pin>
       <div className={styles.curtainTop} data-curtain aria-hidden="true" /><div className={styles.curtainBottom} data-curtain aria-hidden="true" />
-      <h1 className={styles.heroTitle} data-hero-copy>{[['كل', 'ما', 'يناسبك،'], ['بمكان', 'واحد']].map((line, index) => <span key={index}>{line.map(word => <b key={word}><i data-word>{word}</i></b>)}</span>)}</h1>
+      <div className={`${styles.heroTitle} ${styles.heroCopy}`}><h1 data-hero-copy><span>إلك وإلها،</span><span>كل التفاصيل هون.</span></h1><p>عطور، عناية وإكسسوارات للرجال والنساء.</p></div>
       <div className={styles.heroStage}>
         <span className={styles.heroWordmark} data-wordmark aria-hidden="true" dir="ltr">YOU&amp;ME</span>
         <span className={styles.heroGlow} data-glow aria-hidden="true" />

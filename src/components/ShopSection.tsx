@@ -3,15 +3,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import CategoryLink from './CategoryLink'
 import { ProductGridSkeleton } from './StoreSkeleton'
-import type { Product } from '@/types/product'
+import type { CartItem, Product } from '@/types/product'
 import ProductCard from './ProductCard'
 import productStyles from './ProductCard.module.css'
 import { matchesProduct } from '@/lib/search'
 import { ArrowIcon } from './icons'
+import type { Collection } from '@/lib/taxonomy'
 
 const INITIAL_VISIBLE = 12
 
 interface ShopSectionProps {
+  groups: Collection[]
+  initialCategory?: string
+  cart: CartItem[]
   products: Product[]
   currency: string
   pageTitle?: string
@@ -25,7 +29,10 @@ interface ShopSectionProps {
   onOpenDetails: (productId: string) => void
 }
 
-export default function ShopSection({ products, currency, pageTitle, query, unavailable = false, favorites, selectedVariants, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ShopSectionProps) {
+export default function ShopSection({ groups, initialCategory = 'all', cart, products, currency, pageTitle, query, unavailable = false, favorites, selectedVariants, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ShopSectionProps) {
+  const category = initialCategory
+  const flatten = (items: Collection[]): Collection[] => items.flatMap(item => [item, ...flatten(item.children)])
+  const categories = flatten(groups)
   const [pagination, setPagination] = useState({ key: '', count: INITIAL_VISIBLE })
   const [navigating, setNavigating] = useState(false)
   const [sort, setSort] = useState('featured')
@@ -47,7 +54,7 @@ export default function ShopSection({ products, currency, pageTitle, query, unav
     dialog.showModal()
     return () => { if (dialog.open) dialog.close() }
   }, [filtersOpen])
-  const viewKey = `${pageTitle ?? 'home'}:${query}`
+  const viewKey = `${category}:${pageTitle ?? 'home'}:${query}`
 
   const visible = useMemo(() => {
     const result = products.filter(product => matchesProduct(product, query)
@@ -76,8 +83,11 @@ export default function ShopSection({ products, currency, pageTitle, query, unav
   if (navigating) return <section id="shop" className="beauty-shop"><ProductGridSkeleton /></section>
 
   return <section id="shop" className={`beauty-shop ${pageTitle ? 'catalogue-page' : ''} ${productStyles.listing}`}>
-    <div className="collection-heading"><h1>{query.trim() ? `نتائج البحث: ${query.trim()}` : pageTitle ?? 'المتجر'}</h1><span>{visible.length} منتج</span></div>
+    <div className="collection-heading"><h1>{query.trim() ? `نتائج البحث: ${query.trim()}` : pageTitle ?? 'المتجر'}</h1><span aria-live="polite">{visible.length} منتج</span></div>
 
+    <nav className="shop-category-strip" aria-label="أقسام المتجر" dir="rtl">
+      {[{ id: 'all', label: 'الكل' }, ...categories].map(item => <CategoryLink key={item.id} slug={item.id === 'all' ? null : item.id} aria-current={category === item.id ? 'page' : undefined}>{item.label}</CategoryLink>)}
+    </nav>
     <div className="shop-tools">
       <div className="catalog-controls">
         <label className="catalog-sort">ترتيب
@@ -96,6 +106,7 @@ export default function ShopSection({ products, currency, pageTitle, query, unav
       </div>
     </div>
 
+    <p className={productStyles.hint}>اضغط مطوّلًا على أي صورة لتكبيرها، واضغط على القسيمة للإضافة إلى السلة</p>
     <dialog ref={filterDialog} className="shop-filter-sheet" aria-labelledby="filter-title" onCancel={event => { event.preventDefault(); setFiltersOpen(false) }} onClick={event => { if (event.target === event.currentTarget) setFiltersOpen(false) }}>
       <div className="filter-sheet-head"><h2 id="filter-title">تصفية المنتجات</h2><button type="button" onClick={() => setFiltersOpen(false)} aria-label="إغلاق التصفية">×</button></div>
       <label><input type="checkbox" checked={onlyAvailable} onChange={event => setOnlyAvailable(event.target.checked)} /> المتوفر الآن</label>
@@ -107,9 +118,11 @@ export default function ShopSection({ products, currency, pageTitle, query, unav
     {visible.length
       ? <>
           <div className={productStyles.grid}>
-            {rendered.map(product => <ProductCard
+            {rendered.map((product, index) => <ProductCard
               key={product.id}
               product={product}
+              eager={index < 2}
+              quantity={cart.find(item => item.productId === product.id && item.variantId === (selectedVariants[product.id] ?? product.variants[0]?.id ?? null))?.quantity ?? 0}
               currency={currency}
               isFavorite={favoriteSet.has(product.id)}
               selectedVariantId={selectedVariants[product.id] ?? product.variants[0]?.id ?? null}

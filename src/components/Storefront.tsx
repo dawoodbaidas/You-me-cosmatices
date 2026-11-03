@@ -54,6 +54,16 @@ export default function Storefront({ products, settings, categoryId, categories,
   const cataloguePage = categoryId !== undefined
   const [variantChoice, setVariantChoice] = useState<Record<string, string>>({})
   const [cartOpen, setCartOpen] = useState(false)
+  const [cartSide, setCartSide] = useState<'left' | 'right'>('right')
+  const openCart = (event?: React.MouseEvent<HTMLButtonElement>) => {
+    if (cartOpen) return
+    const button = event?.currentTarget ?? document.querySelector<HTMLButtonElement>('.header-bag')
+    const rect = button?.getBoundingClientRect()
+    setCartSide(rect && rect.left + rect.width / 2 < window.innerWidth / 2 ? 'left' : 'right')
+    button?.focus({ preventScroll: true })
+    setQuickViewId(null)
+    setCartOpen(true)
+  }
   const [quickViewId, setQuickViewId] = useState<string | null>(null)
   const [sceneQuickView, setSceneQuickView] = useState(false)
   const [toast, setToast] = useState<ToastMessage | null>(null)
@@ -207,7 +217,7 @@ export default function Storefront({ products, settings, categoryId, categories,
 
   /* ----------------------------------------------------------------- render */
 
-  const visible = useMemo(() => collection ? products.filter(p => collection.productIds.includes(p.id)) : categoryId && categoryId !== 'all' ? [] : products, [products, collection, categoryId])
+  const visible = useMemo(() => collection ? products.filter(product => collection.productIds.includes(product.id)) : categoryId && categoryId !== 'all' ? [] : products, [products, collection, categoryId])
   const quickViewProduct = (sceneQuickView ? sceneProducts : products).find((product) => product.id === quickViewId) ?? null
   const favoriteSet = useMemo(() => new Set(favorites), [favorites])
 
@@ -221,7 +231,7 @@ export default function Storefront({ products, settings, categoryId, categories,
         settings={settings}
         cartCount={totalCount}
         favoriteCount={favorites.length}
-        onOpenCart={() => { setQuickViewId(null); setCartOpen(true) }}
+        onOpenCart={openCart}
         onScrollTo={scrollTo}
         groups={groups}
         selected={categoryId ?? null}
@@ -238,8 +248,11 @@ export default function Storefront({ products, settings, categoryId, categories,
         /></>}
 
         <ShopSection
+          cart={cart}
           key={categoryId ?? 'home'}
           products={visible}
+          groups={groups}
+          initialCategory={categoryId}
           currency={settings.currency}
           pageTitle={cataloguePage ? collection?.label ?? (categoryId === 'all' ? 'جميع المنتجات' : 'المنتجات') : undefined}
           query={searchQuery}
@@ -265,6 +278,7 @@ export default function Storefront({ products, settings, categoryId, categories,
 
       {searchOpen && <SearchOverlay products={products} currency={settings.currency} initialQuery={searchQuery} onClose={() => setSearchOpen(false)} onSubmit={submitSearch} onSelect={id => { setSearchOpen(false); setSceneQuickView(false); setQuickViewId(id) }} />}
       <CartDrawer
+        side={cartSide}
         open={cartOpen}
         lines={lines}
         settings={settings}
@@ -298,7 +312,7 @@ export default function Storefront({ products, settings, categoryId, categories,
         count={totalCount}
         total={total + (totalCount > 0 && !(settings.storeFreeShippingThreshold > 0 && total >= settings.storeFreeShippingThreshold) ? settings.storeShippingFee ?? 0 : 0)}
         settings={settings}
-        onOpenCart={() => { setQuickViewId(null); setCartOpen(true) }}
+        onOpenCart={openCart}
         open={cartOpen || searchOpen || quickViewId !== null}
       />
 

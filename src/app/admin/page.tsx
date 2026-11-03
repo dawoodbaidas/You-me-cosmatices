@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import StoreBrand from '@/components/StoreBrand'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getViewer } from '@/lib/auth'
@@ -72,13 +72,7 @@ export default async function AdminPage() {
       <header className="sticky top-0 z-40 border-b border-sand bg-white/80 backdrop-blur-xl">
         <div className="mx-auto flex h-[68px] max-w-[1280px] items-center justify-between px-4 md:px-8">
           <Link href="/" className="flex items-center gap-3">
-            <Image
-              src="/brand/logo.jpg"
-              alt="You &amp; Me"
-              width={40}
-              height={40}
-              className="h-10 w-10 rounded-full border border-sand bg-white object-cover"
-            />
+            <StoreBrand size="compact" />
             <span className="text-[15px] font-extrabold text-cocoa">لوحة المسؤول</span>
           </Link>
 

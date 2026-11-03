@@ -54,7 +54,7 @@ export default function Footer({ settings, groups, productCount, onScrollTo, onS
       </div>
     </div>
 
-    <div className="footer-brand"><StoreBrand /></div>
+    <div className="footer-brand"><StoreBrand size="large" /></div>
 
     <div className="footer-bottom">
       <span>© You&amp;Me لمستحضرات التجميل · الأردن</span>

@@ -11,7 +11,7 @@ import type { SiteSettings } from '@/types/product'
 
 export default function Header({ settings, cartCount, favoriteCount, onOpenCart, onScrollTo, groups, selected, cataloguePage, onSearch }: {
   onSearch: () => void; settings: SiteSettings; cartCount: number; favoriteCount: number
-  onOpenCart: () => void; onScrollTo: (id: string) => void
+  onOpenCart: (event: React.MouseEvent<HTMLButtonElement>) => void; onScrollTo: (id: string) => void
   groups: Collection[]; selected: string | null; cataloguePage: boolean
 }) {
   const [open, setOpen] = useState(false)
@@ -23,9 +23,27 @@ export default function Header({ settings, cartCount, favoriteCount, onOpenCart,
   useEffect(() => {
     const element = header.current, root = element?.closest<HTMLElement>('.boutique')
     if (!element || !root) return
-    const observer = new ResizeObserver(() => root.style.setProperty('--header-height', `${element.getBoundingClientRect().height}px`))
+    let boundaries: IntersectionObserver | undefined
+    const update = () => {
+      const height = element.getBoundingClientRect().height
+      root.style.setProperty('--header-height', `${height}px`)
+      boundaries?.disconnect()
+      const sections = [...root.querySelectorAll<HTMLElement>('main > section, footer')]
+      const paint = () => {
+        const section = sections.find(section => { const rect = section.getBoundingClientRect(); return rect.top <= height + 1 && rect.bottom > height + 1 }) ?? sections[0]
+        if (!section) return
+        const style = getComputedStyle(section)
+        element.style.backgroundColor = style.backgroundColor
+        element.style.color = style.color
+      }
+      boundaries = new IntersectionObserver(paint, { rootMargin: `-${height}px 0px -${Math.max(0, window.innerHeight - height - 2)}px 0px` })
+      sections.forEach(section => boundaries!.observe(section))
+      paint()
+    }
+    const observer = new ResizeObserver(update)
     observer.observe(element)
-    return () => observer.disconnect()
+    window.addEventListener('resize', update)
+    return () => { observer.disconnect(); boundaries?.disconnect(); window.removeEventListener('resize', update) }
   }, [])
 
   useEffect(() => {
@@ -63,13 +81,9 @@ export default function Header({ settings, cartCount, favoriteCount, onOpenCart,
         </nav>
         <div className="world-nav-actions">
           <button className="nav-search" aria-label="البحث" onClick={search}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="m15 15 6 6" /></svg></button>
-          <button className="header-favorites" onClick={() => onScrollTo('shop')} aria-label={`المفضلة، ${favoriteCount} منتجات`}><HeartIcon />{favoriteCount > 0 && <span>{favoriteCount}</span>}</button>
-          <button className="header-bag" onClick={onOpenCart} aria-label={`السلة، ${cartCount} منتجات`}><BagIcon />{cartCount > 0 && <span>{cartCount}</span>}</button>
+          <button className="header-favorites" onClick={() => onScrollTo('shop')} aria-label={`المفضلة، ${favoriteCount} منتجات`}><HeartIcon />{favoriteCount > 0 && <span dir="ltr">{favoriteCount > 99 ? '99+' : favoriteCount}</span>}</button>
+          <button className="header-bag" onClick={onOpenCart} aria-label={`السلة، ${cartCount} منتجات`}><BagIcon />{cartCount > 0 && <span dir="ltr">{cartCount > 99 ? '99+' : cartCount}</span>}</button>
         </div>
-        <nav className={`mobile-departments${cataloguePage ? ' category-departments' : ''}`} aria-label="أقسام المتجر">
-          <CategoryLink slug={null} aria-current={selected === 'all' ? 'page' : undefined}>الكل</CategoryLink>
-          {groups.map(group => <CategoryLink key={group.id} slug={group.id} aria-current={selected === group.id ? 'page' : undefined} data-active={group.children.some(child => child.id === selected) || undefined}>{group.label}</CategoryLink>)}
-        </nav>
       </header>
     <BoutiqueDialog open={open} onClose={() => setOpen(false)} label="قائمة المتجر" className="menu-dialog">
       <div className="shopping-menu" dir="rtl">

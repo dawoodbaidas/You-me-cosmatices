@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import StoreBrand from '@/components/StoreBrand'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getViewer } from '@/lib/auth'
@@ -65,13 +65,7 @@ function Shell({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-cream px-4 py-12">
       <Link href="/" className="flex items-center gap-3">
-        <Image
-          src="/brand/logo.jpg"
-          alt="You &amp; Me"
-          width={44}
-          height={44}
-          className="h-11 w-11 rounded-full border border-sand bg-white object-cover shadow-sm"
-        />
+        <StoreBrand size="large" />
         <span className="text-right leading-none">
           <span className="block text-[11px] tracking-[0.25em] text-[#B78A4E]">YOU &amp; ME</span>
           <span className="block text-[16px] font-extrabold text-cocoa">COSMETICS</span>
