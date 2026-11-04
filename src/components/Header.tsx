@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import StoreBrand from './StoreBrand'
 import CategoryLink from './CategoryLink'
 import { useEffect, useRef, useState } from 'react'
@@ -9,11 +10,12 @@ import BoutiqueDialog from './BoutiqueDialog'
 import type { Collection } from '@/lib/taxonomy'
 import type { SiteSettings } from '@/types/product'
 
-export default function Header({ settings, cartCount, favoriteCount, onOpenCart, onScrollTo, groups, selected, cataloguePage, onSearch }: {
+export default function Header({ settings, cartCount, favoriteCount, onScrollTo, groups, selected, cataloguePage, onSearch }: {
   onSearch: () => void; settings: SiteSettings; cartCount: number; favoriteCount: number
-  onOpenCart: (event: React.MouseEvent<HTMLButtonElement>) => void; onScrollTo: (id: string) => void
+  onScrollTo: (id: string) => void
   groups: Collection[]; selected: string | null; cataloguePage: boolean
 }) {
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [mega, setMega] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
@@ -44,7 +46,7 @@ export default function Header({ settings, cartCount, favoriteCount, onOpenCart,
     observer.observe(element)
     window.addEventListener('resize', update)
     return () => { observer.disconnect(); boundaries?.disconnect(); window.removeEventListener('resize', update) }
-  }, [])
+  }, [pathname])
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
@@ -55,7 +57,7 @@ export default function Header({ settings, cartCount, favoriteCount, onOpenCart,
       if (section) observer.observe(section)
     }
     return () => observer.disconnect()
-  }, [])
+  }, [pathname])
 
   const closeMenus = () => { setOpen(false); setMega(false) }
   const search = () => { closeMenus(); onSearch() }
@@ -68,9 +70,9 @@ export default function Header({ settings, cartCount, favoriteCount, onOpenCart,
         <nav className="world-desktop-nav" aria-label="التنقل الرئيسي">
           <Link href="/" prefetch={true} aria-current={!cataloguePage && active === 'home' ? 'page' : undefined}>الرئيسية</Link>
           <Link href="/#bestsellers" aria-current={!cataloguePage && active === 'bestsellers' ? 'location' : undefined}>الأكثر طلبًا</Link>
-          <CategoryLink slug={null} aria-current={selected === 'all' ? 'page' : undefined}>المتجر</CategoryLink>
+          <Link href="/categories" onClick={closeMenus}>المتجر</Link>
           <div className="mega-anchor" onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} onKeyDown={event => { if (event.key === 'Escape') setMega(false) }}>
-            <button aria-expanded={mega} aria-controls="shop-mega" onClick={() => setMega(!mega)}>الأقسام ▾</button>
+            <button aria-expanded={mega} aria-controls="shop-mega" onClick={() => setMega(true)}>الأقسام ▾</button>
             {mega && <div id="shop-mega" className="shop-mega">{groups.map(group => <div key={group.id}>
               <CategoryLink slug={group.id} onClick={closeMenus} aria-current={selected === group.id ? 'page' : undefined}>{group.label} <small>({group.productIds.length})</small></CategoryLink>
               {group.children.map(child => <CategoryLink key={child.id} slug={child.id} onClick={closeMenus} aria-current={selected === child.id ? 'page' : undefined}>{child.label} <small>({child.productIds.length})</small></CategoryLink>)}
@@ -81,8 +83,8 @@ export default function Header({ settings, cartCount, favoriteCount, onOpenCart,
         </nav>
         <div className="world-nav-actions">
           <button className="nav-search" aria-label="البحث" onClick={search}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="m15 15 6 6" /></svg></button>
-          <button className="header-favorites" onClick={() => onScrollTo('shop')} aria-label={`المفضلة، ${favoriteCount} منتجات`}><HeartIcon />{favoriteCount > 0 && <span dir="ltr">{favoriteCount > 99 ? '99+' : favoriteCount}</span>}</button>
-          <button className="header-bag" onClick={onOpenCart} aria-label={`السلة، ${cartCount} منتجات`}><BagIcon />{cartCount > 0 && <span dir="ltr">{cartCount > 99 ? '99+' : cartCount}</span>}</button>
+          <Link className="header-favorites" href="/favorites" aria-label={`المفضلة، ${favoriteCount} منتجات`}><HeartIcon />{favoriteCount > 0 && <span dir="ltr">{favoriteCount > 99 ? '99+' : favoriteCount}</span>}</Link>
+          <Link className="header-bag" href="/cart" aria-label={`السلة، ${cartCount} منتجات`}><BagIcon />{cartCount > 0 && <span dir="ltr">{cartCount > 99 ? '99+' : cartCount}</span>}</Link>
         </div>
       </header>
     <BoutiqueDialog open={open} onClose={() => setOpen(false)} label="قائمة المتجر" className="menu-dialog">
@@ -91,7 +93,7 @@ export default function Header({ settings, cartCount, favoriteCount, onOpenCart,
         <nav aria-label="التنقل">
           <Link href="/" prefetch={true} onClick={closeMenus}>الرئيسية</Link>
           <Link href="/#bestsellers" onClick={closeMenus}>الأكثر طلبًا</Link>
-          <CategoryLink slug={null} onClick={closeMenus}>جميع المنتجات</CategoryLink>
+          <Link href="/categories" onClick={closeMenus}>المتجر</Link>
         </nav>
         <p className="shopping-menu-label">تسوق حسب القسم</p>
         {groups.map(group => <div className="shopping-group" key={group.id}>

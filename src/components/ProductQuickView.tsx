@@ -5,13 +5,13 @@ import ProductImage from './ProductImage'
 import Price from './Price'
 import BoutiqueDialog from './BoutiqueDialog'
 import { BagIcon, CheckIcon, CloseIcon, HeartIcon, WhatsappIcon } from '@/components/icons'
-import { cartLineLimit } from '@/lib/cart'
 import { discountPercent, formatJod } from '@/lib/format'
 import { whatsappLink } from '@/lib/whatsapp'
 import type { CartItem, Product, SiteSettings } from '@/types/product'
 
 interface ProductQuickViewProps {
   product: Product | null
+  inline?: boolean
   inventory?: boolean
   cartItems?: CartItem[]
   selectedVariantId: string | null
@@ -27,6 +27,7 @@ interface ProductQuickViewProps {
 export default function ProductQuickView({
   product,
   inventory = true,
+  inline = false,
   cartItems = [],
   currency,
   selectedVariantId,
@@ -48,9 +49,8 @@ export default function ProductQuickView({
   const discount = discountPercent(unitPrice, product.oldPrice)
   const variantId = defaultVariant?.id ?? null
   const existingQuantity = cartItems.find(item => item.productId === product.id && item.variantId === variantId)?.quantity ?? 0
-  const maxAddition = inventory ? Math.max(0, cartLineLimit(product, cartItems, variantId) - existingQuantity) : 99
   const soldOut = inventory && product.stockQuantity != null && product.stockQuantity <= 0
-  const unavailable = inventory && maxAddition < 1
+  const unavailable = inventory && product.stockQuantity != null && existingQuantity >= product.stockQuantity
 
   const buy = () => {
     if (unavailable || onAddToCart(product, defaultVariant?.id ?? null, 1) === false) return
@@ -60,12 +60,11 @@ export default function ProductQuickView({
     timer.current = setTimeout(() => setAdded(false), 1600)
   }
 
-  return (
-    <BoutiqueDialog open onClose={onClose} label={product.nameAr} className="quickview-dialog">
+  const content = (<>
       <div data-testid="product-quickview" className="quickview-sheet">
-        <button type="button" onClick={onClose} aria-label="إغلاق" className="quickview-close">
+        {!inline && <button type="button" onClick={onClose} aria-label="إغلاق" className="quickview-close">
           <CloseIcon />
-        </button>
+        </button>}
 
         <div className="quickview-body">
         <div className="quickview-media">
@@ -111,7 +110,7 @@ export default function ProductQuickView({
           <div className="quickview-actions">
             <button type="button" onClick={buy} disabled={unavailable} data-added={inventory && added} className="quickview-buy">
               {inventory && added ? <CheckIcon /> : <BagIcon />}
-              <span aria-live="polite">{!inventory ? 'أضف للسلة' : soldOut ? 'نفدت الكمية' : unavailable ? maxAddition === 0 ? 'الكمية المتاحة في السلة' : 'اختر كمية متاحة' : added ? 'تمت الإضافة' : 'أضف إلى السلة'}</span>
+              <span aria-live="polite">{!inventory ? 'أضف للسلة' : soldOut ? 'نفدت الكمية' : unavailable ? 'الكمية المتاحة في السلة' : existingQuantity > 0 ? 'في السلة ✓' : added ? 'تمت الإضافة ✓' : 'أضف إلى السلة'}</span>
             </button>
 
             <button
@@ -141,6 +140,7 @@ export default function ProductQuickView({
           <p className="quickview-note">{inventory ? settings.storeAnnouncement : 'توصيل لكل الأردن · الدفع عند الاستلام'}</p>
         </div>
       </div>
-    </BoutiqueDialog>
+    </>
   )
+  return inline ? <section className="store-product-page">{content}</section> : <BoutiqueDialog open onClose={onClose} label={product.nameAr} className="quickview-dialog">{content}</BoutiqueDialog>
 }

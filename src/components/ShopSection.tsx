@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import CategoryLink from './CategoryLink'
 import { ProductGridSkeleton } from './StoreSkeleton'
@@ -29,25 +30,30 @@ interface ShopSectionProps {
   onOpenDetails: (productId: string) => void
 }
 
-export default function ShopSection({ groups, initialCategory = 'all', cart, products, currency, pageTitle, query, unavailable = false, favorites, selectedVariants, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ShopSectionProps) {
+export default function ShopSection({ initialCategory = 'all', cart, products, currency, pageTitle, query, unavailable = false, favorites, selectedVariants, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ShopSectionProps) {
+  const sentinel = useRef<HTMLDivElement>(null)
   const category = initialCategory
-  const flatten = (items: Collection[]): Collection[] => items.flatMap(item => [item, ...flatten(item.children)])
-  const categories = flatten(groups)
   const [pagination, setPagination] = useState({ key: '', count: INITIAL_VISIBLE })
-  const [navigating, setNavigating] = useState(false)
-  const [sort, setSort] = useState('featured')
-  const [onlyAvailable, setOnlyAvailable] = useState(false)
-  const [onlyDiscounted, setOnlyDiscounted] = useState(false)
-  const [onlyNew, setOnlyNew] = useState(false)
+  const [restore, setRestore] = useState<{url:string; y:number; count:number} | null>(null)
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => { try { const saved = JSON.parse(sessionStorage.getItem('store-return') || 'null'); if (saved?.url === location.pathname + location.search) { setRestore(saved); sessionStorage.removeItem('store-return') } } catch {} }); return () => cancelAnimationFrame(frame)
+  }, [])
+  const params = useSearchParams()
+  const sort = params.get('sort') ?? 'featured'
+  const onlyAvailable = params.get('available') === '1'
+  const onlyDiscounted = params.get('discounted') === '1'
+  const onlyNew = params.get('new') === '1'
+  const update = (key: string, value: string | null) => {
+    const next = new URLSearchParams(window.location.search)
+    if (value) next.set(key, value); else next.delete(key)
+    window.history.pushState(null, '', window.location.pathname + (next.size ? '?' + next : ''))
+  }
+  const setSort = (value: string) => update('sort', value === 'featured' ? null : value)
+  const setOnlyAvailable = (value: boolean) => update('available', value ? '1' : null)
+  const setOnlyDiscounted = (value: boolean) => update('discounted', value ? '1' : null)
+  const setOnlyNew = (value: boolean) => update('new', value ? '1' : null)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const filterDialog = useRef<HTMLDialogElement>(null)
-  useEffect(() => {
-    const begin = () => setNavigating(true)
-    const reset = () => setNavigating(false)
-    window.addEventListener('store:navigate', begin)
-    window.addEventListener('popstate', reset)
-    return () => { window.removeEventListener('store:navigate', begin); window.removeEventListener('popstate', reset) }
-  }, [])
   useEffect(() => {
     const dialog = filterDialog.current
     if (!dialog || !filtersOpen) return
@@ -68,9 +74,10 @@ export default function ShopSection({ groups, initialCategory = 'all', cart, pro
     return result
   }, [query, products, sort, onlyAvailable, onlyDiscounted, onlyNew])
 
-  const visibleCount = pagination.key === viewKey ? pagination.count : INITIAL_VISIBLE
+  const visibleCount = Math.max(pagination.key === viewKey ? pagination.count : INITIAL_VISIBLE, restore?.count ?? 0)
   const rendered = visible.slice(0, visibleCount)
   const favoriteSet = new Set(favorites)
+  useEffect(() => { if (!restore) return; const frame = requestAnimationFrame(() => { window.scrollTo({top: restore.y, behavior:'instant'}); setRestore(null); setPagination({key:viewKey, count:Math.max(INITIAL_VISIBLE, restore.count)}) }); return () => cancelAnimationFrame(frame) }, [restore, viewKey])
 
   useEffect(() => {
     window.dispatchEvent(new Event('boutique:layout'))
@@ -80,14 +87,20 @@ export default function ShopSection({ groups, initialCategory = 'all', cart, pro
     setPagination({ key: viewKey, count: visibleCount + INITIAL_VISIBLE })
   }
 
-  if (navigating) return <section id="shop" className="beauty-shop"><ProductGridSkeleton /></section>
+  useEffect(() => {
+    const element = sentinel.current
+    if (!element || rendered.length >= visible.length) return
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) setPagination({ key: viewKey, count: visibleCount + INITIAL_VISIBLE })
+    }, { rootMargin: '200px' })
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [viewKey, visibleCount, rendered.length, visible.length])
+
 
   return <section id="shop" className={`beauty-shop ${pageTitle ? 'catalogue-page' : ''} ${productStyles.listing}`}>
     <div className="collection-heading"><h1>{query.trim() ? `نتائج البحث: ${query.trim()}` : pageTitle ?? 'المتجر'}</h1><span aria-live="polite">{visible.length} منتج</span></div>
 
-    <nav className="shop-category-strip" aria-label="أقسام المتجر" dir="rtl">
-      {[{ id: 'all', label: 'الكل' }, ...categories].map(item => <CategoryLink key={item.id} slug={item.id === 'all' ? null : item.id} aria-current={category === item.id ? 'page' : undefined}>{item.label}</CategoryLink>)}
-    </nav>
     <div className="shop-tools">
       <div className="catalog-controls">
         <label className="catalog-sort">ترتيب
@@ -112,7 +125,7 @@ export default function ShopSection({ groups, initialCategory = 'all', cart, pro
       <label><input type="checkbox" checked={onlyAvailable} onChange={event => setOnlyAvailable(event.target.checked)} /> المتوفر الآن</label>
       <label><input type="checkbox" checked={onlyDiscounted} onChange={event => setOnlyDiscounted(event.target.checked)} /> عليه خصم</label>
       <label><input type="checkbox" checked={onlyNew} onChange={event => setOnlyNew(event.target.checked)} /> جديد</label>
-      <div className="filter-sheet-actions"><button type="button" onClick={() => { setOnlyAvailable(false); setOnlyDiscounted(false); setOnlyNew(false) }}>مسح التصفية</button><button type="button" onClick={() => setFiltersOpen(false)}>عرض {visible.length} منتج</button></div>
+      <div className="filter-sheet-actions"><button type="button" onClick={() => { const next = new URLSearchParams(window.location.search); ['available','discounted','new'].forEach(key => next.delete(key)); window.history.pushState(null, '', window.location.pathname + (next.size ? '?' + next : '')) }}>مسح التصفية</button><button type="button" onClick={() => setFiltersOpen(false)}>عرض {visible.length} منتج</button></div>
     </dialog>
 
     {visible.length
@@ -134,7 +147,7 @@ export default function ShopSection({ groups, initialCategory = 'all', cart, pro
             />)}
           </div>
 
-          {rendered.length < visible.length && <div className="shop-more">
+          {rendered.length < visible.length && <div ref={sentinel} className="shop-more"><ProductGridSkeleton />
             <p><strong>{rendered.length}</strong> من {visible.length}</p>
             <button className="shop-more-button" onClick={showMore}>
               <span>عرض المزيد</span>

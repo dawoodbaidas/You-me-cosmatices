@@ -1,7 +1,9 @@
 ﻿'use client'
 
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { HeartIcon } from './icons'
+import { BagIcon, HeartIcon } from './icons'
 import { formatJod } from '@/lib/format'
 import type { Product } from '@/types/product'
 import ProductLens from './ProductLens'
@@ -17,12 +19,16 @@ interface ProductCardProps {
   selectedVariantId: string | null
   onSelectVariant: (productId: string, variantId: string) => void
   onToggleFavorite: (productId: string) => void
-  onAddToCart: (productId: string, variantId: string | null) => void | boolean
+  onAddToCart: (productId: string, variantId: string | null) => void | boolean | Promise<void | boolean>
   onOpenDetails: (productId: string) => void
 }
 
 export default function ProductCard({ product, currency, eager, deferImage = false, quantity, isFavorite, selectedVariantId, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ProductCardProps) {
+  const pathname = usePathname()
   const [added, setAdded] = useState(false)
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState('')
+  const adding = useRef(false)
   const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const card = useRef<HTMLElement>(null)
   const animations = useRef<Animation[]>([])
@@ -35,15 +41,32 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
   const variant = product.variants.find(item => item.id === selectedVariantId) ?? product.variants[0] ?? null
   const price = variant?.price ?? product.price
   const disabled = (product.stockQuantity != null && product.stockQuantity <= 0) || product.isActive === false || variant?.isActive === false
-  const add = () => {
-    if (onAddToCart(product.id, variant?.id ?? null) === false) return false
-    setAdded(true)
-    if (feedbackTimer.current) clearTimeout(feedbackTimer.current)
-    feedbackTimer.current = setTimeout(() => setAdded(false), 1200)
-    return true
+  const add = async () => {
+    if (adding.current || disabled) return false
+    adding.current = true
+    setPending(true)
+    setError('')
+    try {
+      const result = await onAddToCart(product.id, variant?.id ?? null)
+      if (result === false) throw new Error('Addition rejected')
+      setAdded(true)
+      if (feedbackTimer.current) clearTimeout(feedbackTimer.current)
+      feedbackTimer.current = setTimeout(() => setAdded(false), 1200)
+      return true
+    } catch {
+      setError('تعذّرت الإضافة. تحقّق من الكمية المتاحة وحاول مجددًا.')
+      return false
+    } finally {
+      adding.current = false
+      setPending(false)
+    }
   }
-  const addFromTag = () => {
-    if (add() === false || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  const addFromTag = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+    if (quantity > 0) {
+      if (onAddToCart(product.id, variant?.id ?? null) === false) return
+    } else if (await add() === false) return
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const tag = card.current?.querySelector<HTMLElement>(`[data-price-tag]`)
     if (!tag) return
     animations.current.forEach(animation => animation.cancel())
@@ -75,18 +98,22 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
         {product.badge && <span className={styles.badge}>{product.badge.toLowerCase() === 'new' ? 'جديد' : product.badge}</span>}
         <button className={styles.wishlist} aria-label={isFavorite ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={isFavorite} onClick={() => onToggleFavorite(product.id)}><HeartIcon /></button>
       </div>
-      <div className={styles.tagAnchor}><div className={styles.tagIdle}><button data-price-tag className={styles.tag} disabled={disabled} onClick={addFromTag} aria-label={`أضف قطعة من ${product.nameAr} إلى السلة بسعر ${formatJod(price, currency)}`}>
+      <div className={styles.tagAnchor}><div className={styles.tagIdle}><button data-price-tag className={styles.tag} disabled={disabled || pending} onClick={addFromTag} aria-label={`أضف قطعة من ${product.nameAr} إلى السلة بسعر ${formatJod(price, currency)}`}>
         <span className={styles.paper}><span className={styles.hole} /><strong>{new Intl.NumberFormat('ar-JO', { maximumFractionDigits: 2 }).format(price)}</strong><small>د.أ</small>{product.oldPrice != null && product.oldPrice > price && <del>{product.oldPrice}</del>}</span>
-        {quantity > 0 && <span className={styles.count} data-n={quantity} aria-label={`${quantity} في السلة`} />}
-      </button></div></div>
+      </button></div>{quantity > 0 && <span className={styles.count} aria-label={`العدد ${quantity}`}>{new Intl.NumberFormat('ar-JO').format(quantity)}</span>}</div>
     </div>
     <div className={styles.details}>
       <div className={styles.info}>
         <p className={styles.category}>{variant?.label ?? product.categoryLabel}</p>
-        <h3 className={styles.title}><button onClick={() => onOpenDetails(product.id)}>{product.nameAr}</button></h3>
-        {product.variants.length > 1 && <label className={styles.variant}>النوع<select aria-label={`نوع ${product.nameAr}`} value={variant?.id ?? ''} onChange={e => onSelectVariant(product.id, e.target.value)}>{product.variants.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>}
+        <h3 className={styles.title}><Link onNavigate={event => { event.preventDefault(); onOpenDetails(product.id) }} href={"/products/" + encodeURIComponent(product.slug) + (pathname.startsWith("/category/") ? "?from=" + encodeURIComponent(decodeURIComponent(pathname.split("/")[2])) : "")}>{product.nameAr}</Link></h3>
+        {product.variants.length > 1 && <label className={styles.variant}>النوع<select disabled={pending} aria-label={`نوع ${product.nameAr}`} value={variant?.id ?? ''} onChange={e => onSelectVariant(product.id, e.target.value)}>{product.variants.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>}
       </div>
-      <button className={styles.add} disabled={disabled} onClick={add} aria-live="polite">{disabled ? 'غير متوفر' : added ? 'تمت الإضافة' : 'أضف للسلة'}</button>
+      <div className={styles.purchase}>
+        <button className={styles.add} disabled={pending || quantity > 0 || disabled} aria-busy={pending} onClick={add} aria-live="polite">
+          <BagIcon />{pending ? 'جارٍ الإضافة…' : quantity > 0 ? added ? 'تمت الإضافة ✓' : 'في السلة ✓' : disabled ? 'غير متوفر' : 'أضف إلى السلة'}
+        </button>
+        {error && <p className={styles.addError} role="alert">{error}</p>}
+      </div>
     </div>
   </article>
 }

@@ -1,7 +1,8 @@
 'use client'
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { createContext, useContext, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 const SearchOverlay = dynamic(() => import('./SearchOverlay'))
 import BestSellers from '@/components/BestSellers'
@@ -21,11 +22,15 @@ import Header from '@/components/Header'
 import Hero from '@/components/Hero'
 import MobileCartBar from '@/components/MobileCartBar'
 const ProductQuickView = dynamic(() => import('./ProductQuickView'))
+import CategoryCircles from './CategoryCircles'
+import CategoryLink from './CategoryLink'
+import './category-shopping.css'
+import './store-routes.css'
 import ShopSection from '@/components/ShopSection'
 import Toast, { type ToastMessage } from '@/components/Toast'
 import { cartLineLimit, cartCount as countItems, cartTotal as sumTotal, resolveCart } from '@/lib/cart'
 import { arabicStoreProduct } from '@/lib/storefront-arabic'
-import { storeCollections, findCollection } from '@/lib/store-categories'
+import { storeCollections, findCollection, collectionHref } from '@/lib/store-categories'
 import type { StoreCategory } from '@/types/store'
 import { useStoreRefresh } from './useStoreRefresh'
 import StoreScroll from './StoreScroll'
@@ -36,7 +41,7 @@ import type { Product, SiteSettings } from '@/types/product'
 interface StorefrontProps {
   products: Product[]
   settings: SiteSettings
-  categoryId?: string
+  children: ReactNode
   categories: StoreCategory[]
   storeUnavailable?: boolean
   storeRevision?: string | null
@@ -44,15 +49,17 @@ interface StorefrontProps {
   sceneCurrency?: string
 }
 
-export default function Storefront({ products, settings, categoryId, categories, storeRevision = null, storeUnavailable = false, sceneProducts: editorial = [], sceneCurrency = '' }: StorefrontProps) {
+export default function Storefront({ products, settings, children, categories, storeRevision = null, storeUnavailable = false, sceneProducts: editorial = [], sceneCurrency = '' }: StorefrontProps) {
   const router = useRouter()
+  const pathname = usePathname()
+  const categoryId = pathname.startsWith("/category/") ? decodeURIComponent(pathname.split("/")[2]) : undefined
+  const searchParams = useSearchParams()
   useStoreRefresh(storeRevision)
   const sceneProducts = useMemo(() => editorial.map(arabicStoreProduct), [editorial])
   const [searchOpen, setSearchOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const searchQuery = searchParams.get('q') ?? ''
   const groups = useMemo(() => storeCollections(categories, products), [categories, products])
-  const collection = findCollection(groups, categoryId ?? null)
-  const cataloguePage = categoryId !== undefined
+  const cataloguePage = pathname !== '/'
   const [variantChoice, setVariantChoice] = useState<Record<string, string>>({})
   const [cartOpen, setCartOpen] = useState(false)
   const [cartSide, setCartSide] = useState<'left' | 'right'>('right')
@@ -73,24 +80,14 @@ export default function Storefront({ products, settings, categoryId, categories,
   const [cart, cartActions] = useCartStore()
   const [favorites, toggleFavoriteStore] = useFavoritesStore()
 
-  useEffect(() => {
-    const syncQuery = () => setSearchQuery(new URLSearchParams(window.location.search).get('q') ?? '')
-    syncQuery()
-    window.addEventListener('popstate', syncQuery)
-    return () => window.removeEventListener('popstate', syncQuery)
-  }, [])
 
   const submitSearch = useCallback((value: string) => {
     const query = value.trim()
     if (!query) return
-    setSearchQuery(query)
     setSearchOpen(false)
     router.push(`/category/all?q=${encodeURIComponent(query)}`)
   }, [router])
 
-  useLayoutEffect(() => {
-    if (categoryId !== undefined) window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [categoryId])
 
   /* ------------------------------------------------------------------ toast */
 
@@ -116,7 +113,7 @@ export default function Storefront({ products, settings, categoryId, categories,
   const total = useMemo(() => sumTotal(lines), [lines])
 
   const addProduct = useCallback(
-    (productId: string, variantId: string | null, quantity = 1) => {
+    (productId: string, variantId: string | null, quantity = 1, quiet = false) => {
       const product = products.find((candidate) => candidate.id === productId)
       const current = cartActions.snapshot()
       const quantityInLine = current.find(item => item.productId === productId && item.variantId === variantId)?.quantity ?? 0
@@ -125,7 +122,7 @@ export default function Storefront({ products, settings, categoryId, categories,
         return false
       }
       cartActions.add(productId, variantId, quantity)
-      if (product) notify(`أضيف إلى السلة: ${product.nameAr}`)
+      if (product && !quiet) notify(`أضيف إلى السلة: ${product.nameAr}`)
       return true
     },
     [cartActions, notify, products],
@@ -217,34 +214,37 @@ export default function Storefront({ products, settings, categoryId, categories,
 
   const browse = useCallback(() => {
     setCartOpen(false)
-    scrollTo('shop')
-  }, [scrollTo])
+    router.push('/categories')
+  }, [router])
 
   /* ----------------------------------------------------------------- render */
 
-  const visible = useMemo(() => collection ? products.filter(product => collection.productIds.includes(product.id)) : categoryId && categoryId !== 'all' ? [] : products, [products, collection, categoryId])
-  const quickViewProduct = (sceneQuickView ? sceneProducts : products).find((product) => product.id === quickViewId) ?? null
+  const modalSlug = searchParams.get('product')
+  const modalProduct = modalSlug ? products.find(product => product.slug === modalSlug) : undefined
+  const quickViewProduct = modalProduct ?? (sceneQuickView ? sceneProducts : products).find((product) => product.id === quickViewId) ?? null
+  const closeProduct = () => { if (modalSlug) window.history.back(); else setQuickViewId(null) }
   const favoriteSet = useMemo(() => new Set(favorites), [favorites])
 
-  return (
-    <StorefrontMotion>
-      <StoreScroll />
-      <a href="#shop" className="skip-link">انتقلي إلى المنتجات</a>
 
-      <Header
-        onSearch={() => setSearchOpen(true)}
-        settings={settings}
-        cartCount={totalCount}
-        favoriteCount={favorites.length}
-        onOpenCart={openCart}
-        onScrollTo={scrollTo}
-        groups={groups}
-        selected={categoryId ?? null}
-        cataloguePage={cataloguePage}
-      />
+  const openProduct = (id: string) => {
+    const product = products.find(p => p.id === id)
+    if (product) { const next = new URLSearchParams(window.location.search); next.set('product', product.slug); window.history.pushState(null, '', window.location.pathname + '?' + next) }
+  }
+  const renderPage = ({ mode, slug }: StorePageProps) => {
+    const collection = findCollection(groups, slug ?? null)
+    const product = mode === 'product' ? products.find(p => p.slug === slug) : undefined
+    const from = searchParams.get('from')
+    const candidate = from ? findCollection(groups, from) : undefined
+    const productCategory = product ? (candidate?.productIds.includes(product.id) ? candidate : groups.find(g => g.productIds.includes(product.id))) : undefined
+    const title = mode === 'product' ? product?.nameAr : mode === 'cart' ? 'سلة التسوق' : mode === 'favorites' ? 'المفضلة' : collection?.label ?? (mode === 'categories' ? 'الأقسام' : 'جميع المنتجات')
+    const visible = mode === 'favorites' ? products.filter(p => favorites.includes(p.id)) : collection ? products.filter(p => collection.productIds.includes(p.id)) : products
+    return (      <>
+{mode === "product" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link><span>/</span>{productCategory && <><Link href={collectionHref(productCategory.id)}>{productCategory.label}</Link><span>/</span></>}<span aria-current="page">{title}</span></nav>}
+{mode === "category" && <nav className="store-departments" aria-label="أقسام المتجر" dir="rtl"><CategoryLink slug={null} aria-current={slug === 'all' ? 'page' : undefined}>الكل</CategoryLink>{groups.map(group => <CategoryLink key={group.id} slug={group.id} aria-current={group.id === slug ? 'page' : undefined}>{group.label}</CategoryLink>)}</nav>}
+{mode === "product" && product && <ProductQuickView inline product={product} cartItems={cart} selectedVariantId={variantChoice[product.id] ?? null} onSelectVariant={(id, variant) => setVariantChoice(v => ({...v, [id]:variant}))} currency={settings.currency} isFavorite={favoriteSet.has(product.id)} settings={settings} onClose={() => router.push("/categories")} onToggleFavorite={toggleFavorite} onAddToCart={(p, variant, quantity) => addProduct(p.id, variant, quantity)} />}
+{mode === "cart" && <CartDrawer inline side="right" open lines={lines} settings={settings} onClose={() => router.push("/categories")} onRemove={remove} onCheckout={checkout} onBrowse={() => router.push("/categories")} />}
 
-      <main>
-        {!cataloguePage && <><Hero products={sceneProducts} currency={sceneCurrency} onAddToCart={addSceneProduct} onScrollTo={scrollTo} onOpenDetails={id => { setSceneQuickView(true); setQuickViewId(id) }} />
+        {mode === "home" && <><Hero products={sceneProducts} currency={sceneCurrency} onAddToCart={addSceneProduct} onScrollTo={scrollTo} onOpenDetails={id => { setSceneQuickView(true); setQuickViewId(id) }} />
         <BestSellers
           products={sceneProducts}
           currency={sceneCurrency}
@@ -252,14 +252,14 @@ export default function Storefront({ products, settings, categoryId, categories,
           onOpenDetails={id => { setSceneQuickView(true); setQuickViewId(id) }}
         /></>}
 
-        <ShopSection
+        {(mode === "category" || mode === "favorites") ? <ShopSection
           cart={cart}
-          key={categoryId ?? 'home'}
+          key={pathname}
           products={visible}
           groups={groups}
-          initialCategory={categoryId}
+          initialCategory={slug}
           currency={settings.currency}
-          pageTitle={cataloguePage ? collection?.label ?? (categoryId === 'all' ? 'جميع المنتجات' : 'المنتجات') : undefined}
+          pageTitle={title}
           query={searchQuery}
           unavailable={storeUnavailable}
           favorites={favorites}
@@ -268,10 +268,31 @@ export default function Storefront({ products, settings, categoryId, categories,
             setVariantChoice((current) => ({ ...current, [productId]: variantId }))
           }
           onToggleFavorite={toggleFavorite}
-          onAddToCart={addProduct}
-          onOpenDetails={id => { setSceneQuickView(false); setQuickViewId(id) }}
-        />
-      </main>
+          onAddToCart={(productId, variantId) => addProduct(productId, variantId, 1, true)}
+          onOpenDetails={openProduct}
+        /> : (mode === "home" || mode === "categories") ? <CategoryCircles groups={groups} products={products} /> : null}
+      </>
+
+    )
+  }
+
+  return (
+    <StorePageContext.Provider value={renderPage}><StorefrontMotion>
+      <StoreScroll />
+      <a href="#store-content" className="skip-link">انتقلي إلى المنتجات</a>
+
+      <Header
+        onSearch={() => setSearchOpen(true)}
+        settings={settings}
+        cartCount={totalCount}
+        favoriteCount={favorites.length}
+        onScrollTo={scrollTo}
+        groups={groups}
+        selected={categoryId ?? null}
+        cataloguePage={cataloguePage}
+      />
+
+      <main id="store-content">{children}</main>
 
       <Footer
         settings={settings}
@@ -281,34 +302,32 @@ export default function Storefront({ products, settings, categoryId, categories,
         onSubscribe={() => notify('تم تسجيل بريدك. سنتواصل قريبًا.')}
       />
 
-      {searchOpen && <SearchOverlay products={products} currency={settings.currency} initialQuery={searchQuery} onClose={() => setSearchOpen(false)} onSubmit={submitSearch} onSelect={id => { setSearchOpen(false); setSceneQuickView(false); setQuickViewId(id) }} />}
+      {searchOpen && <SearchOverlay products={products} currency={settings.currency} initialQuery={searchQuery} onClose={() => setSearchOpen(false)} onSubmit={submitSearch} onSelect={id => { setSearchOpen(false); openProduct(id) }} />}
       <CartDrawer
         side={cartSide}
         open={cartOpen}
         lines={lines}
         settings={settings}
         onClose={() => setCartOpen(false)}
-        onIncrement={increment}
-        onDecrement={decrement}
         onRemove={remove}
         onCheckout={checkout}
         onBrowse={browse}
       />
 
       {quickViewProduct && <ProductQuickView
-        key={quickViewId}
+        key={quickViewProduct.id}
         product={quickViewProduct}
         cartItems={cart}
-        inventory={!sceneQuickView}
+        inventory={!!modalProduct || !sceneQuickView}
         selectedVariantId={quickViewProduct ? variantChoice[quickViewProduct.id] ?? null : null}
         onSelectVariant={(productId, variantId) => setVariantChoice(current => ({ ...current, [productId]: variantId }))}
-        currency={sceneQuickView ? sceneCurrency : settings.currency}
+        currency={sceneQuickView && !modalProduct ? sceneCurrency : settings.currency}
         isFavorite={quickViewProduct ? favoriteSet.has(quickViewProduct.id) : false}
         settings={settings}
-        onClose={() => setQuickViewId(null)}
+        onClose={closeProduct}
         onToggleFavorite={toggleFavorite}
         onAddToCart={(product, variantId, quantity) => {
-          if (sceneQuickView) { cartActions.add(product.id, variantId, quantity); return true }
+          if (sceneQuickView && !modalProduct) { cartActions.add(product.id, variantId, quantity); return true }
           return addProduct(product.id, variantId, quantity)
         }}
       />}
@@ -318,10 +337,18 @@ export default function Storefront({ products, settings, categoryId, categories,
         total={total + (totalCount > 0 && !(settings.storeFreeShippingThreshold > 0 && total >= settings.storeFreeShippingThreshold) ? settings.storeShippingFee ?? 0 : 0)}
         settings={settings}
         onOpenCart={openCart}
-        open={cartOpen || searchOpen || quickViewId !== null}
+        open={cartOpen || searchOpen || quickViewId !== null || !!modalProduct}
       />
 
       <Toast toast={cartOpen || searchOpen || quickViewId !== null ? null : toast} />
-    </StorefrontMotion>
+    </StorefrontMotion></StorePageContext.Provider>
   )
+}
+
+export interface StorePageProps { mode: 'home' | 'categories' | 'category' | 'product' | 'cart' | 'favorites'; slug?: string }
+const StorePageContext = createContext<((props: StorePageProps) => ReactNode) | null>(null)
+export function StorePage(props: StorePageProps) {
+  const render = useContext(StorePageContext)
+  if (!render) throw new Error('StorePage requires the store layout')
+  return render(props)
 }

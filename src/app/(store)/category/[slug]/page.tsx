@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import Storefront from '@/components/Storefront'
+import { StorePage } from '@/components/Storefront'
 import { getStoreCatalogue } from '@/lib/store-catalogue'
 import { storeCollections, findCollection } from '@/lib/store-categories'
 
@@ -11,8 +11,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const result = await getStoreCatalogue()
 
   const collection = findCollection(storeCollections(result.categories, result.products), slug)
-  if (slug !== 'all' && !collection && result.revision !== null) notFound()
+  if (slug !== 'all' && !collection && !result.unavailable) notFound()
 
   // Keep the full catalogue available to resolve cart lines across departments.
-  return <Storefront key={slug} products={result.products} settings={result.settings} categories={result.categories} categoryId={slug} storeRevision={result.revision} storeUnavailable={result.unavailable} />
+  return <StorePage mode="category" slug={slug} />
 }

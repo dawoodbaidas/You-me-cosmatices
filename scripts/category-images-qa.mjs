@@ -1,0 +1,5 @@
+﻿import {pathToFileURL} from 'node:url'
+import assert from 'node:assert/strict'
+const {default:p}=await import(pathToFileURL('C:/Users/ONE BY ONE/AppData/Local/npm-cache/_npx/0f94ee7615faf582/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js'))
+const browser=await p.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'})
+try{const page=await browser.newPage();for(const width of [390,1440]){await page.setViewport({width,height:900});await page.goto('http://localhost:3001',{waitUntil:'networkidle0'});await page.waitForSelector('.category-orb img');const data=await page.$$eval('.category-orb',orbs=>orbs.map(o=>{const i=o.querySelector('img'),s=getComputedStyle(o),v=i&&getComputedStyle(i);return {square:Math.abs(o.offsetWidth-o.offsetHeight)<2,round:s.borderRadius,overflow:s.overflow,fit:v?.objectFit,position:v?.objectPosition,padding:v?.padding}}));assert.ok(data.every(x=>x.square&&x.round==='50%'&&x.overflow==='hidden'&&x.fit==='cover'&&x.position==='50% 50%'&&x.padding==='0px'));console.log('PASS',width,data.length)}}finally{await browser.close()}
