@@ -1,4 +1,5 @@
 import { formatJod } from '@/lib/format'
+import { cartShipping } from '@/lib/cart'
 import type { CartLine, SiteSettings } from '@/types/product'
 
 /** Digits-safe WhatsApp href — digits only, no "+" or spaces. */
@@ -35,10 +36,13 @@ export function buildOrderMessage(
   })
 
   const total = lines.reduce((sum, line) => sum + line.lineTotal, 0)
+  const shipping = cartShipping(total, settings)
 
   body.push(
     '',
-    `المجموع الكلي: ${formatJod(total, currency)}`,
+    `المجموع الفرعي: ${formatJod(total, currency)}`,
+    `التوصيل: ${shipping === undefined ? 'يُحدد عند تأكيد الطلب' : shipping === 0 ? 'مجاني' : formatJod(shipping, currency)}`,
+    `${shipping === undefined ? 'مجموع المنتجات دون التوصيل' : 'الإجمالي'}: ${formatJod(total + (shipping ?? 0), currency)}`,
     '',
     'بيانات التوصيل:',
     'الاسم: ',

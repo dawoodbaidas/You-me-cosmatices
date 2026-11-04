@@ -1,0 +1,448 @@
+/* Cart page — full-page redesign on /cart.
+   Scoped to this component only; the drawer (.cart-dialog) keeps its own
+   sheet styles elsewhere, so there is no shared-CSS overlap to fight. */
+
+.view {
+  --muted: #6c665e;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: clamp(18px, 4vw, 28px) clamp(16px, 4vw, 32px) calc(72px + env(safe-area-inset-bottom));
+}
+
+/* ---------------------------------------------------------------- header */
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: clamp(16px, 3vw, 26px);
+  padding-bottom: clamp(14px, 3vw, 22px);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.view .title {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(24px, 5vw, 34px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.countBadge {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  flex: none;
+  padding: 4px 10px;
+  border: 1px solid var(--blush-deep);
+  border-radius: 22px;
+  background: var(--blush);
+  color: var(--wine);
+  font-weight: 700;
+  font-size: 17px;
+}
+
+/* ---------------------------------------------------------------- layout */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 32px);
+  align-items: start;
+}
+
+@media (min-width: 1100px) and (min-height: 760px) {
+  .layout {
+    grid-template-columns: minmax(0, 65fr) minmax(300px, 35fr);
+  }
+  .summary {
+    position: sticky;
+    top: calc(var(--header-height, 96px) + 16px);
+  }
+}
+
+/* ----------------------------------------------------------------- items */
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  position: relative;
+  display: grid;
+  /* RTL: first track is the right edge, so the visual sits on the right. */
+  grid-template-columns: 88px minmax(0, 1fr) 44px;
+  grid-template-areas: "image info remove" "controls controls controls" "stock stock stock";
+  gap: 12px 8px;
+  padding: 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg, 24px);
+  background: var(--paper-soft);
+  box-shadow: 0 10px 26px rgba(24, 8, 14, .05);
+  animation: cartCardIn 320ms var(--ease) both;
+}
+
+@media (min-width: 768px) {
+  .card {
+    grid-template-columns: 148px minmax(0, 1fr) 48px;
+    gap: 18px;
+    padding: 18px;
+  }
+}
+
+@keyframes cartCardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .view .cta { animation: none; transition: none; }
+}
+
+.thumb {
+  position: relative;
+  grid-area: image;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--ivory);
+  align-self: start;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6%;
+  background: var(--ivory);
+}
+
+.thumbFallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--gold);
+}
+
+.cardInfo {
+  grid-area: info;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-block: 2px;
+}
+
+.view .name {
+  margin: 0;
+  color: var(--ink);
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 768px) {
+  .view .name { font-size: 17px; }
+}
+
+.variant {
+  margin: 2px 0 0;
+  color: var(--wine);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.unit {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.controlRow {
+  grid-area: controls;
+  flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--ivory);
+}
+
+.view .step {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 160ms var(--ease), color 160ms var(--ease), opacity 160ms var(--ease);
+}
+
+.view .step svg { width: 15px; height: 15px; }
+
+.view .step:hover:not(:disabled) { background: var(--blush); color: var(--wine); }
+.view .step:disabled { opacity: .35; cursor: default; }
+
+.qty {
+  min-width: 30px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.lineTotal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 0;
+}
+
+.lineTotal small { color: var(--muted); font-size: 13px; line-height: 1.3; }
+.lineTotal strong { color: var(--wine); font-size: 16.5px; font-weight: 700; white-space: nowrap; }
+
+.stockNote {
+  grid-area: stock;
+  margin: 6px 0 0;
+  color: #8a6a3a;
+  font-size: 14px;
+}
+
+.view .remove {
+  grid-area: remove;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 160ms var(--ease), color 160ms var(--ease);
+}
+
+.view .remove svg { width: 17px; height: 17px; }
+.view .remove:hover { background: #f3e4e6; color: #8c4049; }
+
+/* --------------------------------------------------------------- summary */
+
+.summary {
+  padding: clamp(18px, 3vw, 24px);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg, 24px);
+  background: var(--ivory);
+  box-shadow: 0 14px 34px rgba(24, 8, 14, .06);
+}
+
+.view .summaryTitle {
+  margin: 0 0 14px;
+  color: var(--ink);
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.shipMeter p {
+  margin: 0 0 8px;
+  color: var(--wine);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.shipTrack {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--blush);
+  overflow: hidden;
+}
+
+.shipTrack i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--wine);
+  transition: width .5s var(--ease);
+}
+
+.rows {
+  margin: 16px 0 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.row {
+  flex-wrap: wrap;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.row + .row { margin-top: 10px; }
+
+.row dt { color: var(--muted); font-size: 13.5px; }
+.row dd { margin: 0; color: var(--ink); font-size: 14.5px; font-weight: 600; }
+
+.totalRow { margin-top: 14px; }
+.totalRow dt { color: var(--ink); font-size: 15.5px; font-weight: 700; }
+.totalRow dd { color: var(--wine); font-size: 19px; font-weight: 800; }
+
+.shipNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--blush);
+  color: var(--wine);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.shipNote svg { width: 16px; height: 16px; flex: none; margin-top: 2px; color: var(--gold); }
+
+.view .cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 56px;
+  margin-top: 18px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--wine);
+  color: var(--paper);
+  font-size: 15.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 180ms var(--ease), transform 160ms var(--ease), box-shadow 180ms var(--ease);
+  box-shadow: 0 14px 30px rgba(26, 29, 24, .22);
+}
+
+.view .cta svg { width: 17px; height: 17px; flex: none; }
+.view .cta:hover:not(:disabled) { background: var(--wine-deep); }
+.view .cta:active:not(:disabled) { transform: scale(.985); }
+.view .cta:disabled { opacity: .55; cursor: default; }
+
+.note {
+  margin: 10px 0 0;
+  color: #8a6a3a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.assurances {
+  margin: 16px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--line-soft);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.assurances svg { width: 15px; height: 15px; margin-inline-end: 6px; vertical-align: -2px; color: var(--gold); }
+
+/* ------------------------------------------------------------ empty cart */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(40px, 10vw, 72px) 20px;
+  border: 1px dashed var(--blush-deep);
+  border-radius: var(--radius-lg, 24px);
+  background: var(--ivory);
+}
+
+.emptyIcon {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--blush);
+  color: var(--wine);
+}
+
+.emptyIcon svg { width: 34px; height: 34px; }
+
+.empty h2 {
+  margin: 18px 0 0;
+  color: var(--ink);
+  font-size: clamp(20px, 5vw, 26px);
+  font-weight: 700;
+}
+
+.empty p {
+  max-width: 42ch;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.view .empty .cta { width: auto; margin-top: 24px; }
+
+/* Focus visibility for keyboard users. */
+.view .step:focus-visible,
+.view .remove:focus-visible,
+.view .cta:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+ .view *, .view *::before, .view *::after { animation: none; transition: none; }
+}

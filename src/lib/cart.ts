@@ -1,5 +1,5 @@
 import { formatJod } from '@/lib/format'
-import type { CartItem, CartLine, Product } from '@/types/product'
+import type { CartItem, CartLine, Product, SiteSettings } from '@/types/product'
 
 export const CART_STORAGE_KEY = 'you-and-me-cart-v1'
 
@@ -136,3 +136,11 @@ export function writeStoredFavorites(storage: Pick<Storage, 'setItem'>, ids: str
 
 export const describeLine = (line: CartLine, currency: string) =>
   `${formatJod(line.unitPrice, currency)} × ${line.quantity} = ${formatJod(line.lineTotal, currency)}`
+
+/** Unknown fees stay unknown; a valid reached threshold grants free delivery. */
+export function cartShipping(subtotal: number, settings: SiteSettings): number | undefined {
+  const threshold = settings.storeFreeShippingThreshold
+  if (Number.isFinite(threshold) && threshold > 0 && subtotal >= threshold) return 0
+  const fee = settings.storeShippingFee
+  return typeof fee === 'number' && Number.isFinite(fee) && fee >= 0 ? fee : undefined
+}

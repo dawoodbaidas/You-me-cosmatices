@@ -17,6 +17,7 @@ import './orbit.css'
 import './arabic-design.css'
 import './boutique-redesign.css'
 import CartDrawer from '@/components/CartDrawer'
+import CartPage from '@/components/CartPage'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
@@ -247,7 +248,7 @@ export default function Storefront({ products, settings, children, categories, s
 {mode === "product" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link><span>/</span>{productCategory && <><Link href={collectionHref(productCategory.id)}>{productCategory.label}</Link><span>/</span></>}<span aria-current="page">{title}</span></nav>}
 {mode === "category" && <nav className="store-departments" aria-label="أقسام المتجر" dir="rtl"><CategoryLink slug={null} aria-current={slug === 'all' ? 'page' : undefined}>الكل</CategoryLink>{groups.map(group => <CategoryLink key={group.id} slug={group.id} aria-current={group.id === slug ? 'page' : undefined}>{group.label}</CategoryLink>)}</nav>}
 {mode === "product" && product && <ProductQuickView inline product={product} cartItems={cart} selectedVariantId={variantChoice[product.id] ?? null} onSelectVariant={(id, variant) => setVariantChoice(v => ({...v, [id]:variant}))} currency={settings.currency} isFavorite={favoriteSet.has(product.id)} settings={settings} onClose={() => router.push("/categories")} onToggleFavorite={toggleFavorite} onAddToCart={(p, variant, quantity) => addProduct(p.id, variant, quantity)} />}
-{mode === "cart" && <CartDrawer inline side="right" open lines={lines} settings={settings} onClose={() => router.push("/categories")} onRemove={remove} onIncrement={increment} onDecrement={decrement} onCheckout={checkout} onBrowse={() => router.push("/categories")} />}
+{mode === "cart" && <CartPage lines={lines} settings={settings} onRemove={remove} onIncrement={increment} onDecrement={decrement} onCheckout={checkout} onBrowse={() => router.push("/categories")} />}
 
         {mode === "home" && <><Hero products={sceneProducts} currency={sceneCurrency} onAddToCart={addSceneProduct} onScrollTo={scrollTo} onOpenDetails={id => { setSceneQuickView(true); setQuickViewId(id) }} />
         <BestSellers

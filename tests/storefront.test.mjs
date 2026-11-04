@@ -132,7 +132,7 @@ test('WhatsApp order uses selected labels, quantities, exact totals and establis
   const expected = [
     'مرحبا', 'أرغب بطلب المنتجات التالية:', '',
     `1. ${product.nameAr} (${variant.label}) - الكمية: 2 × ${variant.price.toFixed(2)} د.أ = ${(variant.price * 2).toFixed(2)} د.أ`,
-    '', `المجموع الكلي: ${(variant.price * 2).toFixed(2)} د.أ`, '', 'بيانات التوصيل:', 'الاسم: ', 'العنوان: ', 'رقم الهاتف: ', '', 'شكراً لكم 💕',
+    '', `المجموع الفرعي: ${(variant.price * 2).toFixed(2)} د.أ`, 'التوصيل: يُحدد عند تأكيد الطلب', `مجموع المنتجات دون التوصيل: ${(variant.price * 2).toFixed(2)} د.أ`, '', 'بيانات التوصيل:', 'الاسم: ', 'العنوان: ', 'رقم الهاتف: ', '', 'شكراً لكم 💕',
   ].join('\n')
   assert.equal(message, expected)
   const link = new URL(whatsappLink('+962 7 1234 5678', message))
@@ -157,3 +157,13 @@ test('Arabic search matches variants, mixed words and spelling without diacritic
   assert.equal(matchesProduct({ ...product, isActive: false }, 'glow'), false)
 })
 
+
+test('delivery validates fees and preserves free thresholds and message totals', () => {
+ for (const fee of [undefined, null, NaN, Infinity, -1]) assert.equal(cart.cartShipping(10, {storeShippingFee:fee,storeFreeShippingThreshold:25}),undefined)
+ assert.equal(cart.cartShipping(10,{storeShippingFee:3,storeFreeShippingThreshold:25}),3)
+ assert.equal(cart.cartShipping(25,{storeShippingFee:null,storeFreeShippingThreshold:25}),0)
+ assert.equal(cart.cartShipping(10,{storeShippingFee:0,storeFreeShippingThreshold:0}),0)
+ const lines=[{product:products[0],variant:null,quantity:1,unitPrice:10,lineTotal:10}]
+ assert.match(buildOrderMessage(lines,{currency:'JOD',storeShippingFee:3}),/الإجمالي: 13.00/)
+ assert.match(buildOrderMessage(lines,{currency:'JOD',storeFreeShippingThreshold:10}),/التوصيل: مجاني/)
+})
