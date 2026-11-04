@@ -100,7 +100,7 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
       </div>
       <div className={styles.tagAnchor}><div className={styles.tagIdle}><button data-price-tag className={styles.tag} disabled={disabled || pending} onClick={addFromTag} aria-label={`أضف قطعة من ${product.nameAr} إلى السلة بسعر ${formatJod(price, currency)}`}>
         <span className={styles.paper}><span className={styles.hole} /><strong>{new Intl.NumberFormat('ar-JO', { maximumFractionDigits: 2 }).format(price)}</strong><small>د.أ</small>{product.oldPrice != null && product.oldPrice > price && <del>{product.oldPrice}</del>}</span>
-      </button></div>{quantity > 0 && <span className={styles.count} aria-label={`العدد ${quantity}`}>{new Intl.NumberFormat('ar-JO').format(quantity)}</span>}</div>
+      </button></div>{quantity > 0 && <span className={styles.count}><span aria-hidden="true">{new Intl.NumberFormat('ar-JO').format(quantity)}</span><span className="sr-only"> عدد القطع في السلة {quantity}</span></span>}</div>
     </div>
     <div className={styles.details}>
       <div className={styles.info}>

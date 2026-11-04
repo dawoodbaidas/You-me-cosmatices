@@ -1747,15 +1747,19 @@
 .cart-remove:hover { color: var(--wine); }
 .cart-line-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 9px; }
 .quantity-stepper {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  height: 28px;
+  height: 36px;
   border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  overflow: hidden;
 }
-.quantity-stepper button { display: grid; place-items: center; width: 27px; height: 100%; color: var(--muted); transition: color .2s var(--ease), background .2s var(--ease); }
-.quantity-stepper button:hover { background: var(--paper-deep); color: var(--wine); }
-.quantity-stepper button svg { width: 11px; height: 11px; }
-.quantity-stepper span { min-width: 22px; color: var(--ink); font-size: 10px; text-align: center; }
+.quantity-stepper button { display: grid; place-items: center; width: 36px; height: 100%; flex: none; color: var(--muted); transition: color .2s var(--ease), background .2s var(--ease); }
+.quantity-stepper button:hover:not(:disabled) { background: var(--paper-deep); color: var(--wine); }
+.quantity-stepper button:disabled { opacity: .35; cursor: default; }
+.quantity-stepper button svg { width: 12px; height: 12px; }
+.quantity-stepper span { min-width: 26px; color: var(--ink); font-size: 12px; text-align: center; }
 .cart-line-controls > strong { color: var(--wine); font-size: 12px; font-weight: 500; white-space: nowrap; }
 .cart-summary {
   padding: 13px 18px calc(16px + env(safe-area-inset-bottom));

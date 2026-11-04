@@ -35,7 +35,10 @@ export async function removeBrowserWorkspace(directory) {
   const root = await realpath(tmpdir())
   const target = await realpath(directory)
   const child = relative(root, target)
-  if (!basename(target).startsWith(PREFIX) || child.startsWith(`..${sep}`) || child === '..' || resolve(directory) !== target) throw new Error('Refusing to clean outside the dedicated QA workspace')
+  // Compare inverted-case and 8.3-short-name (Windows) path forms through
+  // realpath on both sides instead of a raw resolve() string equality.
+  const resolvedReal = await realpath(resolve(directory))
+  if (!basename(target).startsWith(PREFIX) || child.startsWith(`..${sep}`) || child === '..' || resolvedReal !== target) throw new Error('Refusing to clean outside the dedicated QA workspace')
   // Unlink the junction itself; never recursively traverse shared dependencies.
   const modules = join(target, 'node_modules')
   if (!(await lstat(modules)).isSymbolicLink()) throw new Error('Unexpected QA dependencies; leaving workspace intact')

@@ -62,7 +62,7 @@ export default function ProductQuickView({
 
   const content = (<>
       <div data-testid="product-quickview" className="quickview-sheet">
-        {!inline && <button type="button" onClick={onClose} aria-label="إغلاق" className="quickview-close">
+        {!inline && <button type="button" onClick={onClose} aria-label="إغلاق" data-dialog-autofocus className="quickview-close">
           <CloseIcon />
         </button>}
 

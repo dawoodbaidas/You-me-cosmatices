@@ -112,8 +112,10 @@ export default function Storefront({ products, settings, children, categories, s
   const totalCount = useMemo(() => countItems(lines), [lines])
   const total = useMemo(() => sumTotal(lines), [lines])
 
+  // Confirmation for adding lives in the card and the cart badge itself; the
+  // toast is reserved for rejections so no competing popup ever appears.
   const addProduct = useCallback(
-    (productId: string, variantId: string | null, quantity = 1, quiet = false) => {
+    (productId: string, variantId: string | null, quantity = 1) => {
       const product = products.find((candidate) => candidate.id === productId)
       const current = cartActions.snapshot()
       const quantityInLine = current.find(item => item.productId === productId && item.variantId === variantId)?.quantity ?? 0
@@ -122,17 +124,17 @@ export default function Storefront({ products, settings, children, categories, s
         return false
       }
       cartActions.add(productId, variantId, quantity)
-      if (product && !quiet) notify(`أضيف إلى السلة: ${product.nameAr}`)
       return true
     },
     [cartActions, notify, products],
   )
 
-  const addSceneProduct = useCallback((productId: string, variantId: string | null) => {
-    cartActions.add(productId, variantId, 1)
-    const product = sceneProducts.find(item => item.id === productId)
-    if (product) notify(`أضيف إلى السلة: ${product.nameAr}`)
-  }, [cartActions, sceneProducts, notify])
+  const addSceneProduct = useCallback(
+    (productId: string, variantId: string | null) => {
+      addProduct(productId, variantId, 1)
+    },
+    [addProduct],
+  )
 
   const increment = useCallback(
     (productId: string, variantId: string | null) => {
@@ -228,7 +230,10 @@ export default function Storefront({ products, settings, children, categories, s
 
   const openProduct = (id: string) => {
     const product = products.find(p => p.id === id)
-    if (product) { const next = new URLSearchParams(window.location.search); next.set('product', product.slug); window.history.pushState(null, '', window.location.pathname + '?' + next) }
+    if (product) { const next = new URLSearchParams(window.location.search); next.set('product', product.slug);
+      // Remember the listing position so the back-navigation can restore the grid.
+      try { sessionStorage.setItem('store-return', JSON.stringify({ url: window.location.pathname + window.location.search, y: window.scrollY, count: null })) } catch {}
+      window.history.pushState(null, '', window.location.pathname + '?' + next) }
   }
   const renderPage = ({ mode, slug }: StorePageProps) => {
     const collection = findCollection(groups, slug ?? null)
@@ -242,7 +247,7 @@ export default function Storefront({ products, settings, children, categories, s
 {mode === "product" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link><span>/</span>{productCategory && <><Link href={collectionHref(productCategory.id)}>{productCategory.label}</Link><span>/</span></>}<span aria-current="page">{title}</span></nav>}
 {mode === "category" && <nav className="store-departments" aria-label="أقسام المتجر" dir="rtl"><CategoryLink slug={null} aria-current={slug === 'all' ? 'page' : undefined}>الكل</CategoryLink>{groups.map(group => <CategoryLink key={group.id} slug={group.id} aria-current={group.id === slug ? 'page' : undefined}>{group.label}</CategoryLink>)}</nav>}
 {mode === "product" && product && <ProductQuickView inline product={product} cartItems={cart} selectedVariantId={variantChoice[product.id] ?? null} onSelectVariant={(id, variant) => setVariantChoice(v => ({...v, [id]:variant}))} currency={settings.currency} isFavorite={favoriteSet.has(product.id)} settings={settings} onClose={() => router.push("/categories")} onToggleFavorite={toggleFavorite} onAddToCart={(p, variant, quantity) => addProduct(p.id, variant, quantity)} />}
-{mode === "cart" && <CartDrawer inline side="right" open lines={lines} settings={settings} onClose={() => router.push("/categories")} onRemove={remove} onCheckout={checkout} onBrowse={() => router.push("/categories")} />}
+{mode === "cart" && <CartDrawer inline side="right" open lines={lines} settings={settings} onClose={() => router.push("/categories")} onRemove={remove} onIncrement={increment} onDecrement={decrement} onCheckout={checkout} onBrowse={() => router.push("/categories")} />}
 
         {mode === "home" && <><Hero products={sceneProducts} currency={sceneCurrency} onAddToCart={addSceneProduct} onScrollTo={scrollTo} onOpenDetails={id => { setSceneQuickView(true); setQuickViewId(id) }} />
         <BestSellers
@@ -268,7 +273,7 @@ export default function Storefront({ products, settings, children, categories, s
             setVariantChoice((current) => ({ ...current, [productId]: variantId }))
           }
           onToggleFavorite={toggleFavorite}
-          onAddToCart={(productId, variantId) => addProduct(productId, variantId, 1, true)}
+          onAddToCart={(productId, variantId) => addProduct(productId, variantId)}
           onOpenDetails={openProduct}
         /> : (mode === "home" || mode === "categories") ? <CategoryCircles groups={groups} products={products} /> : null}
       </>
@@ -310,6 +315,8 @@ export default function Storefront({ products, settings, children, categories, s
         settings={settings}
         onClose={() => setCartOpen(false)}
         onRemove={remove}
+        onIncrement={increment}
+        onDecrement={decrement}
         onCheckout={checkout}
         onBrowse={browse}
       />
@@ -326,10 +333,7 @@ export default function Storefront({ products, settings, children, categories, s
         settings={settings}
         onClose={closeProduct}
         onToggleFavorite={toggleFavorite}
-        onAddToCart={(product, variantId, quantity) => {
-          if (sceneQuickView && !modalProduct) { cartActions.add(product.id, variantId, quantity); return true }
-          return addProduct(product.id, variantId, quantity)
-        }}
+        onAddToCart={(product, variantId, quantity) => addProduct(product.id, variantId, quantity)}
       />}
 
       <MobileCartBar

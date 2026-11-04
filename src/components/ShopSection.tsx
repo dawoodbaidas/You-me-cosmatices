@@ -36,7 +36,7 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
   const [pagination, setPagination] = useState({ key: '', count: INITIAL_VISIBLE })
   const [restore, setRestore] = useState<{url:string; y:number; count:number} | null>(null)
   useEffect(() => {
-    const frame = requestAnimationFrame(() => { try { const saved = JSON.parse(sessionStorage.getItem('store-return') || 'null'); if (saved?.url === location.pathname + location.search) { setRestore(saved); sessionStorage.removeItem('store-return') } } catch {} }); return () => cancelAnimationFrame(frame)
+    const frame = requestAnimationFrame(() => { try { const saved = JSON.parse(sessionStorage.getItem('store-return') || 'null'); if (saved?.url === location.pathname + location.search && Number.isFinite(saved?.y)) { setRestore({ url: saved.url, y: Number(saved.y), count: Number.isInteger(saved.count) ? saved.count : 0 }); } sessionStorage.removeItem('store-return') } catch {} }); return () => cancelAnimationFrame(frame)
   }, [])
   const params = useSearchParams()
   const sort = params.get('sort') ?? 'featured'
@@ -54,12 +54,29 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
   const setOnlyNew = (value: boolean) => update('new', value ? '1' : null)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const filterDialog = useRef<HTMLDialogElement>(null)
+  // Pending choices stay local until the user presses the apply button, so
+  // dismissals never apply edits the visitor did not confirm. The draft is
+  // re-seeded from the applied params every time the panel opens.
+  const [draft, setDraft] = useState({ available: false, discounted: false, new: false })
+  const openFilters = () => { setDraft({ available: onlyAvailable, discounted: onlyDiscounted, new: onlyNew }); setFiltersOpen(true) }
   useEffect(() => {
     const dialog = filterDialog.current
     if (!dialog || !filtersOpen) return
     dialog.showModal()
     return () => { if (dialog.open) dialog.close() }
-  }, [filtersOpen])
+  }, [filtersOpen, onlyAvailable, onlyDiscounted, onlyNew])
+  const applyDraft = () => {
+    setOnlyAvailable(draft.available)
+    setOnlyDiscounted(draft.discounted)
+    setOnlyNew(draft['new'])
+    setFiltersOpen(false)
+    window.dispatchEvent(new Event('boutique:layout'))
+  }
+  const clearFilters = () => {
+    setDraft({ available: false, discounted: false, new: false })
+    setOnlyAvailable(false); setOnlyDiscounted(false); setOnlyNew(false)
+  }
+  const activeFilterCount = Number(onlyAvailable) + Number(onlyDiscounted) + Number(onlyNew)
   const viewKey = `${category}:${pageTitle ?? 'home'}:${query}`
 
   const visible = useMemo(() => {
@@ -111,10 +128,10 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
             <option value="name">الاسم</option>
           </select>
         </label>
-        <button className="filter-open" type="button" onClick={() => setFiltersOpen(true)} aria-haspopup="dialog">
+        <button className="filter-open" type="button" onClick={openFilters} aria-haspopup="dialog" aria-expanded={filtersOpen} aria-label={`تصفية${activeFilterCount ? `، ${activeFilterCount} فلاتر مفعلة` : ''}`}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M4 7h16M7 12h10m-7 5h4"/><circle cx="8" cy="7" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/></svg>
           تصفية
-          {(onlyAvailable || onlyDiscounted || onlyNew) && <i aria-label="فلاتر مفعلة">{Number(onlyAvailable)+Number(onlyDiscounted)+Number(onlyNew)}</i>}
+          {activeFilterCount > 0 && <i aria-hidden="true">{activeFilterCount}</i>}
         </button>
       </div>
     </div>
@@ -122,10 +139,12 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
     <p className={productStyles.hint}>اضغط مطوّلًا على أي صورة لتكبيرها، واضغط على القسيمة للإضافة إلى السلة</p>
     <dialog ref={filterDialog} className="shop-filter-sheet" aria-labelledby="filter-title" onCancel={event => { event.preventDefault(); setFiltersOpen(false) }} onClick={event => { if (event.target === event.currentTarget) setFiltersOpen(false) }}>
       <div className="filter-sheet-head"><h2 id="filter-title">تصفية المنتجات</h2><button type="button" onClick={() => setFiltersOpen(false)} aria-label="إغلاق التصفية">×</button></div>
-      <label><input type="checkbox" checked={onlyAvailable} onChange={event => setOnlyAvailable(event.target.checked)} /> المتوفر الآن</label>
-      <label><input type="checkbox" checked={onlyDiscounted} onChange={event => setOnlyDiscounted(event.target.checked)} /> عليه خصم</label>
-      <label><input type="checkbox" checked={onlyNew} onChange={event => setOnlyNew(event.target.checked)} /> جديد</label>
-      <div className="filter-sheet-actions"><button type="button" onClick={() => { const next = new URLSearchParams(window.location.search); ['available','discounted','new'].forEach(key => next.delete(key)); window.history.pushState(null, '', window.location.pathname + (next.size ? '?' + next : '')) }}>مسح التصفية</button><button type="button" onClick={() => setFiltersOpen(false)}>عرض {visible.length} منتج</button></div>
+      <form onSubmit={event => { event.preventDefault(); applyDraft() }} className="shop-filter-form">
+    <label><input type="checkbox" checked={draft.available} onChange={event => setDraft(current => ({ ...current, available: event.target.checked }))} /> المتوفر الآن</label>
+    <label><input type="checkbox" checked={draft.discounted} onChange={event => setDraft(current => ({ ...current, discounted: event.target.checked }))} /> عليه خصم</label>
+    <label><input type="checkbox" checked={draft['new']} onChange={event => setDraft(current => ({ ...current, 'new': event.target.checked }))} /> جديد</label>
+    <div className="filter-sheet-actions"><button type="button" onClick={clearFilters}>مسح التصفية</button><button type="submit">عرض {visible.length} منتج</button></div>
+    </form>
     </dialog>
 
     {visible.length

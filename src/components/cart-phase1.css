@@ -22,11 +22,13 @@
 .boutique .cart-line-total { margin-inline-start:auto; text-align:end; }
 .boutique .cart-line-total small { display:block; color:var(--muted); font-size:12px; }
 .boutique .cart-line-total strong { font-size:16px; color:var(--wine); }
-.boutique .quantity-stepper { display:inline-flex; width:max-content; height:44px; flex:none; border-radius:8px; overflow:hidden; }
-.boutique .quantity-stepper button { width:44px; min-height:44px; font-size:22px; }
-.boutique .quantity-stepper button:disabled { opacity:.4; }
-.boutique .quantity-stepper svg { width:16px; height:16px; }
-.boutique .quantity-stepper span { min-width:30px; font-size:16px; }
+.boutique .quantity-stepper { display:inline-flex; width:max-content; height:36px; flex:none; border-radius:18px; overflow:hidden; }
+.boutique .quantity-stepper button { width:36px; font-size:18px; }
+.boutique .quantity-stepper svg { width:14px; height:14px; }
+@media(max-width:767px){
+ .boutique .quantity-stepper { height:40px; }
+ .boutique .quantity-stepper button { width:40px; min-width:40px; min-height:40px; }
+}
 .boutique .cart-remove,.boutique .cart-heading .icon-button { width:44px; height:44px; }
 .boutique .cart-remove svg { width:18px; height:18px; }
 .boutique .cart-summary { padding:12px 16px calc(12px + env(safe-area-inset-bottom)); }
