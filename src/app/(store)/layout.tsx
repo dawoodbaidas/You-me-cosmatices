@@ -1,18 +1,16 @@
 import Storefront from '@/components/Storefront'
-import { getCatalogue } from '@/lib/products/queries'
 import { getStoreCatalogue } from '@/lib/store-catalogue'
 
 // Prices must never be baked into a static build: read them on every request.
 export const revalidate = 0
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
-  // The two editorial scenes retain their original source and selection logic.
-  const [scenes, store] = await Promise.all([getCatalogue(), getStoreCatalogue()])
+  const store = await getStoreCatalogue()
 
   return (
     <>
       <Storefront products={store.products} settings={store.settings} categories={store.categories} storeRevision={store.revision} storeUnavailable={store.unavailable}
-        sceneProducts={scenes.status === 'ok' ? scenes.products : []} sceneCurrency={scenes.status === 'ok' ? scenes.settings.currency : ''} >{children}</Storefront>
+        homeSections={store.homeSections} >{children}</Storefront>
     </>
   )
 }

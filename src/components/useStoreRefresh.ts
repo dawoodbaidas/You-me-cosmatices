@@ -34,8 +34,10 @@ export function useStoreRefresh(revision: string | null) {
     const channel = client.channel('store-revision').on('postgres_changes', {
       event: 'UPDATE', schema: 'public', table: 'store_revision',
     }, visible).subscribe()
+    const poll = window.setInterval(() => void refresh(), 30_000)
     void refresh()
     return () => {
+      window.clearInterval(poll)
       disposed = true
       window.removeEventListener('focus', visible)
       window.removeEventListener('online', visible)

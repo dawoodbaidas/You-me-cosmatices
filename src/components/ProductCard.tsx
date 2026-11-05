@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { BagIcon, HeartIcon } from './icons'
 import { formatJod } from '@/lib/format'
+import { productPricing } from '@/lib/pricing'
 import type { Product } from '@/types/product'
 import ProductLens from './ProductLens'
 import styles from './ProductCard.module.css'
@@ -39,7 +40,7 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
     flyers.current.forEach(element => element.remove())
   }, [])
   const variant = product.variants.find(item => item.id === selectedVariantId) ?? product.variants[0] ?? null
-  const price = variant?.price ?? product.price
+  const { price, oldPrice, discount } = productPricing(product, variant)
   const disabled = (product.stockQuantity != null && product.stockQuantity <= 0) || product.isActive === false || variant?.isActive === false
   const add = async () => {
     if (adding.current || disabled) return false
@@ -95,16 +96,16 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
     <div className={styles.visual}>
       <div className={styles.tile}>
         <ProductLens src={product.imageUrl} name={product.nameAr} eager={eager} defer={deferImage} onOpen={() => onOpenDetails(product.id)} />
-        {product.badge && <span className={styles.badge}>{product.badge.toLowerCase() === 'new' ? 'جديد' : product.badge}</span>}
+        {(discount || product.isNew) && <span className={styles.badge}>{discount ? `-${discount}%` : 'جديد'}</span>}
         <button className={styles.wishlist} aria-label={isFavorite ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={isFavorite} onClick={() => onToggleFavorite(product.id)}><HeartIcon /></button>
       </div>
       <div className={styles.tagAnchor}><div className={styles.tagIdle}><button data-price-tag className={styles.tag} disabled={disabled || pending} onClick={addFromTag} aria-label={`أضف قطعة من ${product.nameAr} إلى السلة بسعر ${formatJod(price, currency)}`}>
-        <span className={styles.paper}><span className={styles.hole} /><strong>{new Intl.NumberFormat('ar-JO', { maximumFractionDigits: 2 }).format(price)}</strong><small>د.أ</small>{product.oldPrice != null && product.oldPrice > price && <del>{product.oldPrice}</del>}</span>
+        <span className={styles.paper}><span className={styles.hole} /><strong>{new Intl.NumberFormat('ar-JO', { maximumFractionDigits: 3 }).format(price)}</strong><small>د.أ</small>{oldPrice != null && <del>{oldPrice}</del>}</span>
       </button></div>{quantity > 0 && <span className={styles.count}><span aria-hidden="true">{new Intl.NumberFormat('ar-JO').format(quantity)}</span><span className="sr-only"> عدد القطع في السلة {quantity}</span></span>}</div>
     </div>
     <div className={styles.details}>
       <div className={styles.info}>
-        <p className={styles.category}>{variant?.label ?? product.categoryLabel}</p>
+        <p className={styles.category}>{variant?.label ?? product.categoryLabel}{discount && product.isNew && <span className={styles.newBadge}>جديد</span>}</p>
         <h3 className={styles.title}><Link onNavigate={event => { event.preventDefault(); onOpenDetails(product.id) }} href={"/products/" + encodeURIComponent(product.slug) + (pathname.startsWith("/category/") ? "?from=" + encodeURIComponent(decodeURIComponent(pathname.split("/")[2])) : "")}>{product.nameAr}</Link></h3>
         {product.variants.length > 1 && <label className={styles.variant}>النوع<select disabled={pending} aria-label={`نوع ${product.nameAr}`} value={variant?.id ?? ''} onChange={e => onSelectVariant(product.id, e.target.value)}>{product.variants.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>}
       </div>

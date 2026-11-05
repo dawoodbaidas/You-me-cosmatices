@@ -25,7 +25,7 @@
   --ease: cubic-bezier(.22, 1, .36, 1);
   --ease-in-out: cubic-bezier(.76, 0, .24, 1);
   box-sizing: border-box;
-  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  padding-bottom: 0;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-tajawal), system-ui, sans-serif;
@@ -2756,7 +2756,7 @@
 html:has(.boutique) { scroll-padding-bottom:160px; scrollbar-gutter:stable; }
 .boutique .boutique-toast-wrap { bottom:16px; }
 @media(max-width:767px) {
- .boutique:has(.mobile-shopping-bar.is-visible) { --bottom-space:calc(100px + env(safe-area-inset-bottom)); }
+ .boutique:has(.mobile-shopping-bar.is-visible) { --bottom-space:calc(100px + env(safe-area-inset-bottom)); padding-bottom:var(--bottom-space); }
  .boutique:has(.mobile-shopping-bar.is-visible):has(.boutique-toast) { --bottom-space:calc(176px + env(safe-area-inset-bottom)); }
  .boutique:has(.mobile-shopping-bar.is-visible) .boutique-toast-wrap { bottom:calc(88px + env(safe-area-inset-bottom)); }
  .boutique .quickview-purchase { padding:10px 12px calc(10px + env(safe-area-inset-bottom)); gap:8px; }

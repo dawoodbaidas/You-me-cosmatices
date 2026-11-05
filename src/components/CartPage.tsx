@@ -1,4 +1,6 @@
 'use client'
+import Price from './Price'
+import { productPricing } from '@/lib/pricing'
 
 import { useMemo, useRef, useState } from 'react'
 import ProductImage from './ProductImage'
@@ -78,7 +80,7 @@ export default function CartPage({ lines, settings, onRemove, onIncrement, onDec
                   <div className={styles.cardInfo}>
                     <h3 className={styles.name}>{line.product.nameAr}</h3>
                     <p className={styles.variant}>{variantLabel}</p>
-                    <p className={styles.unit}>سعر الوحدة: <bdi>{formatJod(line.unitPrice, settings.currency)}</bdi></p>
+                    <p className={styles.unit}>سعر الوحدة: <Price value={line.unitPrice} oldPrice={productPricing(line.product, line.variant).oldPrice} currency={settings.currency} /></p>
 
                   </div>
                     <div className={styles.controlRow}>

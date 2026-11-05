@@ -12,6 +12,9 @@ export interface ProductDraft {
   category_label: string
   price: number
   old_price: number | null
+  original_price?: number
+  discount_enabled?: boolean
+  is_new?: boolean
   badge: string | null
   benefits: string[]
   is_active: boolean
@@ -34,6 +37,11 @@ export function validateProduct(value: unknown): asserts value is ProductDraft {
   if (p.stock_quantity !== undefined && p.stock_quantity !== null && (!Number.isInteger(p.stock_quantity) || p.stock_quantity < 0 || p.stock_quantity > 2147483647)) throw new Error('المخزون يجب أن يكون عدداً صحيحاً غير سالب أو فارغاً إذا لم يُسجّل.')
   if (p.category_slugs !== undefined && (!Array.isArray(p.category_slugs) || p.category_slugs.length > 100 || new Set(p.category_slugs).size !== p.category_slugs.length || !p.category_slugs.every(slug => typeof slug === 'string' && slug.length <= 100 && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) && slug !== 'all'))) throw new Error('قائمة الأقسام غير صالحة.')
   if (!price(p.price) || (p.old_price !== null && (!price(p.old_price) || p.old_price < p.price))) throw new Error('راجعي الأسعار: السعر القديم لا يقل عن الحالي، وبحد أقصى ثلاث منازل عشرية.')
+  if (p.is_new !== undefined && typeof p.is_new !== 'boolean') throw new Error('حالة جديد غير صالحة.')
+  if (p.discount_enabled !== undefined) {
+    if (typeof p.discount_enabled !== 'boolean' || !price(p.original_price)
+      || (p.discount_enabled ? p.original_price! <= 0 || p.price >= p.original_price! || p.old_price !== p.original_price : p.price !== p.original_price || p.old_price !== null)) throw new Error('أدخل سعراً أصلياً موجباً وسعراً مخفّضاً أقل منه، بدقة ثلاث منازل عشرية.')
+  }
   if ((p.description !== null && !string(p.description, 10000)) || (p.badge !== null && !string(p.badge, 150)) || !Array.isArray(p.benefits) || p.benefits.length > 50 || !p.benefits.every(b => string(b, 250, true))) throw new Error('الوصف أو الشارة أو الفوائد غير صالحة.')
   if (typeof p.is_active !== 'boolean' || typeof p.is_featured !== 'boolean' || !order(p.sort_order)) throw new Error('حالة المنتج أو ترتيبه غير صالح.')
   if (!Array.isArray(p.variants) || p.variants.length > 100 || !p.variants.every(v => v && string(v.id, 36) && UUID.test(v.id) && string(v.label, 250, true) && price(v.price) && typeof v.is_active === 'boolean' && order(v.sort_order))) throw new Error('راجعي أسماء الأنواع وأسعارها وترتيبها (100 نوع كحد أقصى).')

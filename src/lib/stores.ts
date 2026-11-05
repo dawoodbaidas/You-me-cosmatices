@@ -94,8 +94,8 @@ export function useCartStore() {
 
   const actions = useMemo(
     () => ({
-      add: (productId: string, variantId: string | null, quantity = 1) =>
-        cartStore.set(addToCart(itemsRef(), productId, variantId, quantity)),
+      add: (productId: string, variantId: string | null, quantity = 1, unitPrice?: number) =>
+        cartStore.set(addToCart(itemsRef(), productId, variantId, quantity, unitPrice)),
       setQuantity: (productId: string, variantId: string | null, quantity: number) =>
         cartStore.set(setCartQuantity(itemsRef(), productId, variantId, quantity)),
       remove: (productId: string, variantId: string | null) =>

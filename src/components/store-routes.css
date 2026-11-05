@@ -7,7 +7,7 @@
 .boutique .world-header .world-nav-actions :is(.header-bag,.header-favorites)>span{position:absolute;top:0;right:0;left:auto;inset-inline:auto;transform:none;pointer-events:none}
 .boutique,.boutique #store-content,.boutique #store-content > section,.boutique #store-content > nav{background:var(--shop-ivory)}
 .boutique .category-circles.store-departments{position:sticky;top:var(--header-height,76px);z-index:30;padding:8px 0 6px;border-bottom:1px solid var(--shop-line)}
-.store-departments .category-circle-grid{flex-wrap:nowrap;justify-content:flex-start;gap:12px;max-width:1440px;padding:6px 16px;margin:auto;overflow-x:auto;overscroll-behavior-x:contain;scroll-behavior:smooth;scroll-padding-inline:16px;scrollbar-width:none}
+.store-departments .category-circle-grid{display:flex;flex-wrap:nowrap;justify-content:flex-start;gap:12px;max-width:1440px;padding:6px 16px;margin:auto;overflow-x:auto;overscroll-behavior-x:contain;scroll-behavior:smooth;scroll-padding-inline:16px;scrollbar-width:none}
 .store-departments .category-circle-grid::-webkit-scrollbar{display:none}
 .store-departments .category-circle-link{flex:0 0 72px;text-align:center;scroll-margin-inline:8px}
 .store-departments .category-orb{width:52px;margin-bottom:5px;transition:transform .2s,outline-color .2s;outline:1px solid transparent;outline-offset:3px}

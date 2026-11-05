@@ -279,6 +279,8 @@
 .plainImage { object-fit: contain; }
 
 /* ------------------------------------------------------------------ showcase */
+.sceneBadge{position:absolute;top:8px;inset-inline-start:8px;padding:5px 10px;border-radius:20px;background:var(--shop-ivory);color:var(--shop-ink);font-size:12px;z-index:2}
+.sceneNew{display:inline-block;margin-inline-start:8px;padding:2px 8px;border-radius:12px;background:#e8ecdf;color:#46513c;font-size:12px}
 
 .showcase {
   position: relative;

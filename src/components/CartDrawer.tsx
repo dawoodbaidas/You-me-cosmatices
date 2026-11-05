@@ -1,4 +1,6 @@
 'use client'
+import Price from './Price'
+import { productPricing } from '@/lib/pricing'
 import ProductImage from './ProductImage'
 import { useRef } from 'react'
 import BoutiqueDialog from './BoutiqueDialog'
@@ -19,7 +21,7 @@ export default function CartDrawer({ side, open, lines, settings, onClose, onRem
     <div className="cart-heading"><h2>سلة التسوق <span>({count})</span></h2><button className="icon-button" aria-label="إغلاق السلة" onClick={onClose}><CloseIcon/></button></div>
    <div className="cart-content">{!lines.length?<div className="cart-empty"><span className="empty-bag"><BagIcon/></span><h3>سلتك فاضية، ابدأ بإضافة منتج</h3><button className="scene-button" onClick={onBrowse}>تسوّق الآن</button></div>:<ul>{lines.map(line=><li className="cart-line" key={`${line.product.id}-${line.variant?.id??'base'}`}>
     <div className="cart-thumbnail">{line.product.imageUrl?<ProductImage src={line.product.imageUrl} alt={line.product.nameAr} sizes="72px" eager/>:<BagIcon/>}</div>
-    <div className="cart-line-info"><div className="cart-line-top"><div><h3>{line.product.nameAr}</h3>{line.variant&&<p>{line.variant.label}</p>}<small className="cart-unit-price">سعر الوحدة: <bdi>{formatJod(line.unitPrice,settings.currency)}</bdi></small></div><button className="cart-remove" aria-label={`حذف ${line.product.nameAr}`} onClick={()=>onRemove(line.product.id,line.variant?.id??null)}><TrashIcon/></button></div>
+    <div className="cart-line-info"><div className="cart-line-top"><div><h3>{line.product.nameAr}</h3>{line.variant&&<p>{line.variant.label}</p>}<small className="cart-unit-price">سعر الوحدة: <Price value={line.unitPrice} oldPrice={productPricing(line.product,line.variant).oldPrice} currency={settings.currency}/></small></div><button className="cart-remove" aria-label={`حذف ${line.product.nameAr}`} onClick={()=>onRemove(line.product.id,line.variant?.id??null)}><TrashIcon/></button></div>
     <div className="cart-line-controls"><span className="cart-quantity" role="group" aria-label={`كمية ${line.product.nameAr}`}><span className="quantity-stepper">
       <button aria-label={`زيادة كمية ${line.product.nameAr}`} onClick={()=>onIncrement(line.product.id,line.variant?.id??null)} disabled={line.quantity>=99}>+</button>
       <span>{line.quantity}</span>

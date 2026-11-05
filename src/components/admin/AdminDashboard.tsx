@@ -1,47 +1,32 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useMemo, useState, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import {
-  saveProductPrices,
   saveSettings,
-  setProductFlags,
   type ActionResult,
   type SettingsPayload,
 } from '@/app/admin/actions'
-import { formatJod } from '@/lib/format'
+import HomeSectionManager, { type HomeSectionDraft } from './HomeSectionManager'
 import type { Product, SiteSettings } from '@/types/product'
 import ProductManager from '@/components/admin/ProductManager'
 import CategoryManager from './CategoryManager'
 import type { StoreCategory } from '@/types/store'
 
-type Tab = 'products' | 'prices' | 'settings' | 'categories'
+type Tab = 'products' | 'home' | 'settings' | 'categories'
 
 export default function AdminDashboard({
   products,
   settings,
-  categories,
+  categories, total, page, query, sections, categoryCounts,
 }: {
+  total: number; page: number; query: string; sections: HomeSectionDraft[]; categoryCounts: Record<string,number>
   products: Product[]
   settings: SiteSettings
   categories: StoreCategory[]
 }) {
   const [tab, setTab] = useState<Tab>('products')
-  const [query, setQuery] = useState('')
+  const [homeTab, setHomeTab] = useState<'hero' | 'bestsellers'>('hero')
   const [editing, setEditing] = useState(false)
-
-  const visible = useMemo(() => {
-    const needle = query.trim().toLowerCase()
-    if (!needle) return products
-    return products.filter((product) =>
-      `${product.nameAr} ${product.nameEn} ${product.slug}`.toLowerCase().includes(needle),
-    )
-  }, [products, query])
-
-  const variantCount = useMemo(
-    () => products.reduce((sum, product) => sum + product.variants.length, 0),
-    [products],
-  )
 
   return (
     <div className="mx-auto max-w-[1280px] px-4 py-8 md:px-8">
@@ -49,15 +34,15 @@ export default function AdminDashboard({
         <div>
           <h1 className="text-[24px] font-extrabold">إدارة المنتجات والمتجر</h1>
           <p className="mt-1 text-[12.5px] text-cocoa/60">
-            {products.length} منتج • {variantCount} نوع — اضغطي حفظ لتطبيق التعديلات في المتجر.
+            {total} منتج — اضغطي حفظ لتطبيق التعديلات في المتجر.
           </p>
         </div>
 
-        <div className="flex gap-1 rounded-full border border-sand bg-white p-1">
+        <div className="flex flex-wrap gap-1 rounded-2xl border border-sand bg-white p-1">
           {(
             [
               ['products', 'المنتجات'],
-              ['prices', 'الأسعار'],
+              ['home', 'إدارة الصفحة الرئيسية'],
               ['categories', 'الأقسام'],
               ['settings', 'الإعدادات'],
             ] as const
@@ -78,230 +63,14 @@ export default function AdminDashboard({
         </div>
       </div>
 
-      {tab === 'products' ? <ProductManager products={products} categories={categories} currency={settings.currency} onEditingChange={setEditing} /> : tab === 'categories' ? <CategoryManager categories={categories} onEditingChange={setEditing} /> : tab === 'prices' ? (
-        <>
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="ابحثي باسم المنتج…"
-            className="mt-6 w-full rounded-full border border-sand bg-white px-4 py-2.5 text-[13px] outline-none focus:border-rose md:max-w-sm"
-          />
-
-          <div className="mt-5 space-y-4">
-            {visible.map((product) => (
-              <ProductEditor key={`${product.id}-${product.updatedAt}`} product={product} currency={settings.currency} />
-            ))}
-          </div>
-        </>
-      ) : (
+      {tab === 'products' ? <ProductManager products={products} total={total} page={page} initialQuery={query} categories={categories} currency={settings.currency} onEditingChange={setEditing} /> : tab === 'categories' ? <CategoryManager categories={categories} counts={categoryCounts} onEditingChange={setEditing} /> : tab === 'home' ? <section>
+        <h2 className="mt-6 text-xl font-bold">إدارة الصفحة الرئيسية</h2>
+        <div className="mt-4 flex gap-3">{(['hero','bestsellers'] as const).map(key => <button key={key} disabled={editing && key !== homeTab} aria-pressed={key === homeTab} className="rounded-full border border-sand px-4 py-2 disabled:opacity-40" onClick={() => setHomeTab(key)}>{key === 'hero' ? 'إدارة الهيرو' : 'إدارة الأكثر طلبًا'}</button>)}</div>
+        {sections.filter(section=>section.section===homeTab).map(section=><HomeSectionManager key={section.section+'-'+section.updated_at} section={section} onEditingChange={setEditing} />)}
+      </section> : (
         <SettingsEditor settings={settings} />
       )}
     </div>
-  )
-}
-
-/* ------------------------------------------------------------ product card */
-
-function ProductEditor({ product, currency }: { product: Product; currency: string }) {
-  const router = useRouter()
-  const [pending, startTransition] = useTransition()
-  const [result, setResult] = useState<ActionResult | null>(null)
-
-  // Local drafts keep typing smooth; nothing is written until "حفظ".
-  const [price, setPrice] = useState(String(product.price))
-  const [oldPrice, setOldPrice] = useState(
-    product.oldPrice === null ? '' : String(product.oldPrice),
-  )
-  const [variantPrices, setVariantPrices] = useState<Record<string, string>>(() =>
-    Object.fromEntries(product.variants.map((variant) => [variant.id, String(variant.price)])),
-  )
-
-  const parsedPrice = Number.parseFloat(price)
-  const parsedOldPrice = oldPrice.trim() === '' ? null : Number.parseFloat(oldPrice)
-  const parsedVariants = Object.fromEntries(
-    Object.entries(variantPrices).map(([id, value]) => [id, Number.parseFloat(value)]),
-  )
-
-  const dirty =
-    parsedPrice !== product.price ||
-    (parsedOldPrice ?? null) !== (product.oldPrice ?? null) ||
-    product.variants.some(
-      (variant) => Number.parseFloat(variantPrices[variant.id] ?? '') !== variant.price,
-    )
-
-  const invalid =
-    !Number.isFinite(parsedPrice) ||
-    parsedPrice < 0 ||
-    (parsedOldPrice !== null &&
-      (!Number.isFinite(parsedOldPrice) || parsedOldPrice < parsedPrice)) ||
-    Object.values(parsedVariants).some((value) => !Number.isFinite(value) || value < 0)
-
-  return (
-    <article
-      data-testid={`admin-product-${product.slug}`}
-      className="rounded-[22px] border border-sand bg-white p-4 shadow-[0_8px_30px_rgba(74,46,42,0.04)]"
-    >
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-[220px] flex-1">
-          <div className="text-[11px] font-bold tracking-widest text-[#B78A4E]">
-            {product.categoryLabel}
-          </div>
-          <h2 className="mt-0.5 text-[15px] font-bold">{product.nameAr}</h2>
-          <div className="text-[11.5px] text-cocoa/50">{product.nameEn}</div>
-          <div className="mt-1 font-mono text-[10.5px] text-cocoa/35">{product.slug}</div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Toggle
-            disabled={pending || dirty}
-            label="مفعّل"
-            active={product.isActive ?? true}
-            onChange={(value) =>
-              startTransition(async () => {
-                setResult(await setProductFlags(product.id, { is_active: value }))
-                router.refresh()
-              })
-            }
-          />
-          <Toggle
-            disabled={pending || dirty}
-            label="مميّز"
-            active={product.isFeatured ?? false}
-            onChange={(value) =>
-              startTransition(async () => {
-                setResult(await setProductFlags(product.id, { is_featured: value }))
-                router.refresh()
-              })
-            }
-          />
-        </div>
-      </div>
-
-      <div className="mt-4 flex flex-wrap items-end gap-3">
-        <label className="block">
-          <span className="mb-1 block text-[11px] font-bold text-cocoa/60">السعر الحالي</span>
-          <input
-            type="number"
-            step="0.25"
-            min="0"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-            className="w-[130px] rounded-full border border-sand bg-white px-3 py-2 text-[13px] font-bold outline-none focus:border-rose"
-          />
-        </label>
-
-        <label className="block">
-          <span className="mb-1 block text-[11px] font-bold text-cocoa/60">
-            السعر القديم (فارغ = بدون خصم)
-          </span>
-          <input
-            type="number"
-            step="0.25"
-            min="0"
-            value={oldPrice}
-            onChange={(event) => setOldPrice(event.target.value)}
-            className="w-[130px] rounded-full border border-sand bg-white px-3 py-2 text-[13px] font-bold outline-none focus:border-rose"
-          />
-        </label>
-
-        <span className="pb-2 text-[12px] text-cocoa/50">
-          المعروض في المتجر:{' '}
-          <b className="text-cocoa">{formatJod(parsedPrice || 0, currency)}</b>
-        </span>
-      </div>
-
-      {product.variants.length > 0 && (
-        <div className="mt-4 border-t border-sand pt-4">
-          <div className="mb-2 text-[11px] font-bold tracking-widest text-cocoa/60">أسعار الأنواع</div>
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {product.variants.map((variant) => (
-              <label key={variant.id} className="flex items-center gap-2">
-                <span className="min-w-[96px] flex-1 truncate text-[11.5px] font-medium text-cocoa/70">
-                  {variant.label}
-                </span>
-                <input
-                  type="number"
-                  step="0.25"
-                  min="0"
-                  value={variantPrices[variant.id] ?? ''}
-                  onChange={(event) =>
-                    setVariantPrices((current) => ({
-                      ...current,
-                      [variant.id]: event.target.value,
-                    }))
-                  }
-                  className="w-[96px] rounded-full border border-sand bg-white px-3 py-1.5 text-[12px] font-bold outline-none focus:border-rose"
-                />
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="mt-4 flex flex-wrap items-center gap-3">
-        <button
-          type="button"
-          disabled={pending || !dirty || invalid}
-          onClick={() =>
-            startTransition(async () => {
-              const response = await saveProductPrices({
-                productId: product.id,
-                updatedAt: product.updatedAt ?? '',
-                price: parsedPrice,
-                oldPrice: parsedOldPrice,
-                variantPrices: parsedVariants,
-              })
-              setResult(response)
-              if (response.ok) router.refresh()
-            })
-          }
-          className="rounded-full bg-cocoa px-5 py-2 text-[12.5px] font-bold text-white transition hover:bg-rose disabled:opacity-40"
-        >
-          {pending ? 'جارٍ الحفظ…' : 'حفظ الأسعار'}
-        </button>
-
-        {result && (
-          <span className={`text-[12px] font-bold ${result.ok ? 'text-sage' : 'text-rose'}`}>
-            {result.message}
-          </span>
-        )}
-
-        {invalid && (
-          <span className="text-[12px] font-bold text-rose">
-            راجعي القيم: السعر القديم يجب أن يكون أكبر من السعر الحالي.
-          </span>
-        )}
-      </div>
-    </article>
-  )
-}
-
-/* ----------------------------------------------------------------- toggles */
-
-function Toggle({
-  disabled,
-  label,
-  active,
-  onChange,
-}: {
-  disabled: boolean
-  label: string
-  active: boolean
-  onChange: (value: boolean) => void
-}) {
-  return (
-    <button
-      type="button"
-      disabled={disabled}
-      onClick={() => onChange(!active)}
-      aria-pressed={active}
-      className={`rounded-full border px-3 py-1.5 text-[11.5px] font-bold transition ${
-        active ? 'border-sage/40 bg-[#E8F5E0] text-[#5A8A4A]' : 'border-sand bg-white text-cocoa/50'
-      }`}
-    >
-      {label}
-    </button>
   )
 }
 

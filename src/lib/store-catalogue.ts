@@ -40,6 +40,7 @@ export async function readStoreCatalogue(fresh = false): Promise<StoreCatalogue>
     const data = await response.json() as {
       products: Parameters<typeof mapProduct>[0][]; categories: StoreCategory[]
       settings: { key: string; value: string }[]; revision: number | string
+      home_sections?: StoreCatalogue['homeSections']
     }
     return {
       products: data.products.map(row => {
@@ -47,7 +48,7 @@ export async function readStoreCatalogue(fresh = false): Promise<StoreCatalogue>
         const category = data.categories.find(category => product.categorySlugs?.includes(category.slug))
         return category ? { ...product, categoryLabel: category.name_ar } : product
       }), categories: data.categories,
-      settings: mapSettings(data.settings, EMPTY_STORE_SETTINGS), revision: String(data.revision), unavailable: false,
+      homeSections: data.home_sections, settings: mapSettings(data.settings, EMPTY_STORE_SETTINGS), revision: String(data.revision), unavailable: false,
     }
   } catch {
     // No demo catalogue, inferred departments, replacement images or invented prices.

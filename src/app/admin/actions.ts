@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation'
 import { isAdmin } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 import { invalidateStoreCatalogue } from '@/lib/store-cache'
+import { UUID } from '@/lib/products/editor'
+import { mapProduct } from '@/lib/products/map'
 import { validateCategory, type CategoryDraft } from '@/lib/category-editor'
 
 export interface ActionResult {
@@ -77,10 +79,11 @@ export async function saveProductPrices(payload: ProductPricePayload): Promise<A
   if (!Number.isFinite(price) || price < 0 || price > MAX_PRICE) {
     return { ok: false, message: 'السعر غير صالح.' }
   }
-  if (oldPrice !== null && (!Number.isFinite(oldPrice) || oldPrice < price || oldPrice > MAX_PRICE)) {
+  if (oldPrice !== null && (!Number.isFinite(oldPrice) || oldPrice <= price || oldPrice > MAX_PRICE)) {
     return { ok: false, message: 'السعر القديم يجب أن يكون أكبر من السعر الحالي أو فارغاً.' }
   }
 
+  if ([price, ...(oldPrice === null ? [] : [oldPrice]), ...Object.values(variantPrices)].some(value => Math.abs(value * 1000 - Math.round(value * 1000)) > .00001)) return { ok: false, message: 'الأسعار بدقة ثلاث منازل عشرية كحد أقصى.' }
   const entries = Object.entries(variantPrices)
   for (const [, variantPrice] of entries) {
     if (!Number.isFinite(variantPrice) || variantPrice < 0 || variantPrice > MAX_PRICE) {
@@ -155,21 +158,49 @@ export async function saveStoreCategory(payload: CategoryDraft): Promise<ActionR
   try { validateCategory(payload) } catch (error) { return { ok: false, message: (error as Error).message } }
   const client = await createClient()
   const { updated_at, ...row } = payload
-  const query = updated_at
-    ? client.from('store_categories').update({ name_ar: row.name_ar, parent_slug: row.parent_slug, sort_order: row.sort_order, is_active: row.is_active }).eq('slug', row.slug).eq('updated_at', updated_at)
-    : client.from('store_categories').insert(row)
-  const { error } = await query.select('slug').single()
+  const { error } = await client.rpc('admin_save_category', { p_category: row, p_expected_updated_at: updated_at })
   if (error) return { ok: false, message: 'تعذّر حفظ القسم. تحقق من الرابط والقسم الرئيسي، وحدّث الصفحة إذا عدّلته جلسة أخرى.' }
   invalidateStoreCatalogue()
   return { ok: true, message: 'تم حفظ القسم.' }
 }
 
-export async function deleteStoreCategory(slug: string, updatedAt: string): Promise<ActionResult> {
-  if (!(await isAdmin())) return { ok: false, message: 'غير مصرّح.' }
-  if (!slug || !Number.isFinite(Date.parse(updatedAt))) return { ok: false, message: 'القسم أو إصدار التعديل غير صالح.' }
+export async function deleteStoreCategory(slug: string, updatedAt: string, target: string | null = null): Promise<ActionResult> {
+  if (!(await isAdmin())) return { ok: false, message: 'غير مصرح.' }
+  if (!slug || !Number.isFinite(Date.parse(updatedAt)) || target === slug || (target !== null && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(target))) return { ok: false, message: 'اختيار القسم غير صالح.' }
   const client = await createClient()
-  const { error } = await client.from('store_categories').delete().eq('slug', slug).eq('updated_at', updatedAt).select('slug').single()
-  if (error) return { ok: false, message: 'تعذّر حذف القسم. انقل أقسامه الفرعية أولاً، وحدّث الصفحة إذا عدّلته جلسة أخرى.' }
+  const { error } = await client.rpc('admin_delete_category', { p_slug: slug, p_expected_updated_at: updatedAt, p_target: target })
+  if (error) return { ok: false, message: 'تعذّر حذف القسم. حدّث الصفحة وتحقق من القسم الهدف.' }
   invalidateStoreCatalogue()
-  return { ok: true, message: 'تم حذف القسم وروابطه؛ المنتجات محفوظة.' }
+  return { ok: true, message: 'تم حذف القسم وحفظ المنتجات وتحديث تصنيفها.' }
+}
+
+export async function moveProducts(ids: string[], target: string | null): Promise<ActionResult> {
+  if (!(await isAdmin())) return { ok: false, message: 'غير مصرح.' }
+  if (!Array.isArray(ids) || !ids.length || ids.length > 1000 || ids.some(id => !UUID.test(id)) || new Set(ids).size !== ids.length || (target !== null && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(target))) return { ok: false, message: 'اختيار المنتجات أو القسم غير صالح.' }
+  const client = await createClient()
+  const { error } = await client.rpc('admin_move_products', { p_ids: ids, p_target: target })
+  if (error) return { ok: false, message: 'تعذّر نقل المنتجات. حدّث القائمة وتحقق من القسم الهدف.' }
+  invalidateStoreCatalogue()
+  return { ok: true, message: 'تم نقل المنتجات المحددة.' }
+}
+
+export async function searchAdminProducts(query: string) {
+  if (!(await isAdmin())) throw new Error('غير مصرح.')
+  const needle = String(query).slice(0, 150).replace(/[^\p{L}\p{N}\s-]/gu, ' ').trim()
+  const client = await createClient()
+  let request = client.from('products').select('*,product_categories(category_slug),product_variants(*)').order('sort_order').order('id').limit(25)
+  if (needle) request = request.or(`name_ar.ilike.%${needle}%,name_en.ilike.%${needle}%,slug.ilike.%${needle}%`)
+  const { data, error } = await request
+  if (error) throw new Error('تعذّر البحث عن المنتجات.')
+  return (data ?? []).map(row => mapProduct(row, true))
+}
+
+export async function saveHomeSection(section: string, ids: string[], updatedAt: string): Promise<ActionResult> {
+  if (!(await isAdmin())) return { ok: false, message: 'غير مصرح.' }
+  if (!['hero', 'bestsellers'].includes(section) || !Array.isArray(ids) || ids.length > (section === 'hero' ? 5 : 100) || ids.some(id => !UUID.test(id)) || new Set(ids).size !== ids.length || !Number.isFinite(Date.parse(updatedAt))) return { ok: false, message: 'قائمة المنتجات غير صالحة (الحد الأقصى للهيرو خمسة منتجات).' }
+  const client = await createClient()
+  const { error } = await client.rpc('admin_save_home_section', { p_section: section, p_ids: ids, p_expected_updated_at: updatedAt })
+  if (error) return { ok: false, message: 'تعذّر الحفظ أو تغيّرت القائمة في جلسة أخرى. حدّث الصفحة ثم أعد المحاولة.' }
+  invalidateStoreCatalogue()
+  return { ok: true, message: 'تم حفظ الاختيارات والترتيب.' }
 }

@@ -1,4 +1,5 @@
 import { formatJod } from '@/lib/format'
+import { productPricing, roundMoney } from './pricing'
 import type { CartItem, CartLine, Product, SiteSettings } from '@/types/product'
 
 export const CART_STORAGE_KEY = 'you-and-me-cart-v1'
@@ -20,7 +21,7 @@ export function canCheckoutCart(lines: CartLine[]): boolean {
 }
 
 /**
- * Joins the stored cart (product id + variant id + quantity only) against the
+ * Joins stored product/variant ids and quantities against the
  * freshly loaded catalogue so every price on screen comes from the database.
  * Lines whose product or variant disappeared are dropped.
  */
@@ -41,9 +42,9 @@ export function resolveCart(items: CartItem[], products: Product[]): CartLine[] 
     if (item.variantId && !variant) continue
 
     const quantity = Math.max(1, Math.floor(item.quantity) || 1)
-    const unitPrice = variant ? variant.price : product.price
+    const unitPrice = productPricing(product, variant).price
 
-    lines.push({ product, variant, quantity, unitPrice, lineTotal: unitPrice * quantity })
+    lines.push({ product, variant, quantity, unitPrice, lineTotal: roundMoney(unitPrice * quantity) })
   }
 
   return lines
@@ -53,15 +54,15 @@ export const cartCount = (lines: CartLine[]) =>
   lines.reduce((sum, line) => sum + line.quantity, 0)
 
 export const cartTotal = (lines: CartLine[]) =>
-  lines.reduce((sum, line) => sum + line.lineTotal, 0)
+  roundMoney(lines.reduce((sum, line) => sum + line.lineTotal, 0))
 
 /** Adds a line, merging with an identical product+variant pair. */
-export function addToCart(items: CartItem[], productId: string, variantId: string | null, quantity = 1) {
+export function addToCart(items: CartItem[], productId: string, variantId: string | null, quantity = 1, unitPrice?: number) {
   const index = items.findIndex(
     (item) => item.productId === productId && item.variantId === variantId,
   )
 
-  if (index === -1) return [...items, { productId, variantId, quantity }]
+  if (index === -1) return [...items, { productId, variantId, quantity, ...(unitPrice === undefined ? {} : { unitPrice }) }]
 
   const next = [...items]
   next[index] = { ...next[index], quantity: next[index].quantity + quantity }
@@ -90,13 +91,14 @@ export function readStoredCart(storage: Pick<Storage, 'getItem'>): CartItem[] {
 
     return parsed.flatMap((entry) => {
       if (!entry || typeof entry !== 'object') return []
-      const { productId, variantId, quantity } = entry as Partial<CartItem>
+      const { productId, variantId, quantity, unitPrice } = entry as Partial<CartItem>
       if (typeof productId !== 'string' || !productId) return []
       return [
         {
           productId,
           variantId: typeof variantId === 'string' && variantId ? variantId : null,
           quantity: typeof quantity === 'number' && quantity > 0 ? Math.floor(quantity) : 1,
+          ...(typeof unitPrice === 'number' && Number.isFinite(unitPrice) && unitPrice >= 0 ? { unitPrice } : {}),
         },
       ]
     })

@@ -7,6 +7,12 @@ export type SceneAsset = ScenePalette & {
   bounds: { x: number; y: number; width: number; height: number }
 }
 export const sceneAssets = assets as unknown as Record<string, SceneAsset>
+export const productSceneAsset = (product: Product) => sceneAssets[product.slug]?.source === product.imageUrl ? sceneAssets[product.slug] : undefined
+
+export function selectedSceneProducts(products: Product[], ids: string[] | undefined, section: 'hero' | 'bestsellers') {
+  if (ids === undefined) return section === 'hero' ? heroProducts(products) : showcaseProducts(products)
+  return ids.flatMap(id => products.find(product => product.id === id && product.isActive !== false && product.imageUrl) ?? [])
+}
 const heroOrder = ['body-mist', 'aloe-foam', 'foundation', 'mascara', 'musk-tahara-oil']
 
 export function heroProducts(products: Product[]) {

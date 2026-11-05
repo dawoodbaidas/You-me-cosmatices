@@ -24,13 +24,16 @@ import Hero from '@/components/Hero'
 import MobileCartBar from '@/components/MobileCartBar'
 const ProductQuickView = dynamic(() => import('./ProductQuickView'))
 import CategoryCircles from './CategoryCircles'
+import CategoryLink, { CategoryUrls } from './CategoryLink'
 import './category-shopping.css'
 import './store-routes.css'
 import ShopSection from '@/components/ShopSection'
 import Toast, { type ToastMessage } from '@/components/Toast'
-import { cartLineLimit, cartCount as countItems, cartTotal as sumTotal, resolveCart } from '@/lib/cart'
-import { arabicStoreProduct } from '@/lib/storefront-arabic'
-import { storeCollections, findCollection, collectionHref } from '@/lib/store-categories'
+import { cartLineLimit, cartCount as countItems, cartTotal as sumTotal, resolveCart, cartShipping } from '@/lib/cart'
+import { formatJod } from '@/lib/format'
+import { productPricing, roundMoney } from '@/lib/pricing'
+import { selectedSceneProducts } from '@/lib/scene-products'
+import { storeCollections, findCollection, collectionHref, categoryPath } from '@/lib/store-categories'
 import type { StoreCategory } from '@/types/store'
 import { useStoreRefresh } from './useStoreRefresh'
 import StoreScroll from './StoreScroll'
@@ -45,17 +48,17 @@ interface StorefrontProps {
   categories: StoreCategory[]
   storeUnavailable?: boolean
   storeRevision?: string | null
-  sceneProducts?: Product[]
-  sceneCurrency?: string
+  homeSections?: Record<'hero' | 'bestsellers', string[]>
 }
 
-export default function Storefront({ products, settings, children, categories, storeRevision = null, storeUnavailable = false, sceneProducts: editorial = [], sceneCurrency = '' }: StorefrontProps) {
+export default function Storefront({ products, settings, children, categories, storeRevision = null, storeUnavailable = false, homeSections }: StorefrontProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const categoryId = pathname.startsWith("/category/") ? decodeURIComponent(pathname.split("/")[2]) : undefined
+  const categoryId = categories.find(category => categoryPath(category, categories) === pathname)?.slug ?? (pathname.startsWith("/category/") ? decodeURIComponent(pathname.split("/")[2]) : undefined)
   const searchParams = useSearchParams()
   useStoreRefresh(storeRevision)
-  const sceneProducts = useMemo(() => editorial.map(arabicStoreProduct), [editorial])
+  const heroItems = useMemo(() => selectedSceneProducts(products, homeSections?.hero, 'hero'), [products, homeSections])
+  const bestsellerItems = useMemo(() => selectedSceneProducts(products, homeSections?.bestsellers, 'bestsellers'), [products, homeSections])
   const [searchOpen, setSearchOpen] = useState(false)
   const searchQuery = searchParams.get('q') ?? ''
   const groups = useMemo(() => storeCollections(categories, products), [categories, products])
@@ -73,7 +76,6 @@ export default function Storefront({ products, settings, children, categories, s
     setCartOpen(true)
   }
   const [quickViewId, setQuickViewId] = useState<string | null>(null)
-  const [sceneQuickView, setSceneQuickView] = useState(false)
   const [toast, setToast] = useState<ToastMessage | null>(null)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -123,7 +125,7 @@ export default function Storefront({ products, settings, children, categories, s
         notify('الكمية المطلوبة غير متاحة حالياً.', 'error')
         return false
       }
-      cartActions.add(productId, variantId, quantity)
+      cartActions.add(productId, variantId, quantity, productPricing(product, product.variants.find(variant => variant.id === variantId)).price)
       return true
     },
     [cartActions, notify, products],
@@ -198,21 +200,35 @@ export default function Storefront({ products, settings, children, categories, s
   /* --------------------------------------------------------------- checkout */
 
   const checkoutPending = useRef(false)
+  const checkoutToken = useRef<{ id: string; cart: string } | null>(null)
   const checkout = useCallback(async () => {
     if (checkoutPending.current) return
     checkoutPending.current = true
     const target = window.open('about:blank', '_blank')
     if (target) target.opener = null
     try {
-      const result = await prepareCheckout(cartActions.snapshot())
-      if (!result.url) { target?.close(); notify(result.error!, 'error'); router.refresh(); return }
+      const items = cartActions.snapshot()
+      const signature = JSON.stringify(items)
+      if (checkoutToken.current?.cart !== signature) checkoutToken.current = { id: crypto.randomUUID(), cart: signature }
+      const checkoutId = checkoutToken.current.id
+      let result = await prepareCheckout(items, { id: checkoutId, unitPrices: items.map(item => item.unitPrice ?? lines.find(line => line.product.id === item.productId && (line.variant?.id ?? null) === item.variantId)?.unitPrice ?? 0), total: roundMoney(total + (cartShipping(total, settings) ?? 0)) })
+      // No order is written for a changed quote until the customer accepts it.
+      for (let attempts = 0; result.confirmation && attempts < 3; attempts++) {
+        const quote = result.confirmation
+        router.refresh()
+        const message = quote.lines.map(line => `${line.nameAr}${line.variantLabel ? ' (' + line.variantLabel + ')' : ''}: ${line.quantity} × ${formatJod(line.unitPrice, quote.currency)}`).join('\n')
+        if (!window.confirm(`تغيّرت الأسعار أو رسوم التوصيل. راجع الطلب المحدّث:\n${message}\nالإجمالي: ${formatJod(quote.total, quote.currency)}${quote.shipping === null ? ' (دون التوصيل)' : ''}\nهل تؤكد هذا الإجمالي؟`)) { target?.close(); return }
+        result = await prepareCheckout(items, { id: checkoutId, unitPrices: quote.lines.map(line => line.unitPrice), total: quote.total })
+      }
+      if (!result.url) { target?.close(); notify(result.error ?? 'تغيّرت الأسعار مجدداً. راجع السلة ثم أعد المحاولة.', 'error'); router.refresh(); return }
+      checkoutToken.current = null
       if (target) target.location.replace(result.url)
       else window.location.assign(result.url)
     } catch {
       target?.close()
       notify('تعذّر الاتصال. حاول مجددًا.', 'error')
     } finally { checkoutPending.current = false }
-  }, [cartActions, notify, router])
+  }, [cartActions, notify, router, lines, total, settings])
 
   const browse = useCallback(() => {
     setCartOpen(false)
@@ -223,7 +239,7 @@ export default function Storefront({ products, settings, children, categories, s
 
   const modalSlug = searchParams.get('product')
   const modalProduct = modalSlug ? products.find(product => product.slug === modalSlug) : undefined
-  const quickViewProduct = modalProduct ?? (sceneQuickView ? sceneProducts : products).find((product) => product.id === quickViewId) ?? null
+  const quickViewProduct = modalProduct ?? products.find((product) => product.id === quickViewId) ?? null
   const closeProduct = () => { if (modalSlug) window.history.back(); else setQuickViewId(null) }
   const favoriteSet = useMemo(() => new Set(favorites), [favorites])
 
@@ -242,29 +258,33 @@ export default function Storefront({ products, settings, children, categories, s
     const candidate = from ? findCollection(groups, from) : undefined
     const productCategory = product ? (candidate?.productIds.includes(product.id) ? candidate : groups.find(g => g.productIds.includes(product.id))) : undefined
     const title = mode === 'product' ? product?.nameAr : mode === 'cart' ? 'سلة التسوق' : mode === 'favorites' ? 'المفضلة' : collection?.label ?? (mode === 'categories' ? 'الأقسام' : 'جميع المنتجات')
-    const visible = mode === 'favorites' ? products.filter(p => favorites.includes(p.id)) : collection ? products.filter(p => collection.productIds.includes(p.id)) : products
+    const visible = mode === 'favorites' ? products.filter(p => favorites.includes(p.id)) : collection ? products.filter(p => (collection.directProductIds ?? collection.productIds).includes(p.id)) : products
+    const ancestry = []
+    let ancestor = categories.find(category => category.slug === slug)
+    while (ancestor) { ancestry.unshift(ancestor); ancestor = categories.find(category => category.slug === ancestor!.parent_slug) }
     return (      <>
-{mode === "product" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link><span>/</span>{productCategory && <><Link href={collectionHref(productCategory.id)}>{productCategory.label}</Link><span>/</span></>}<span aria-current="page">{title}</span></nav>}
-{mode === "category" && <CategoryCircles compact selected={slug} groups={groups} products={products} />}
+{mode === "product" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link><span>/</span>{productCategory && <><Link href={productCategory.href ?? collectionHref(productCategory.id)}>{productCategory.label}</Link><span>/</span></>}<span aria-current="page">{title}</span></nav>}
+{mode === "category" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link>{ancestry.map(category => <span key={category.slug}> / <CategoryLink slug={category.slug} aria-current={category.slug === slug ? 'page' : undefined}>{category.name_ar}</CategoryLink></span>)}</nav>}
+{mode === "category" && !!collection?.children.length && <CategoryCircles groups={collection.children} products={products} title={collection.label} />}
 {mode === "product" && product && <ProductQuickView inline product={product} cartItems={cart} selectedVariantId={variantChoice[product.id] ?? null} onSelectVariant={(id, variant) => setVariantChoice(v => ({...v, [id]:variant}))} currency={settings.currency} isFavorite={favoriteSet.has(product.id)} settings={settings} onClose={() => router.push("/categories")} onToggleFavorite={toggleFavorite} onAddToCart={(p, variant, quantity) => addProduct(p.id, variant, quantity)} />}
 {mode === "cart" && <CartPage lines={lines} settings={settings} onRemove={remove} onIncrement={increment} onDecrement={decrement} onCheckout={checkout} onBrowse={() => router.push("/categories")} />}
 
-        {mode === "home" && <><Hero products={sceneProducts} currency={sceneCurrency} onAddToCart={addSceneProduct} onScrollTo={scrollTo} onOpenDetails={id => { setSceneQuickView(true); setQuickViewId(id) }} />
+        {mode === "home" && <>{heroItems.length > 0 && <Hero products={heroItems} currency={settings.currency} onAddToCart={addSceneProduct} onScrollTo={scrollTo} onOpenDetails={setQuickViewId} />}
         <BestSellers
-          products={sceneProducts}
-          currency={sceneCurrency}
+          products={bestsellerItems}
+          currency={settings.currency}
           onAddToCart={addSceneProduct}
-          onOpenDetails={id => { setSceneQuickView(true); setQuickViewId(id) }}
+          onOpenDetails={setQuickViewId}
         /></>}
 
-        {(mode === "category" || mode === "favorites") ? <ShopSection
+        {(mode === "favorites" || (mode === "category" && (!collection?.children.length || visible.length > 0))) ? <ShopSection
           cart={cart}
           key={pathname}
           products={visible}
           groups={groups}
           initialCategory={slug}
           currency={settings.currency}
-          pageTitle={title}
+          pageTitle={collection?.children.length ? "منتجات هذا القسم" : title}
           query={searchQuery}
           unavailable={storeUnavailable}
           favorites={favorites}
@@ -282,7 +302,7 @@ export default function Storefront({ products, settings, children, categories, s
   }
 
   return (
-    <StorePageContext.Provider value={renderPage}><StorefrontMotion>
+    <CategoryUrls.Provider value={Object.fromEntries(categories.map(category => [category.slug, categoryPath(category, categories)]))}><StorePageContext.Provider value={renderPage}><StorefrontMotion>
       <StoreScroll />
       <a href="#store-content" className="skip-link">انتقلي إلى المنتجات</a>
 
@@ -325,10 +345,10 @@ export default function Storefront({ products, settings, children, categories, s
         key={quickViewProduct.id}
         product={quickViewProduct}
         cartItems={cart}
-        inventory={!!modalProduct || !sceneQuickView}
+        inventory
         selectedVariantId={quickViewProduct ? variantChoice[quickViewProduct.id] ?? null : null}
         onSelectVariant={(productId, variantId) => setVariantChoice(current => ({ ...current, [productId]: variantId }))}
-        currency={sceneQuickView && !modalProduct ? sceneCurrency : settings.currency}
+        currency={settings.currency}
         isFavorite={quickViewProduct ? favoriteSet.has(quickViewProduct.id) : false}
         settings={settings}
         onClose={closeProduct}
@@ -345,7 +365,7 @@ export default function Storefront({ products, settings, children, categories, s
       />
 
       <Toast toast={cartOpen || searchOpen || quickViewId !== null ? null : toast} />
-    </StorefrontMotion></StorePageContext.Provider>
+    </StorefrontMotion></StorePageContext.Provider></CategoryUrls.Provider>
   )
 }
 

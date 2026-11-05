@@ -8,6 +8,9 @@ test('cached navigation refreshes only changed revisions and deduplicates concur
     compilerOptions: { module: ts.ModuleKind.CommonJS },
   }).outputText
   const window = new EventTarget(), document = new EventTarget()
+  let poll
+  window.setInterval = callback => { poll = callback; return 1 }
+  window.clearInterval = id => { assert.equal(id, 1); poll = null }
   document.hidden = false
   let cleanup, resolveRead, reads = 0, refreshes = 0, realtime
   const channel = { on: (_event, _filter, callback) => { realtime = callback; return channel }, subscribe: () => channel }
@@ -26,7 +29,7 @@ test('cached navigation refreshes only changed revisions and deduplicates concur
   }, window, document)
   exports.useStoreRefresh('7')
   window.dispatchEvent(new Event('focus'))
-  window.dispatchEvent(new Event('popstate'))
+  poll()
   assert.equal(reads, 1)
   resolveRead({ data: [{ version: 7 }], error: null })
   await new Promise(resolve => setImmediate(resolve))

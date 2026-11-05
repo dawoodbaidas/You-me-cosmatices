@@ -56,6 +56,8 @@ test('public catalogue uses only database rows and revisioned cache; admin write
   const client = {
     rpc: (name, payload) => name === 'admin_save_product'
       ? result('select admin_save_product($1::jsonb,$2::jsonb,$3::timestamptz) result', [JSON.stringify(payload.p_product),JSON.stringify(payload.p_variants),payload.p_expected_updated_at])
+      : name === 'admin_delete_category' ? result('select admin_delete_category($1,$2,$3) result', [payload.p_slug,payload.p_expected_updated_at,payload.p_target])
+      : name === 'admin_save_category' ? result('select admin_save_category($1::jsonb,$2) result', [JSON.stringify(payload.p_category),payload.p_expected_updated_at])
       : result('select admin_save_product_prices($1,$2,$3,$4::jsonb,$5) result', [payload.p_id,payload.p_price,payload.p_old_price,JSON.stringify(payload.p_variants),payload.p_expected_updated_at]),
     from(table) {
       let operation, value

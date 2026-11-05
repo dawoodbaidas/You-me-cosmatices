@@ -18,7 +18,6 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [mega, setMega] = useState(false)
-  const [expanded, setExpanded] = useState<string | null>(null)
   const [active, setActive] = useState('home')
   const header = useRef<HTMLElement>(null)
 
@@ -75,7 +74,7 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
             <button aria-expanded={mega} aria-controls="shop-mega" onClick={() => setMega(true)}>الأقسام ▾</button>
             {mega && <div id="shop-mega" className="shop-mega">{groups.map(group => <div key={group.id}>
               <CategoryLink slug={group.id} onClick={closeMenus} aria-current={selected === group.id ? 'page' : undefined}>{group.label} <small>({group.productIds.length})</small></CategoryLink>
-              {group.children.map(child => <CategoryLink key={child.id} slug={child.id} onClick={closeMenus} aria-current={selected === child.id ? 'page' : undefined}>{child.label} <small>({child.productIds.length})</small></CategoryLink>)}
+              <CategoryBranches groups={group.children} selected={selected} onNavigate={closeMenus} />
             </div>)}</div>}
           </div>
           
@@ -96,18 +95,15 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
           <Link href="/categories" onClick={closeMenus}>المتجر</Link>
         </nav>
         <p className="shopping-menu-label">تسوق حسب القسم</p>
-        {groups.map(group => <div className="shopping-group" key={group.id}>
-          <div>
-            <CategoryLink slug={group.id} onClick={closeMenus} aria-current={selected === group.id ? 'page' : undefined}>{group.label} <small>{group.productIds.length}</small></CategoryLink>
-            {group.children.length > 0 && <button className="expand-group" aria-label={`عرض أقسام ${group.label}`} aria-expanded={expanded === group.id} onClick={() => setExpanded(expanded === group.id ? null : group.id)}>{expanded === group.id ? '−' : '+'}</button>}
-          </div>
-          {expanded === group.id && <div className="shopping-subgroups">
-            <button onClick={() => setExpanded(null)}>← رجوع إلى الأقسام</button>
-            <CategoryLink slug={group.id} onClick={closeMenus}>كل {group.label} <small>{group.productIds.length}</small></CategoryLink>
-            {group.children.map(child => <CategoryLink key={child.id} slug={child.id} aria-current={selected === child.id ? 'page' : undefined} onClick={closeMenus}>{child.label} <small>{child.productIds.length}</small></CategoryLink>)}
-          </div>}
-        </div>)}
+        <CategoryBranches groups={groups} selected={selected} onNavigate={closeMenus} />
       </div>
     </BoutiqueDialog>
   </>
+}
+
+function CategoryBranches({ groups, selected, onNavigate }: { groups: Collection[]; selected: string | null; onNavigate: () => void }) {
+  return <ul className="category-menu-tree">{groups.map(group => <li key={group.id}>
+    <CategoryLink slug={group.id} onClick={onNavigate} aria-current={selected === group.id ? 'page' : undefined}>{group.label}</CategoryLink>
+    {!!group.children.length && <details><summary aria-label={`عرض أقسام ${group.label}`}>الأقسام الفرعية</summary><CategoryBranches groups={group.children} selected={selected} onNavigate={onNavigate} /></details>}
+  </li>)}</ul>
 }

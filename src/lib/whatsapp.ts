@@ -15,7 +15,7 @@ export function whatsappLink(number: string, message: string) {
  * Keep order quantities and prices consistent with the storefront.
  */
 export function buildOrderMessage(
-  lines: CartLine[],
+  lines: (Pick<CartLine, 'quantity' | 'unitPrice' | 'lineTotal'> & { product: { nameAr: string }; variant: { label: string } | null })[],
   settings: SiteSettings,
 ): string {
   const currency = settings.currency

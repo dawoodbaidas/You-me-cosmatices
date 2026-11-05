@@ -1,6 +1,6 @@
 import type { Product } from '@/types/product'
 
-export interface Collection { id: string; label: string; productIds: string[]; children: Collection[] }
+export interface Collection { id: string; label: string; productIds: string[]; children: Collection[]; href?: string; imageUrl?: string | null; directProductIds?: string[] }
 
 type Rule = { id: string; label: string; matches: (p: Product) => boolean; children?: Rule[] }
 const labelHas = (pattern: RegExp) => (p: Product) => pattern.test(p.categoryLabel)

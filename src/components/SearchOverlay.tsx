@@ -1,10 +1,11 @@
 'use client'
+import { productPricing } from '@/lib/pricing'
+import Price from './Price'
 
 import { useState } from 'react'
 import ProductImage from './ProductImage'
 import { matchesProduct } from '@/lib/search'
 import BoutiqueDialog from './BoutiqueDialog'
-import { formatJod } from '@/lib/format'
 import type { Product } from '@/types/product'
 import './search-overlay.css'
 
@@ -23,7 +24,7 @@ export default function SearchOverlay({ products, currency, initialQuery = '', o
       <p role="status">{results.length} منتج</p>
       <div className="search-results">{results.map(product => <button key={product.id} className="search-result" onClick={() => onSelect(product.id)}>
         <span className="search-thumbnail"><ProductImage src={product.imageUrl} alt="" sizes="80px" /></span>
-        <span>{product.nameAr}<small dir="ltr">{formatJod(product.variants[0]?.price ?? product.price, currency)}</small></span>
+        <span>{product.nameAr}<small dir="ltr"><Price value={productPricing(product, product.variants[0]).price} oldPrice={productPricing(product, product.variants[0]).oldPrice} currency={currency}/></small></span>
       </button>)}{!results.length && <p>لم نجد منتجات مطابقة. جرّب اسمًا آخر.</p>}</div>
     </section>
   </BoutiqueDialog>

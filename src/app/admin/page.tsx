@@ -5,6 +5,7 @@ import { getViewer } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { signOut } from '@/app/admin/actions'
+import type { HomeSectionDraft } from '@/components/admin/HomeSectionManager'
 import AdminDashboard from '@/components/admin/AdminDashboard'
 import type { Product, SiteSettings } from '@/types/product'
 import type { StoreCategory } from '@/types/store'
@@ -18,7 +19,10 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic'
 
-export default async function AdminPage() {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ q?: string; page?: string }> }) {
+  const params = await searchParams
+  const query = String(params.q ?? '').slice(0,150).replace(/[^\p{L}\p{N}\s-]/gu,' ').trim()
+  const page = Math.min(100000, Math.max(1, Math.floor(Number(params.page) || 1)))
   if (!isSupabaseConfigured()) redirect('/admin/login')
 
   const { user, admin } = await getViewer()
@@ -51,16 +55,16 @@ export default async function AdminPage() {
 
   const supabase = await createClient()
 
-  const [productsResult, settingsResult, categoriesResult] = await Promise.all([
-    supabase
-      .from('products')
-      .select(
-        'id, slug, name_ar, name_en, description, category, category_label, price, old_price, image_url, badge, benefits, is_active, is_featured, sort_order, updated_at, stock_quantity, product_categories(category_slug), product_variants(id, product_id, label, price, is_active, sort_order)',
-      )
-      .order('sort_order', { ascending: true }),
-    supabase.from('site_settings').select('key, value'),
+  let request = supabase.from('products').select('*,product_categories(category_slug),product_variants(*)', { count: 'exact' }).order('sort_order').order('id').range((page-1)*30,page*30-1)
+  if (query) request=request.or(`name_ar.ilike.%${query}%,name_en.ilike.%${query}%,slug.ilike.%${query}%`)
+  const [productsResult, settingsResult, categoriesResult, sectionsResult, countsResult] = await Promise.all([
+    request, supabase.from('site_settings').select('key,value'),
     supabase.from('store_categories').select('*').order('sort_order').order('slug'),
+    supabase.from('home_sections').select('section,updated_at,home_section_products(position,products(*,product_variants(*),product_categories(category_slug)))'),
+    supabase.rpc('admin_category_counts'),
   ])
+  const sections = (sectionsResult.data ?? []).map(row => ({ section: row.section, updated_at: row.updated_at, products: [...row.home_section_products].sort((a,b)=>a.position-b.position).flatMap(entry => entry.products ? [mapProduct(entry.products as unknown as Parameters<typeof mapProduct>[0],true)] : []) })) as HomeSectionDraft[]
+  const categoryCounts = Object.fromEntries((countsResult.data ?? []).map((row: {slug:string;product_count:number})=>[row.slug,Number(row.product_count)]))
 
   const products: Product[] = (productsResult.data ?? []).map((row) =>
     mapProduct(row as Parameters<typeof mapProduct>[0], true),
@@ -98,9 +102,9 @@ export default async function AdminPage() {
         </div>
       </header>
 
-      {productsResult.error || settingsResult.error || categoriesResult.error ? (
-        <p role="alert" className="p-8 text-center text-rose">تعذر تحميل لوحة الإدارة. يرجى تحديث الصفحة والمحاولة مجدداً.</p>
-      ) : <AdminDashboard products={products} settings={settings} categories={(categoriesResult.data ?? []) as StoreCategory[]} />}
+      {productsResult.error || settingsResult.error || categoriesResult.error || sectionsResult.error || countsResult.error ? (
+        <p role="alert" className="p-8 text-center text-rose">تعذر تحميل لوحة الإدارة. تحقق من تطبيق migration 004 ثم حدّث الصفحة.</p>
+      ) : <AdminDashboard sections={sections} categoryCounts={categoryCounts} total={productsResult.count ?? 0} page={page} query={query} products={products} settings={settings} categories={(categoriesResult.data ?? []) as StoreCategory[]} />}
     </main>
   )
 }

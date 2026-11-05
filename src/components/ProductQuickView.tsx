@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react'
 import ProductImage from './ProductImage'
+import { productPricing } from '@/lib/pricing'
 import Price from './Price'
 import BoutiqueDialog from './BoutiqueDialog'
 import { BagIcon, CheckIcon, CloseIcon, HeartIcon, WhatsappIcon } from '@/components/icons'
-import { discountPercent, formatJod } from '@/lib/format'
+import { formatJod } from '@/lib/format'
 import { whatsappLink } from '@/lib/whatsapp'
 import type { CartItem, Product, SiteSettings } from '@/types/product'
 
@@ -45,8 +46,7 @@ export default function ProductQuickView({
   if (!product) return null
 
   const defaultVariant = product.variants.find(variant => variant.id === selectedVariantId) ?? product.variants[0] ?? null
-  const unitPrice = defaultVariant ? defaultVariant.price : product.price
-  const discount = discountPercent(unitPrice, product.oldPrice)
+  const { price: unitPrice, oldPrice, discount } = productPricing(product, defaultVariant)
   const variantId = defaultVariant?.id ?? null
   const existingQuantity = cartItems.find(item => item.productId === product.id && item.variantId === variantId)?.quantity ?? 0
   const soldOut = inventory && product.stockQuantity != null && product.stockQuantity <= 0
@@ -69,19 +69,19 @@ export default function ProductQuickView({
         <div className="quickview-body">
         <div className="quickview-media">
           <ProductImage key={product.imageUrl} src={product.imageUrl} alt={product.nameAr} sizes="(max-width: 767px) 90vw, 440px" eager />
-          {product.badge && <span className="quickview-badge">{product.badge}</span>}
+          {(discount || product.isNew) && <span className="quickview-badge">{discount ? `-${discount}%` : 'جديد'}</span>}
         </div>
 
         <div className="quickview-info">
-          <p className="scene-label">{product.categoryLabel}</p>
+          <p className="scene-label">{product.categoryLabel}{discount && product.isNew && <span className="quickview-badge-inline"> جديد</span>}</p>
           <h3>{product.nameAr}</h3>
           {inventory && product.stockQuantity != null && <p className="quickview-en">{soldOut ? 'نفدت الكمية' : `${product.stockQuantity} متوفر`}</p>}
           {!inventory && <p className="quickview-en">مختار بعناية لك</p>}
 
           <div className="quickview-price">
             <Price value={unitPrice} currency={currency} />
-            {product.oldPrice && product.oldPrice > unitPrice && <>
-              <del dir="ltr">{formatJod(product.oldPrice, currency)}</del>
+            {oldPrice != null && <>
+              <del dir="ltr">{formatJod(oldPrice!, currency)}</del>
               {discount && <span dir="ltr">-{discount}%</span>}
             </>}
           </div>
@@ -98,7 +98,7 @@ export default function ProductQuickView({
               {product.variants.map(variant => <li key={variant.id}>
                 <button type="button" aria-pressed={defaultVariant?.id === variant.id} onClick={() => { setAdded(false); onSelectVariant(product.id, variant.id) }}>
                   <span>{variant.label}</span>
-                  <span dir="ltr">{formatJod(variant.price, currency)}</span>
+                  <span dir="ltr">{formatJod(productPricing(product, variant).price, currency)}</span>
                 </button>
               </li>)}
             </ul>

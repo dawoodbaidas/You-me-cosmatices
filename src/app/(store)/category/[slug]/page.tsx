@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { StorePage } from '@/components/Storefront'
 import { getStoreCatalogue } from '@/lib/store-catalogue'
 import { storeCollections, findCollection } from '@/lib/store-categories'
@@ -12,6 +12,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   const collection = findCollection(storeCollections(result.categories, result.products), slug)
   if (slug !== 'all' && !collection && !result.unavailable) notFound()
+  if (collection?.href) redirect(collection.href)
 
   // Keep the full catalogue available to resolve cart lines across departments.
   return <StorePage mode="category" slug={slug} />

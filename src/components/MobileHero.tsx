@@ -1,8 +1,8 @@
 'use client'
 
-import { useCallback, useId, useMemo, useRef } from 'react'
+import { useCallback, useId, useRef } from 'react'
 import { getImageProps } from 'next/image'
-import { heroProducts, sceneAssets } from '@/lib/scene-products'
+import { productSceneAsset } from '@/lib/scene-products'
 import { clamp } from '@/lib/scene-palette'
 import type { Product } from '@/types/product'
 import SceneProductImage from './SceneProductImage'
@@ -19,9 +19,9 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
   onAddToCart: (id: string, variant: string | null) => void; onOpenDetails: (id: string) => void
 }) {
   const root = useRef<HTMLElement>(null)
-  const items = useMemo(() => heroProducts(products), [products])
+  const items = products
   const maskId = useId().replace(/:/g, '')
-  const main = items[0], asset = main && sceneAssets[main.slug]
+  const main = items[0], asset = main && productSceneAsset(main)
   const maskSrc = asset && getImageProps({ src: asset.src, alt: '', width: 260, height: Math.round(260 * asset.height / asset.width) }).props.src
   const draw = useCallback(({ progress: hp, elapsed: time, reduced, width }: SceneFrame) => {
     const element = root.current
@@ -73,6 +73,7 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
   }, [asset])
   useSceneFrame(root, draw, true)
 
+  if (!items.length) return null
   return <section id="home" ref={root} className={styles.hero} aria-label="الرئيسية">
     <div className={styles.heroPin} data-scene-pin>
       <div className={styles.curtainTop} data-curtain aria-hidden="true" /><div className={styles.curtainBottom} data-curtain aria-hidden="true" />

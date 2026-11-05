@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { sceneAssets } from '@/lib/scene-products'
+import { productSceneAsset } from '@/lib/scene-products'
 import type { Product } from '@/types/product'
 import styles from './scroll-scenes.module.css'
 
@@ -19,7 +19,7 @@ export default function SceneProductImage({ product, preload = false, eager = fa
     observer.observe(frame.current)
     return () => observer.disconnect()
   }, [ready])
-  const asset = sceneAssets[product.slug]
+  const asset = productSceneAsset(product)
   const bounds = asset?.bounds
   const src = asset?.src ?? product.imageUrl
   if (!src) return null

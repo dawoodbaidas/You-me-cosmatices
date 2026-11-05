@@ -25,6 +25,11 @@ export interface Product {
   categoryLabel: string
   price: number
   oldPrice: number | null
+  originalPrice?: number
+  discountEnabled?: boolean
+  isNew?: boolean
+  originalImageUrl?: string | null
+  processedImageUrl?: string | null
   imageUrl: string | null
   badge: string | null
   benefits: string[]
@@ -36,11 +41,13 @@ export interface Product {
   stockQuantity?: number | null
 }
 
-/** One persisted row of the customer's cart. Only ids + quantity are stored. */
+/** Cart ids/quantity and the observed price, which is never a checkout authority. */
 export interface CartItem {
   productId: string
   variantId: string | null
   quantity: number
+  /** Observed at add time, only used to request confirmation; never trusted for pricing. */
+  unitPrice?: number
 }
 
 /** A cart line joined against the freshly loaded catalogue, with live prices. */

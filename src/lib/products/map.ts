@@ -40,7 +40,12 @@ interface ProductRow {
   category_label: string
   price: number | string
   old_price: number | string | null
+  original_price?: number | string
+  discount_enabled?: boolean
+  is_new?: boolean
   image_url: string | null
+  original_image_url?: string | null
+  processed_image_url?: string | null
   badge: string | null
   benefits: unknown
   is_active: boolean
@@ -107,6 +112,11 @@ export function mapProduct(row: ProductRow, includeInactiveVariants = false): Pr
     categoryLabel: row.category_label,
     price: toNumber(row.price),
     oldPrice: row.old_price === null ? null : toNumber(row.old_price),
+    originalPrice: toNumber(row.original_price ?? row.old_price ?? row.price),
+    discountEnabled: row.discount_enabled ?? (row.old_price != null && toNumber(row.old_price) > toNumber(row.price)),
+    isNew: row.is_new ?? /^(new|جديد)$/i.test(row.badge?.trim() ?? ''),
+    originalImageUrl: row.original_image_url as string | null,
+    processedImageUrl: row.processed_image_url as string | null,
     imageUrl: row.image_url,
     badge: row.badge,
     benefits: toBenefits(row.benefits),

@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import Price from './Price'
+import { productPricing } from '@/lib/pricing'
 import { clamp, interpolatePalette, showcasePosition, type ScenePalette } from '@/lib/scene-palette'
-import { sceneAssets, showcaseProducts } from '@/lib/scene-products'
+import { productSceneAsset } from '@/lib/scene-products'
 import type { Product } from '@/types/product'
 import SceneProductImage from './SceneProductImage'
 import { useSceneFrame, type SceneFrame } from './useSceneFrame'
@@ -15,9 +16,9 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
   products: Product[]; currency: string; onAddToCart: (id: string, variant: string | null) => void; onOpenDetails: (id: string) => void
 }) {
   const root = useRef<HTMLElement>(null)
-  const items = useMemo(() => showcaseProducts(products), [products])
+  const items = products
   const palettes = useMemo(() => items.map(item => {
-    const asset = sceneAssets[item.slug]
+    const asset = productSceneAsset(item)
     return asset ? { bgA: asset.bgA, bgB: asset.bgB } : DEFAULT_PALETTE
   }), [items])
   const [active, setActive] = useState(0)
@@ -86,23 +87,24 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
       </header>
       <div className={styles.showcaseStage}>
         {items.map((item, index) => {
-          const asset = sceneAssets[item.slug]
+          const asset = productSceneAsset(item)
           const ratio = asset ? asset.bounds.width / asset.bounds.height : 4 / 5
           return <div key={item.id} className={styles.showcaseItem} data-showcase-item style={{ aspectRatio: String(ratio) }}>
             <span className={styles.showcaseShadow} aria-hidden="true" />
             <button className={styles.showcaseProduct} aria-label={`عرض تفاصيل ${item.nameAr}`} onClick={() => onOpenDetails(item.id)}>
               {Math.abs(index - active) <= 1 && <SceneProductImage product={item} sizes="(max-width:599px) 60vw, 320px" />}
+              {(productPricing(item).discount || item.isNew) && <span className={styles.sceneBadge}>{productPricing(item).discount ? `-${productPricing(item).discount}%` : 'جديد'}</span>}
             </button>
           </div>
         })}
       </div>
       <div className={styles.showcaseInfo}>
         {items.map((item, index) => <div key={item.id} className={styles.showcaseInfoItem} data-showcase-info aria-hidden={index !== active} inert={index !== active}>
-          <span className={styles.showcaseCategory}>{item.categoryLabel}</span>
+          <span className={styles.showcaseCategory}>{item.categoryLabel}{productPricing(item).discount && item.isNew && <span className={styles.sceneNew}> جديد</span>}</span>
           <h3>{item.nameAr}</h3>
           {item.description && <p>{item.description}</p>}
           <div className={styles.showcaseBuy}>
-            <Price value={item.variants[0]?.price ?? item.price} currency={currency} />
+            <Price value={productPricing(item, item.variants[0]).price} oldPrice={productPricing(item, item.variants[0]).oldPrice} currency={currency} />
             <button onClick={() => {
               onAddToCart(item.id, item.variants[0]?.id ?? null)
               setAdded(true)
