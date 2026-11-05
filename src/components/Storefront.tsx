@@ -24,7 +24,6 @@ import Hero from '@/components/Hero'
 import MobileCartBar from '@/components/MobileCartBar'
 const ProductQuickView = dynamic(() => import('./ProductQuickView'))
 import CategoryCircles from './CategoryCircles'
-import CategoryLink from './CategoryLink'
 import './category-shopping.css'
 import './store-routes.css'
 import ShopSection from '@/components/ShopSection'
@@ -246,7 +245,7 @@ export default function Storefront({ products, settings, children, categories, s
     const visible = mode === 'favorites' ? products.filter(p => favorites.includes(p.id)) : collection ? products.filter(p => collection.productIds.includes(p.id)) : products
     return (      <>
 {mode === "product" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link><span>/</span>{productCategory && <><Link href={collectionHref(productCategory.id)}>{productCategory.label}</Link><span>/</span></>}<span aria-current="page">{title}</span></nav>}
-{mode === "category" && <nav className="store-departments" aria-label="أقسام المتجر" dir="rtl"><CategoryLink slug={null} aria-current={slug === 'all' ? 'page' : undefined}>الكل</CategoryLink>{groups.map(group => <CategoryLink key={group.id} slug={group.id} aria-current={group.id === slug ? 'page' : undefined}>{group.label}</CategoryLink>)}</nav>}
+{mode === "category" && <CategoryCircles compact selected={slug} groups={groups} products={products} />}
 {mode === "product" && product && <ProductQuickView inline product={product} cartItems={cart} selectedVariantId={variantChoice[product.id] ?? null} onSelectVariant={(id, variant) => setVariantChoice(v => ({...v, [id]:variant}))} currency={settings.currency} isFavorite={favoriteSet.has(product.id)} settings={settings} onClose={() => router.push("/categories")} onToggleFavorite={toggleFavorite} onAddToCart={(p, variant, quantity) => addProduct(p.id, variant, quantity)} />}
 {mode === "cart" && <CartPage lines={lines} settings={settings} onRemove={remove} onIncrement={increment} onDecrement={decrement} onCheckout={checkout} onBrowse={() => router.push("/categories")} />}
 

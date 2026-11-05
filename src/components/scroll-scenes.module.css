@@ -1,7 +1,7 @@
 /* Shared artwork for the two pinned scroll scenes. */
 
 .hero {
-  --cream: #fbf6e9;
+  --cream: var(--shop-ivory);
   --cream-deep: #efe3cb;
   --line: #cdba90;
   --gold: #8a7650;
