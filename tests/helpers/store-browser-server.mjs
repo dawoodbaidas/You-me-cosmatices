@@ -3,6 +3,7 @@ import http from 'node:http'
 import { randomUUID } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { storeDatabase } from './store-database.mjs'
+import sharp from 'sharp'
 
 export async function startStoreBrowserDatabase() {
 const db = await storeDatabase()
@@ -20,8 +21,10 @@ for (const section of ['hero', 'bestsellers']) {
   const version = (await db.query('select updated_at from home_sections where section=$1',[section])).rows[0].updated_at
   await db.query('select admin_save_home_section($1,$2,$3)',[section,ids,version])
 }
-let revisionReads=0,catalogueReads=0,delay=0
+let revisionReads=0,catalogueReads=0,productReads=0,categoryReads=0,delay=0
+const categoryImages = new Map()
 await db.exec("insert into product_categories select id,'leaf' from products where category<>'mist' limit 3")
+await db.exec("insert into product_categories select id,'child' from products where category<>'mist' order by sort_order,id limit 2")
 let queue=Promise.resolve()
 const query = (sql,params,publicRead=false) => {
   const work = queue.then(async()=>{
@@ -47,12 +50,32 @@ const server=http.createServer(async(request,response)=>{
       data=(await query('select get_store_catalogue(null) data',[],true)).rows[0].data
     }else if(url.pathname==='/rest/v1/category_paths'){
       data=(await query('select category_id from category_paths where path=$1',[url.searchParams.get('path')?.slice(3)],true)).rows
+    }else if(url.pathname==='/rest/v1/store_categories'){
+      categoryReads++
+      data=(await query('select * from store_categories where is_active order by sort_order,slug',[],true)).rows
     }else if(url.pathname==='/rest/v1/products'){
-      data=(await query("select to_jsonb(p)||jsonb_build_object('product_variants',coalesce((select jsonb_agg(v) from product_variants v where v.product_id=p.id),'[]'::jsonb)) data from products p where is_active order by sort_order,id",[],true)).rows.map(row=>row.data)
+      productReads++
+      const slug=url.searchParams.get('product_categories.category_slug')?.slice(3)??null
+      const ids=url.searchParams.get('id')?.slice(4,-1).split(',')??null
+      data=(await query("select to_jsonb(p)||jsonb_build_object('product_variants',coalesce((select jsonb_agg(v) from product_variants v where v.product_id=p.id),'[]'::jsonb),'product_categories',coalesce((select jsonb_agg(jsonb_build_object('category_slug',pc.category_slug)) from product_categories pc where pc.product_id=p.id),'[]'::jsonb)) data from products p where is_active and ($1::text is null or exists(select 1 from product_categories pc where pc.product_id=p.id and pc.category_slug=$1)) and ($2::uuid[] is null or p.id=any($2::uuid[])) order by sort_order,id",[slug,ids],true)).rows.map(row=>row.data)
     }else if(url.pathname==='/rest/v1/site_settings'){
       data=(await query('select key,value from site_settings',[],true)).rows
     }else if(url.pathname==='/__test/stats'){
-      data={revisionReads,catalogueReads,orders:(await query('select count(*) count from store_orders')).rows[0].count}
+      data={revisionReads,catalogueReads,productReads,categoryReads,orders:(await query('select count(*) count from store_orders')).rows[0].count}
+    }else if(url.pathname.startsWith('/storage/v1/object/public/category-images/')){
+      const bytes=categoryImages.get(url.pathname.split('/category-images/')[1])
+      response.statusCode=bytes?200:404
+      response.setHeader('Content-Type','image/webp')
+      response.setHeader('Cache-Control','public,max-age=31536000,immutable')
+      response.end(bytes);return
+    }else if(url.pathname==='/__test/category-image'&&request.method==='POST'){
+      let body='';for await(const chunk of request)body+=chunk
+      const args=JSON.parse(body)
+      const row=(await query('select * from store_categories where slug=$1',[args.slug])).rows[0]
+      const imagePath=`categories/${randomUUID()}/${randomUUID()}.webp`
+      categoryImages.set(imagePath,await sharp({create:{width:500,height:500,channels:3,background:args.color??'#b27280'}}).webp().toBuffer())
+      await query('select admin_save_category($1::jsonb,$2)',[JSON.stringify({...row,image_path:imagePath}),row.updated_at])
+      data={ok:true,imagePath}
     }else if(url.pathname==='/rest/v1/rpc/create_store_order'&&request.method==='POST'){
       let body='';for await(const chunk of request)body+=chunk
       const args=JSON.parse(body)

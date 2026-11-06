@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { StorePage } from '@/components/Storefront'
-import { getStoreCatalogue, publicDatabaseConfig } from '@/lib/store-catalogue'
+import { getStoreNavigation, getCategoryProducts, publicDatabaseConfig } from '@/lib/store-catalogue'
 import { categoryPath, findCollection, storeCollections } from '@/lib/store-categories'
 
 export const revalidate = 0
@@ -9,7 +9,7 @@ export default async function CategoryPage({ params, searchParams }: { params: P
   const raw = (await params).path
   let path: string[]
   try { path = raw.map(segment => decodeURIComponent(segment)) } catch { notFound() }
-  const catalogue = await getStoreCatalogue()
+  const catalogue = await getStoreNavigation()
   const requested = '/categories/' + path.map(encodeURIComponent).join('/')
   let category = catalogue.categories.find(item => categoryPath(item, catalogue.categories) === requested)
   if (!category && !catalogue.unavailable) {
@@ -28,5 +28,6 @@ export default async function CategoryPage({ params, searchParams }: { params: P
     notFound()
   }
   if (category && !findCollection(storeCollections(catalogue.categories, catalogue.products), category.slug)) notFound()
-  return <StorePage mode="category" slug={category?.slug} />
+  const products = category?.parent_slug ? await getCategoryProducts(category.slug) : []
+  return <StorePage mode="category" slug={category?.slug} data={{ ...catalogue, products }} />
 }

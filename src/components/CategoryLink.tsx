@@ -9,7 +9,7 @@ export const CategoryUrls = createContext<Record<string, string>>({})
 export default function CategoryLink({ slug, onNavigate, ...props }: { slug: string | null } & Omit<ComponentProps<typeof Link>, 'href'>) {
   const urls = useContext(CategoryUrls)
   const href = (slug && urls[slug]) || collectionHref(slug)
-  return <Link prefetch={true} {...props} href={href} onNavigate={event => {
+  return <Link prefetch={false} {...props} href={href} onNavigate={event => {
     let prevented = false
     onNavigate?.({ preventDefault: () => { prevented = true; event.preventDefault() } })
     if (!prevented && window.location.pathname !== href) {

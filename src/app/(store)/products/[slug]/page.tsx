@@ -8,5 +8,5 @@ export default async function Page({params}: {params: Promise<{slug:string}>}) {
  const slug=decodeURIComponent(raw)
  const catalogue=await getStoreCatalogue()
  if (!catalogue.products.some(product => product.slug === slug) && !catalogue.unavailable) notFound()
- return <StorePage mode="product" slug={slug} />
+ return <StorePage mode="product" slug={slug} data={catalogue} />
 }

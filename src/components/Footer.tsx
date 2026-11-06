@@ -8,10 +8,9 @@ import { whatsappLink } from '@/lib/whatsapp'
 import type { Collection } from '@/lib/taxonomy'
 import type { SiteSettings } from '@/types/product'
 
-export default function Footer({ settings, groups, productCount, onScrollTo, onSubscribe }: {
+export default function Footer({ settings, groups, onScrollTo, onSubscribe }: {
   groups: Collection[]
   settings: SiteSettings
-  productCount: number
   onScrollTo: (id: string) => void
   onSubscribe: (email: string) => void
 }) {
@@ -40,7 +39,7 @@ export default function Footer({ settings, groups, productCount, onScrollTo, onS
 
     <div className="footer-links">
       <nav aria-label="روابط التذييل">
-        <CategoryLink slug={null}>المتجر · {productCount} قطعة</CategoryLink>
+        <CategoryLink slug={null}>المتجر</CategoryLink>
         <button onClick={() => onScrollTo('bestsellers')}>الأكثر طلبًا</button>
         {groups.map(group => <CategoryLink key={group.id} slug={group.id}>{group.label}</CategoryLink>)}
         <button onClick={() => onScrollTo('story')}>حكايتنا</button>

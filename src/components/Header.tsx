@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import StoreBrand from './StoreBrand'
 import CategoryLink from './CategoryLink'
+import CategoryCircles from './CategoryCircles'
+import { findCollection } from '@/lib/store-categories'
 import { useEffect, useRef, useState } from 'react'
 import { BagIcon, CloseIcon, HeartIcon } from './icons'
 import BoutiqueDialog from './BoutiqueDialog'
@@ -65,15 +67,15 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
       <div className="announcement"><span>{settings.storeAnnouncement}</span><span className="announcement-tag">You&amp;Me / الأردن</span></div>
       <header ref={header} className="world-header shop-header">
         <button className="menu-trigger" aria-label="فتح القائمة" aria-expanded={open} onClick={() => setOpen(true)}><span /><span /><small>القائمة</small></button>
-        <Link className="world-brand" href="/" prefetch={true}><StoreBrand /></Link>
+        <Link className="world-brand" href="/" prefetch={false}><StoreBrand /></Link>
         <nav className="world-desktop-nav" aria-label="التنقل الرئيسي">
-          <Link href="/" prefetch={true} aria-current={!cataloguePage && active === 'home' ? 'page' : undefined}>الرئيسية</Link>
-          <Link href="/#bestsellers" aria-current={!cataloguePage && active === 'bestsellers' ? 'location' : undefined}>الأكثر طلبًا</Link>
+          <Link href="/" prefetch={false} aria-current={!cataloguePage && active === 'home' ? 'page' : undefined}>الرئيسية</Link>
+          <Link href="/#bestsellers" prefetch={false} aria-current={!cataloguePage && active === 'bestsellers' ? 'location' : undefined}>الأكثر طلبًا</Link>
           <Link href="/categories" onClick={closeMenus}>المتجر</Link>
           <div className="mega-anchor" onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} onKeyDown={event => { if (event.key === 'Escape') setMega(false) }}>
             <button aria-expanded={mega} aria-controls="shop-mega" onClick={() => setMega(true)}>الأقسام ▾</button>
             {mega && <div id="shop-mega" className="shop-mega">{groups.map(group => <div key={group.id}>
-              <CategoryLink slug={group.id} onClick={closeMenus} aria-current={selected === group.id ? 'page' : undefined}>{group.label} <small>({group.productIds.length})</small></CategoryLink>
+              <CategoryLink slug={group.id} onClick={closeMenus} aria-current={selected === group.id ? 'page' : undefined}>{group.label}</CategoryLink>
               <CategoryBranches groups={group.children} selected={selected} onNavigate={closeMenus} />
             </div>)}</div>}
           </div>
@@ -82,16 +84,17 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
         </nav>
         <div className="world-nav-actions">
           <button className="nav-search" aria-label="البحث" onClick={search}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="m15 15 6 6" /></svg></button>
-          <Link className="header-favorites" href="/favorites" aria-label={`المفضلة، ${favoriteCount} منتجات`}><HeartIcon />{favoriteCount > 0 && <span dir="ltr">{favoriteCount > 99 ? '99+' : favoriteCount}</span>}</Link>
-          <Link className="header-bag" href="/cart" aria-label={`السلة، ${cartCount} منتجات`}><BagIcon />{cartCount > 0 && <span dir="ltr">{cartCount > 99 ? '99+' : cartCount}</span>}</Link>
+          <Link className="header-favorites" href="/favorites" prefetch={false} aria-label={`المفضلة، ${favoriteCount} منتجات`}><HeartIcon />{favoriteCount > 0 && <span dir="ltr">{favoriteCount > 99 ? '99+' : favoriteCount}</span>}</Link>
+          <Link className="header-bag" href="/cart" prefetch={false} aria-label={`السلة، ${cartCount} منتجات`}><BagIcon />{cartCount > 0 && <span dir="ltr">{cartCount > 99 ? '99+' : cartCount}</span>}</Link>
         </div>
       </header>
+      <CategoryCircles compact groups={groups} selected={groups.find(group => group.id === selected || !!findCollection(group.children, selected))?.id} />
     <BoutiqueDialog open={open} onClose={() => setOpen(false)} label="قائمة المتجر" className="menu-dialog">
       <div className="shopping-menu" dir="rtl">
         <div className="shopping-menu-head"><StoreBrand /><button className="icon-button" aria-label="إغلاق القائمة" onClick={() => setOpen(false)}><CloseIcon /></button></div>
         <nav aria-label="التنقل">
-          <Link href="/" prefetch={true} onClick={closeMenus}>الرئيسية</Link>
-          <Link href="/#bestsellers" onClick={closeMenus}>الأكثر طلبًا</Link>
+          <Link href="/" prefetch={false} onClick={closeMenus}>الرئيسية</Link>
+          <Link href="/#bestsellers" prefetch={false} onClick={closeMenus}>الأكثر طلبًا</Link>
           <Link href="/categories" onClick={closeMenus}>المتجر</Link>
         </nav>
         <p className="shopping-menu-label">تسوق حسب القسم</p>

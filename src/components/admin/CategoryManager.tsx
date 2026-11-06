@@ -64,7 +64,9 @@ export default function CategoryManager({ categories, counts, onEditingChange }:
             is_active: data.has('is_active'), is_featured: data.has('is_featured'), image_path: imagePath, updated_at: current?.updated_at ?? null,
           }))
           if (file) body.set('image', file)
-          const response = await (await fetch('/api/admin/categories', { method: 'POST', body })).json() as ActionResult
+          const saved = await fetch('/api/admin/categories', { method: 'POST', body })
+          const response = await saved.json() as ActionResult
+          if (!saved.ok && response.ok) throw new Error('Invalid save response')
           setResult(response)
           if (response.ok) { setEditing(null); onEditingChange(false); router.refresh() }
         } catch { setResult({ ok: false, message: 'تعذّر الاتصال. حدّث القائمة للتحقق قبل إعادة المحاولة.' }) }
@@ -82,7 +84,10 @@ export default function CategoryManager({ categories, counts, onEditingChange }:
           <label className="grid gap-2">صورة القسم<input type="file" accept="image/jpeg,image/png,image/webp" onChange={event => {
             const selected = event.target.files?.[0]
             if (!selected) return
-            if (selected.size > 4 * 1024 * 1024) { setResult({ ok: false, message: 'حجم الصورة الأقصى 4 MB.' }); return }
+            if (!selected.size || selected.size > 4 * 1024 * 1024 || !['image/jpeg', 'image/png', 'image/webp'].includes(selected.type)) {
+              event.target.value = ''; setFile(null); setPreview(null)
+              setResult({ ok: false, message: 'اختر صورة JPG أو PNG أو WebP بحجم لا يتجاوز 4 MB.' }); return
+            }
             setFile(selected); setPreview(URL.createObjectURL(selected)); setResult(null)
           }} /></label>
           {(preview || imagePath) && <><div className="relative h-36 w-36 overflow-hidden rounded-full"><Image src={preview ?? categoryImage(imagePath)!} alt="معاينة صورة القسم" fill sizes="144px" unoptimized={!!preview} className="object-cover" /></div><button type="button" className={button} onClick={() => { setFile(null); setPreview(null); setImagePath(null) }}>إزالة الصورة</button></>}

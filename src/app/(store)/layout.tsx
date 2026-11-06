@@ -1,16 +1,15 @@
 import Storefront from '@/components/Storefront'
-import { getStoreCatalogue } from '@/lib/store-catalogue'
+import { getStoreNavigation } from '@/lib/store-catalogue'
 
 // Prices must never be baked into a static build: read them on every request.
 export const revalidate = 0
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
-  const store = await getStoreCatalogue()
+  const store = await getStoreNavigation()
 
   return (
     <>
-      <Storefront products={store.products} settings={store.settings} categories={store.categories} storeRevision={store.revision} storeUnavailable={store.unavailable}
-        homeSections={store.homeSections} >{children}</Storefront>
+      <Storefront settings={store.settings} categories={store.categories} storeRevision={store.revision} storeUnavailable={store.unavailable}>{children}</Storefront>
     </>
   )
 }

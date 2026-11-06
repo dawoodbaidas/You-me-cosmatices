@@ -173,7 +173,7 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
         </>
       : <div className="empty-collection">
           <span className="empty-mark" aria-hidden="true">✳</span>
-          <h3>{unavailable ? 'تعذّر تحميل المنتجات حالياً.' : query ? 'لا توجد نتائج لهذا البحث.' : 'لا توجد منتجات متاحة حالياً.'}</h3>
+          <h3>{unavailable ? 'تعذّر تحميل المنتجات حالياً.' : query ? 'لا توجد نتائج لهذا البحث.' : 'لا توجد منتجات حاليًا'}</h3>
           <p>{unavailable ? 'يرجى المحاولة مجدداً بعد قليل.' : 'ستظهر المنتجات هنا عند توفرها في المتجر.'}</p>
           <CategoryLink className="scene-button" slug={null}>جميع المنتجات</CategoryLink>
         </div>}

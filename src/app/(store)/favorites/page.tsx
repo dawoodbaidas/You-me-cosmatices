@@ -1,2 +1,3 @@
 import { StorePage } from '@/components/Storefront'
-export default function Page() { return <StorePage mode="favorites" /> }
+import { getStoreCatalogue } from '@/lib/store-catalogue'
+export default async function Page() { return <StorePage mode="favorites" data={await getStoreCatalogue()} /> }

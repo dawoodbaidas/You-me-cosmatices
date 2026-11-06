@@ -14,8 +14,16 @@ const probe = createServer()
 await new Promise(resolve => probe.listen(0, '127.0.0.1', resolve))
 const port = probe.address().port
 await new Promise(resolve => probe.close(resolve))
-const child = spawn(process.execPath, [resolve(project, 'node_modules/next/dist/bin/next'), 'dev', '--webpack', '--hostname', '127.0.0.1', '--port', String(port)], {
-  cwd: directory, env: browserTestEnvironment(fixture.url), stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true,
+const production = process.argv.includes('--production')
+if (production) {
+  const build = spawn(process.execPath, [resolve(project, 'node_modules/next/dist/bin/next'), 'build', '--webpack'], {
+    cwd: directory, env: { ...browserTestEnvironment(fixture.url), NODE_ENV: 'production' }, stdio: 'inherit', windowsHide: true,
+  })
+  const [code] = await once(build, 'exit')
+  if (code !== 0) { await fixture.close(); await removeBrowserWorkspace(directory); process.exit(code ?? 1) }
+}
+const child = spawn(process.execPath, [resolve(project, 'node_modules/next/dist/bin/next'), ...(production ? ['start'] : ['dev', '--webpack']), '--hostname', '127.0.0.1', '--port', String(port)], {
+  cwd: directory, env: { ...browserTestEnvironment(fixture.url), NODE_ENV: production ? 'production' : 'development' }, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true,
 })
 child.stdout.pipe(process.stdout)
 child.stderr.pipe(process.stderr)

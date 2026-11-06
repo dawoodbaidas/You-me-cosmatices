@@ -1,4 +1,4 @@
-import { cp, lstat, mkdtemp, realpath, rm, symlink, unlink } from 'node:fs/promises'
+import { cp, lstat, mkdtemp, realpath, rm, symlink, unlink, readFile, writeFile } from 'node:fs/promises'
 import { basename, join, relative, resolve, sep } from 'node:path'
 import { tmpdir } from 'node:os'
 
@@ -28,6 +28,10 @@ export async function createBrowserWorkspace(projectDirectory) {
     } })
   }
   await symlink(join(projectDirectory, 'node_modules'), join(directory, 'node_modules'), 'junction')
+  // Only the isolated test server serves images on a private loopback address.
+  const configPath = join(directory, 'next.config.ts')
+  const config = await readFile(configPath, 'utf8').catch(error => { if (error.code === 'ENOENT') return null; throw error })
+  if (config !== null) await writeFile(configPath, config.replace('images: {', 'images: { dangerouslyAllowLocalIP: true,'))
   return directory
 }
 

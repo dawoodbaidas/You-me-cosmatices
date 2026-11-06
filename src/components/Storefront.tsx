@@ -34,7 +34,7 @@ import { formatJod } from '@/lib/format'
 import { productPricing, roundMoney } from '@/lib/pricing'
 import { selectedSceneProducts } from '@/lib/scene-products'
 import { storeCollections, findCollection, collectionHref, categoryPath } from '@/lib/store-categories'
-import type { StoreCategory } from '@/types/store'
+import type { StoreCategory, StoreCatalogue } from '@/types/store'
 import { useStoreRefresh } from './useStoreRefresh'
 import StoreScroll from './StoreScroll'
 import { useCartStore, useFavoritesStore } from '@/lib/stores'
@@ -42,26 +42,26 @@ import { prepareCheckout } from '@/app/checkout'
 import type { Product, SiteSettings } from '@/types/product'
 
 interface StorefrontProps {
-  products: Product[]
   settings: SiteSettings
   children: ReactNode
   categories: StoreCategory[]
   storeUnavailable?: boolean
   storeRevision?: string | null
-  homeSections?: Record<'hero' | 'bestsellers', string[]>
 }
 
-export default function Storefront({ products, settings, children, categories, storeRevision = null, storeUnavailable = false, homeSections }: StorefrontProps) {
+export default function Storefront({ settings, children, categories, storeRevision = null, storeUnavailable = false }: StorefrontProps) {
+  const [pageData, setPageData] = useState<StoreCatalogue | undefined>()
+  const [cartProducts, setCartProducts] = useState<Product[]>([])
+  const [searchProducts, setSearchProducts] = useState<Product[] | null>(null)
+  const products = useMemo(() => [...new Map([...(searchProducts ?? []), ...cartProducts, ...(pageData?.products ?? [])].map(product => [product.id, product])).values()], [cartProducts, pageData, searchProducts])
   const router = useRouter()
   const pathname = usePathname()
   const categoryId = categories.find(category => categoryPath(category, categories) === pathname)?.slug ?? (pathname.startsWith("/category/") ? decodeURIComponent(pathname.split("/")[2]) : undefined)
   const searchParams = useSearchParams()
   useStoreRefresh(storeRevision)
-  const heroItems = useMemo(() => selectedSceneProducts(products, homeSections?.hero, 'hero'), [products, homeSections])
-  const bestsellerItems = useMemo(() => selectedSceneProducts(products, homeSections?.bestsellers, 'bestsellers'), [products, homeSections])
   const [searchOpen, setSearchOpen] = useState(false)
   const searchQuery = searchParams.get('q') ?? ''
-  const groups = useMemo(() => storeCollections(categories, products), [categories, products])
+  const groups = useMemo(() => storeCollections(categories, []), [categories])
   const cataloguePage = pathname !== '/'
   const [variantChoice, setVariantChoice] = useState<Record<string, string>>({})
   const [cartOpen, setCartOpen] = useState(false)
@@ -81,6 +81,17 @@ export default function Storefront({ products, settings, children, categories, s
 
   const [cart, cartActions] = useCartStore()
   const [favorites, toggleFavoriteStore] = useFavoritesStore()
+  const cartIds = [...new Set(cart.map(item => item.productId))].sort().join(',')
+  useEffect(() => {
+    if (!cartIds) return
+    const controller = new AbortController()
+    fetch(`/api/store/products?ids=${encodeURIComponent(cartIds)}`, { signal: controller.signal })
+      .then(response => { if (!response.ok) throw new Error('Cart unavailable'); return response.json() })
+      .then(setCartProducts).catch(error => {
+        if (error.name !== 'AbortError') setToast({ id: Date.now(), text: 'تعذّر تحديث بيانات السلة. افتح السلة لإعادة المحاولة.', tone: 'error' })
+      })
+    return () => controller.abort()
+  }, [cartIds, storeRevision])
 
 
   const submitSearch = useCallback((value: string) => {
@@ -251,8 +262,15 @@ export default function Storefront({ products, settings, children, categories, s
       try { sessionStorage.setItem('store-return', JSON.stringify({ url: window.location.pathname + window.location.search, y: window.scrollY, count: null })) } catch {}
       window.history.pushState(null, '', window.location.pathname + '?' + next) }
   }
-  const renderPage = ({ mode, slug }: StorePageProps) => {
+  const renderPage = ({ mode, slug, data }: StorePageProps) => {
+    const products = data?.products ?? []
+    const groups = storeCollections(data?.categories ?? categories, products)
+    const heroItems = mode === 'home' ? selectedSceneProducts(products, data?.homeSections?.hero, 'hero') : []
+    const bestsellerItems = mode === 'home' ? selectedSceneProducts(products, data?.homeSections?.bestsellers, 'bestsellers') : []
+    const lines = resolveCart(cart, [...new Map([...cartProducts, ...products].map(product => [product.id, product])).values()])
+    const pageUnavailable = data?.unavailable ?? storeUnavailable
     const collection = findCollection(groups, slug ?? null)
+    const isMainCategory = categories.some(category => category.slug === slug && category.parent_slug === null)
     const product = mode === 'product' ? products.find(p => p.slug === slug) : undefined
     const from = searchParams.get('from')
     const candidate = from ? findCollection(groups, from) : undefined
@@ -265,7 +283,7 @@ export default function Storefront({ products, settings, children, categories, s
     return (      <>
 {mode === "product" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link><span>/</span>{productCategory && <><Link href={productCategory.href ?? collectionHref(productCategory.id)}>{productCategory.label}</Link><span>/</span></>}<span aria-current="page">{title}</span></nav>}
 {mode === "category" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link>{ancestry.map(category => <span key={category.slug}> / <CategoryLink slug={category.slug} aria-current={category.slug === slug ? 'page' : undefined}>{category.name_ar}</CategoryLink></span>)}</nav>}
-{mode === "category" && !!collection?.children.length && <CategoryCircles groups={collection.children} products={products} title={collection.label} />}
+{mode === "category" && isMainCategory && <><CategoryCircles groups={collection?.children ?? []} title={collection?.label} />{!collection?.children.length && <p className="category-empty">لا توجد أقسام فرعية حاليًا</p>}</>}
 {mode === "product" && product && <ProductQuickView inline product={product} cartItems={cart} selectedVariantId={variantChoice[product.id] ?? null} onSelectVariant={(id, variant) => setVariantChoice(v => ({...v, [id]:variant}))} currency={settings.currency} isFavorite={favoriteSet.has(product.id)} settings={settings} onClose={() => router.push("/categories")} onToggleFavorite={toggleFavorite} onAddToCart={(p, variant, quantity) => addProduct(p.id, variant, quantity)} />}
 {mode === "cart" && <CartPage lines={lines} settings={settings} onRemove={remove} onIncrement={increment} onDecrement={decrement} onCheckout={checkout} onBrowse={() => router.push("/categories")} />}
 
@@ -277,16 +295,16 @@ export default function Storefront({ products, settings, children, categories, s
           onOpenDetails={setQuickViewId}
         /></>}
 
-        {(mode === "favorites" || (mode === "category" && (!collection?.children.length || visible.length > 0))) ? <ShopSection
+        {(mode === "favorites" || (mode === "category" && !isMainCategory)) ? <ShopSection
           cart={cart}
           key={pathname}
           products={visible}
           groups={groups}
           initialCategory={slug}
           currency={settings.currency}
-          pageTitle={collection?.children.length ? "منتجات هذا القسم" : title}
+          pageTitle={title}
           query={searchQuery}
-          unavailable={storeUnavailable}
+          unavailable={pageUnavailable}
           favorites={favorites}
           selectedVariants={variantChoice}
           onSelectVariant={(productId, variantId) =>
@@ -295,19 +313,25 @@ export default function Storefront({ products, settings, children, categories, s
           onToggleFavorite={toggleFavorite}
           onAddToCart={(productId, variantId) => addProduct(productId, variantId)}
           onOpenDetails={openProduct}
-        /> : (mode === "home" || mode === "categories") ? <CategoryCircles groups={groups} products={products} /> : null}
+        /> : (mode === "home" || mode === "categories") ? <CategoryCircles groups={groups} /> : null}
       </>
 
     )
   }
 
   return (
-    <CategoryUrls.Provider value={Object.fromEntries(categories.map(category => [category.slug, categoryPath(category, categories)]))}><StorePageContext.Provider value={renderPage}><StorefrontMotion>
+    <CategoryUrls.Provider value={Object.fromEntries(categories.map(category => [category.slug, categoryPath(category, categories)]))}><StoreDataContext.Provider value={setPageData}><StorePageContext.Provider value={renderPage}><StorefrontMotion>
       <StoreScroll />
       <a href="#store-content" className="skip-link">انتقلي إلى المنتجات</a>
 
       <Header
-        onSearch={() => setSearchOpen(true)}
+        onSearch={async () => {
+          try {
+            const response = await fetch('/api/store/products')
+            if (!response.ok) throw new Error('Search unavailable')
+            setSearchProducts(await response.json()); setSearchOpen(true)
+          } catch { notify('تعذّر تحميل البحث. حاول مجددًا.', 'error') }
+        }}
         settings={settings}
         cartCount={totalCount}
         favoriteCount={favorites.length}
@@ -322,7 +346,6 @@ export default function Storefront({ products, settings, children, categories, s
       <Footer
         settings={settings}
         groups={groups}
-        productCount={products.length}
         onScrollTo={scrollTo}
         onSubscribe={() => notify('تم تسجيل بريدك. سنتواصل قريبًا.')}
       />
@@ -365,14 +388,17 @@ export default function Storefront({ products, settings, children, categories, s
       />
 
       <Toast toast={cartOpen || searchOpen || quickViewId !== null ? null : toast} />
-    </StorefrontMotion></StorePageContext.Provider></CategoryUrls.Provider>
+    </StorefrontMotion></StorePageContext.Provider></StoreDataContext.Provider></CategoryUrls.Provider>
   )
 }
 
-export interface StorePageProps { mode: 'home' | 'categories' | 'category' | 'product' | 'cart' | 'favorites'; slug?: string }
+export interface StorePageProps { mode: 'home' | 'categories' | 'category' | 'product' | 'cart' | 'favorites'; slug?: string; data?: StoreCatalogue }
+const StoreDataContext = createContext<((data: StoreCatalogue | undefined) => void) | null>(null)
 const StorePageContext = createContext<((props: StorePageProps) => ReactNode) | null>(null)
 export function StorePage(props: StorePageProps) {
   const render = useContext(StorePageContext)
+  const register = useContext(StoreDataContext)
+  useEffect(() => { register?.(props.data) }, [register, props.data])
   if (!render) throw new Error('StorePage requires the store layout')
   return render(props)
 }

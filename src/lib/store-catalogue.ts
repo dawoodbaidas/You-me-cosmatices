@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { unstable_cache } from 'next/cache'
 import { mapProduct, mapSettings } from './products/map'
 import type { StoreCatalogue, StoreCategory } from '@/types/store'
 import type { SiteSettings } from '@/types/product'
@@ -57,3 +58,34 @@ export async function readStoreCatalogue(fresh = false): Promise<StoreCatalogue>
 }
 
 export const getStoreCatalogue = cache(() => readStoreCatalogue())
+
+// Shared chrome never needs the product catalogue. Revision-keyed caching keeps
+// immutable image URLs fresh without disabling the image or catalogue caches.
+export const getStoreNavigation = cache(async (): Promise<StoreCatalogue> => {
+  const empty: StoreCatalogue = { products: [], categories: [], settings: EMPTY_STORE_SETTINGS, revision: null, unavailable: false }
+  const config = publicDatabaseConfig()
+  if (!config) return empty
+  try {
+    const revision = await readStoreRevision()
+    const read = unstable_cache(async (path: string) => {
+      const response = await fetch(`${config.url}/rest/v1/${path}`, { headers: config.headers, cache: 'no-store' })
+      if (!response.ok) throw new Error('Store navigation unavailable')
+      return response.json()
+    }, ['store-navigation', config.url, revision ?? ''], { revalidate: 300, tags: [STORE_CATALOGUE_TAG] })
+    const [categories, settings] = await Promise.all([
+      read('store_categories?select=*&is_active=eq.true&order=sort_order,slug'),
+      read('site_settings?select=key,value'),
+    ])
+    return { ...empty, categories, settings: mapSettings(settings, EMPTY_STORE_SETTINGS), revision }
+  } catch { return { ...empty, unavailable: true } }
+})
+
+export async function getCategoryProducts(slug: string) {
+  const config = publicDatabaseConfig()
+  if (!config) return []
+  const query = new URLSearchParams({ select: '*,product_variants(*),product_categories!inner(category_slug)', is_active: 'eq.true', 'product_categories.category_slug': `eq.${slug}`, order: 'sort_order,id' })
+  const response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers: config.headers, cache: 'no-store' })
+  if (!response.ok) throw new Error('تعذّر تحميل منتجات القسم. حاول مجددًا.')
+  const rows: Parameters<typeof mapProduct>[0][] = await response.json()
+  return rows.map(row => mapProduct(row))
+}

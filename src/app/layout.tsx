@@ -40,7 +40,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" className={tajawal.variable}>
+    <html lang="ar" dir="rtl" data-scroll-behavior="smooth" className={tajawal.variable}>
       <body className="min-h-screen bg-cream text-cocoa antialiased">{children}</body>
     </html>
   )
