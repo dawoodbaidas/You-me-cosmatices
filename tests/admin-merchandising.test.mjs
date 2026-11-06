@@ -5,7 +5,7 @@ import { readFile } from 'node:fs/promises'
 import sharp from 'sharp'
 import { storeDatabase } from './helpers/store-database.mjs'
 import { modules } from './helpers/load-app.mjs'
-import { removeProductBackground, originalProductImage } from '../src/lib/products/images.ts'
+import { approvedProductImage, originalProductImage } from '../src/lib/products/images.ts'
 import { validateProduct } from '../src/lib/products/editor.ts'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -137,31 +137,22 @@ test('discount validation and fresh checkout match cart prices; cancelled discou
   } finally { await db.close() }
 })
 
-test('background removal uses the server service output, preserves alpha pixels, rejects opaque failures, and original upload is byte-for-byte', async () => {
-  const input = await sharp({ create: { width: 20, height: 20, channels: 3, background: 'white' } }).png().toBuffer()
+test('approved WebP preserves alpha and resolution, accepts originals and rejects opaque processed results', async () => {
+  const input = await sharp({ create: { width: 20, height: 20, channels: 3, background: 'white' } }).webp().toBuffer()
   const alpha = Buffer.alloc(20 * 20 * 4)
   for (let y = 5; y < 15; y++) for (let x = 5; x < 15; x++) { const i = (y * 20 + x) * 4; alpha[i] = 220; alpha[i + 3] = 255 }
-  const cutout = await sharp(alpha, { raw: { width: 20, height: 20, channels: 4 } }).png().toBuffer()
-  const previous = globalThis.fetch
-  try {
-    globalThis.fetch = async (url, options) => {
-      assert.equal(url, 'https://sdk.photoroom.com/v1/segment')
-      assert.equal(options.headers['X-Api-Key'], 'test-server-key')
-      assert.equal(options.body.get('format'), 'png')
-      return new Response(cutout)
-    }
-    const output = await removeProductBackground(input, 'test-server-key')
-    const stats = await sharp(output).stats()
-    assert.equal((await sharp(output).metadata()).hasAlpha, true)
-    assert.equal(stats.channels[3].min, 0)
-    assert.equal(stats.channels[3].max, 255)
-    assert.deepEqual((await originalProductImage(input)).bytes, input)
-    globalThis.fetch = async () => new Response(input)
-    await assert.rejects(removeProductBackground(input, 'test-server-key'))
-    globalThis.fetch = async () => new Response('unavailable', { status: 503 })
-    await assert.rejects(removeProductBackground(input, 'test-server-key'))
-    await assert.rejects(removeProductBackground(input, ''))
-  } finally { globalThis.fetch = previous }
+  const cutout = await sharp(alpha, { raw: { width: 20, height: 20, channels: 4 } }).webp().toBuffer()
+  const output = await approvedProductImage(cutout, true)
+  const stats = await sharp(output).stats()
+  assert.equal((await sharp(output).metadata()).format, 'webp')
+  assert.equal(stats.channels[3].min, 0)
+  assert.equal(stats.channels[3].max, 255)
+  assert.deepEqual((await originalProductImage(input)).bytes, input)
+  await assert.rejects(approvedProductImage(input, true))
+  assert.equal((await sharp(await approvedProductImage(input, false)).metadata()).format, 'webp')
+  const empty = await sharp({ create: { width: 20, height: 20, channels: 4, background: '#00000000' } }).webp().toBuffer()
+  await assert.rejects(approvedProductImage(empty, true))
+  await assert.rejects(approvedProductImage(Buffer.from('invalid'), true))
 })
 
 test('rendered product cards place new/discount badges correctly in all four combinations and retain the hanging price tag', () => {
@@ -200,7 +191,7 @@ test('image upload preserves the existing link on upload/save failure, cleans ne
   const api = load('@/app/api/admin/products/route')
   const removal = load('@/app/api/admin/products/remove-background/route')
   const request = (url = '/api/admin/products') => {
-    const body = new FormData(); body.set('product', JSON.stringify(p)); body.set('image', new File([image], 'photo.png', { type: 'image/png' }))
+    const body = new FormData(); body.set('product', JSON.stringify(p)); body.set('image', new File([image], 'photo.png', { type: 'image/png' })); body.set('image_confirmed', 'true')
     return new Request('https://store.test' + url, { method: 'POST', body, headers: { origin: 'https://store.test', host: 'store.test' } })
   }
   uploadFails = true
@@ -210,8 +201,8 @@ test('image upload preserves the existing link on upload/save failure, cleans ne
   assert.equal((await api.POST(request())).status, 409)
   assert.equal(linked, current)
   assert.ok(removed.includes(uploaded.path))
-  assert.deepEqual(uploaded.bytes, image)
-  assert.equal(uploaded.options.contentType, 'image/png')
+  assert.deepEqual(await sharp(uploaded.bytes).raw().toBuffer(), await sharp(image).raw().toBuffer())
+  assert.equal(uploaded.options.contentType, 'image/webp')
   saveFails = false
   assert.equal((await api.POST(request())).status, 200)
   assert.notEqual(linked, current)

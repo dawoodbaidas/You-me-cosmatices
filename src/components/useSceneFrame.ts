@@ -30,6 +30,10 @@ export function useSceneFrame(root: RefObject<HTMLElement | null>, draw: (frame:
     redraw.current = schedule
     const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; schedule() })
     observer.observe(element)
+    const sizeObserver = new ResizeObserver(schedule)
+    sizeObserver.observe(element)
+    const pin = element.querySelector<HTMLElement>('[data-scene-pin]')
+    if (pin) sizeObserver.observe(pin)
     window.addEventListener('scroll', schedule, { passive: true })
     window.addEventListener('resize', schedule, { passive: true })
     window.addEventListener('boutique:layout', schedule)
@@ -38,7 +42,7 @@ export function useSceneFrame(root: RefObject<HTMLElement | null>, draw: (frame:
     reduced.addEventListener('change', schedule)
     schedule()
     return () => {
-      cancelAnimationFrame(frame); observer.disconnect(); redraw.current = () => {}
+      cancelAnimationFrame(frame); observer.disconnect(); sizeObserver.disconnect(); redraw.current = () => {}
       window.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule)
       window.removeEventListener('boutique:layout', schedule); element.removeEventListener('load', schedule, true)
       document.removeEventListener('visibilitychange', schedule); reduced.removeEventListener('change', schedule)

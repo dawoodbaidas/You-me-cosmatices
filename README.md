@@ -268,3 +268,7 @@ Added for production:
 - `npm audit` reports 5 high-severity advisories in `braces` → `micromatch` → `fast-glob`,
   pulled in by **`eslint-config-next` (dev dependency only)**. The suggested fix downgrades Next to
   14.x; do not run `npm audit fix --force`. Nothing ships to the browser from this chain.
+
+### Product images and remove.bg
+
+The admin uses one-click remove.bg preview removal, explicit result/original approval, and the existing Supabase save flow. Set the server-only `REMOVE_BG_API_KEY` in `.env.local` and restart Next.js. Only the approved image is saved as alpha-preserving WebP; preview resolution is never upscaled. Local models and manual editing tools have been removed. See [setup, behavior, limits and verification](docs/product-images.md).

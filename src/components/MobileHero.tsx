@@ -26,7 +26,7 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
   const draw = useCallback(({ progress: hp, elapsed: time, reduced, width }: SceneFrame) => {
     const element = root.current
     if (!element) return
-    const u = Math.min(1.12, width / 390), exit = reduced ? 0 : ease((hp - .55) / .45)
+    const u = Math.min(2.8, width / 390), exit = reduced ? 0 : ease((hp - .55) / .45)
     element.querySelectorAll<HTMLElement>('[data-curtain]').forEach((panel, i) => {
       panel.style.transform = `translateY(${(i ? 1 : -1) * 101 * (reduced ? 1 : ease(time / 1.1))}%)`
     })
@@ -43,10 +43,13 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
         return
       }
       const side = index % 2 ? 1 : -1, outer = index > 2
-      const distance = (outer ? 170 : 112) * u, productWidth = (outer ? 52 : 80) * u
+      const mobile = width < 768
+      const distance = (mobile ? outer ? 136 : 100 : outer ? 158 : 100) * u, productWidth = (outer ? 52 : 80) * u
       const enter = reduced ? 1 : ease((hp - (outer ? .08 : 0)) / .4)
-      const x = side * (distance * enter + (width / 2 + productWidth + 30) * (1 - enter) + exit * width * .28)
-      card.style.transform = `translate3d(${x}px,0,0) rotate(${side * 22 * (1 - enter)}deg) scale(${1 + .2 * exit})`
+      const start = mobile ? distance + 12 * u : width / 2 + productWidth + 30
+      const x = side * (distance * enter + start * (1 - enter) + exit * width * .28)
+      const y = mobile && outer ? -Math.min(150, width * .36) : 0
+      card.style.transform = `translate3d(${x}px,${y}px,0) rotate(${side * (mobile ? 8 : 22) * (1 - enter)}deg) scale(${1 + .2 * exit})`
       card.style.opacity = String(1 - .92 * exit)
     })
     element.querySelectorAll<HTMLElement>('[data-hero-copy]').forEach((copy, index) => {
@@ -82,10 +85,10 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
         <span className={styles.heroWordmark} data-wordmark aria-hidden="true" dir="ltr">YOU&amp;ME</span>
         <span className={styles.heroGlow} data-glow aria-hidden="true" />
         <span className={styles.shelf} data-shelf aria-hidden="true" />
-        {items.map((product, index) => <button key={product.id} className={`${styles.heroProduct} ${index === 0 ? styles.heroMain : index < 3 ? styles.heroMiddle : styles.heroOuter}`} data-hero-product
+        {items.map((product, index) => <button key={product.id} className={`${styles.heroProduct} ${index === 0 ? styles.heroMain : index < 3 ? styles.heroMiddle : styles.heroOuter}`} data-hero-product style={{ aspectRatio: String((productSceneAsset(product)?.bounds.width ?? 4) / (productSceneAsset(product)?.bounds.height ?? 5)) }}
           aria-label={`عرض تفاصيل ${product.nameAr}`} onClick={() => onOpenDetails(product.id)}>
           <span className={styles.productShadow} aria-hidden="true" />
-          <SceneProductImage product={product} preload={index === 0} sizes="(max-width:599px) 130px, 180px" />
+          <SceneProductImage product={product} preload={index === 0} mobileWeight={index === 0 ? 1 : index < 3 ? .85 : .7} sizes="(max-width:767px) 32vw, (max-width:1200px) 36vw, 480px" />
           {index === 0 && asset && <svg className={styles.shine} viewBox={`${asset.bounds.x} ${asset.bounds.y} ${asset.bounds.width} ${asset.bounds.height}`} preserveAspectRatio="none" aria-hidden="true">
             <defs><clipPath id={`${maskId}-clip`}><rect x={asset.bounds.x} y={asset.bounds.y} width={asset.bounds.width} height={asset.bounds.height} /></clipPath>
               <mask id={`${maskId}-mask`} maskUnits="userSpaceOnUse" x="0" y="0" width={asset.width} height={asset.height} style={{ maskType: 'alpha' }}><image href={maskSrc} width={asset.width} height={asset.height} /></mask></defs>

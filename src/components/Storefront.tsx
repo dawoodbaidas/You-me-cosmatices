@@ -283,7 +283,7 @@ export default function Storefront({ settings, children, categories, storeRevisi
     return (      <>
 {mode === "product" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link><span>/</span>{productCategory && <><Link href={productCategory.href ?? collectionHref(productCategory.id)}>{productCategory.label}</Link><span>/</span></>}<span aria-current="page">{title}</span></nav>}
 {mode === "category" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link>{ancestry.map(category => <span key={category.slug}> / <CategoryLink slug={category.slug} aria-current={category.slug === slug ? 'page' : undefined}>{category.name_ar}</CategoryLink></span>)}</nav>}
-{mode === "category" && isMainCategory && <><CategoryCircles groups={collection?.children ?? []} title={collection?.label} />{!collection?.children.length && <p className="category-empty">لا توجد أقسام فرعية حاليًا</p>}</>}
+{mode === "category" && isMainCategory && <><CategoryCircles page groups={collection?.children ?? []} title={collection?.label} />{!collection?.children.length && <p className="category-empty">لا توجد أقسام فرعية حاليًا</p>}</>}
 {mode === "product" && product && <ProductQuickView inline product={product} cartItems={cart} selectedVariantId={variantChoice[product.id] ?? null} onSelectVariant={(id, variant) => setVariantChoice(v => ({...v, [id]:variant}))} currency={settings.currency} isFavorite={favoriteSet.has(product.id)} settings={settings} onClose={() => router.push("/categories")} onToggleFavorite={toggleFavorite} onAddToCart={(p, variant, quantity) => addProduct(p.id, variant, quantity)} />}
 {mode === "cart" && <CartPage lines={lines} settings={settings} onRemove={remove} onIncrement={increment} onDecrement={decrement} onCheckout={checkout} onBrowse={() => router.push("/categories")} />}
 
@@ -313,7 +313,7 @@ export default function Storefront({ settings, children, categories, storeRevisi
           onToggleFavorite={toggleFavorite}
           onAddToCart={(productId, variantId) => addProduct(productId, variantId)}
           onOpenDetails={openProduct}
-        /> : (mode === "home" || mode === "categories") ? <CategoryCircles groups={groups} /> : null}
+        /> : (mode === "home" || mode === "categories") ? <CategoryCircles groups={groups} page={mode === "categories"} title={mode === "categories" ? title : undefined} /> : null}
       </>
 
     )

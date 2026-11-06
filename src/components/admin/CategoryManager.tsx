@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import CategoryImage from '../CategoryImage'
 import { categoryImage, categoryPath } from '@/lib/store-categories'
 import { useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
@@ -90,7 +90,7 @@ export default function CategoryManager({ categories, counts, onEditingChange }:
             }
             setFile(selected); setPreview(URL.createObjectURL(selected)); setResult(null)
           }} /></label>
-          {(preview || imagePath) && <><div className="relative h-36 w-36 overflow-hidden rounded-full"><Image src={preview ?? categoryImage(imagePath)!} alt="معاينة صورة القسم" fill sizes="144px" unoptimized={!!preview} className="object-cover" /></div><button type="button" className={button} onClick={() => { setFile(null); setPreview(null); setImagePath(null) }}>إزالة الصورة</button></>}
+          {(preview || imagePath) && <><div className="relative h-36 w-36 overflow-hidden rounded-full"><CategoryImage src={preview ?? categoryImage(imagePath)!} alt="معاينة صورة القسم" sizes="144px" /></div><button type="button" className={button} onClick={() => { setFile(null); setPreview(null); setImagePath(null) }}>إزالة الصورة</button></>}
           <p className="text-sm">JPG، PNG، WebP حتى 4 MB. تحفظ نسخة WebP محسنة ويُعرض وسط الصورة داخل الدائرة.</p>
         </div>
       </fieldset>

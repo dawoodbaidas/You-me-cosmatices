@@ -88,7 +88,7 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
           <Link className="header-bag" href="/cart" prefetch={false} aria-label={`السلة، ${cartCount} منتجات`}><BagIcon />{cartCount > 0 && <span dir="ltr">{cartCount > 99 ? '99+' : cartCount}</span>}</Link>
         </div>
       </header>
-      <CategoryCircles compact groups={groups} selected={groups.find(group => group.id === selected || !!findCollection(group.children, selected))?.id} />
+      {pathname !== '/' && <CategoryCircles compact groups={groups} selected={groups.find(group => group.id === selected || !!findCollection(group.children, selected))?.id} />}
     <BoutiqueDialog open={open} onClose={() => setOpen(false)} label="قائمة المتجر" className="menu-dialog">
       <div className="shopping-menu" dir="rtl">
         <div className="shopping-menu-head"><StoreBrand /><button className="icon-button" aria-label="إغلاق القائمة" onClick={() => setOpen(false)}><CloseIcon /></button></div>

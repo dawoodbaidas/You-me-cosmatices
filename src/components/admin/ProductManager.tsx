@@ -9,8 +9,9 @@ import type { Product } from '@/types/product'
 import type { ActionResult } from '@/app/admin/actions'
 import Toast from '@/components/Toast'
 import { formatJod } from '@/lib/format'
-import { MAX_UPLOAD_BYTES, validateProduct, type ProductDraft } from '@/lib/products/editor'
+import { validateProduct, type ProductDraft } from '@/lib/products/editor'
 import type { StoreCategory } from '@/types/store'
+import ProductImageEditor, { type ProductImageChoice } from './ProductImageEditor'
 
 const button = 'rounded-full border border-sand px-4 py-2 text-sm font-bold disabled:opacity-40'
 const primary = `${button} bg-cocoa text-white`
@@ -90,26 +91,15 @@ function FullProductEditor({ product, categories, onCancel, onSaved, onError }: 
   const [id] = useState(() => product?.id ?? crypto.randomUUID())
   const [variants, setVariants] = useState<ProductDraft['variants']>(() => product?.variants.map(v => ({ id: v.id, label: v.label, price: v.price, is_active: v.isActive ?? true, sort_order: v.sortOrder ?? 0 })) ?? [])
   const [categorySlugs, setCategorySlugs] = useState<string[]>(() => product?.categorySlugs ?? [])
-  const [file, setFile] = useState<File | null>(null)
-  const [processed, setProcessed] = useState<{ previewId: string; originalUrl: string; processedUrl: string } | null>(null)
-  const [removeBackground, setRemoveBackground] = useState(false)
-  const [approved, setApproved] = useState(false)
-  const [restoreImage, setRestoreImage] = useState(false)
-  const [processing, setProcessing] = useState(false)
-  const [processingError, setProcessingError] = useState('')
-  const imageRequest = useRef<AbortController | null>(null)
+  const [imageChoice, setImageChoice] = useState<ProductImageChoice>({ file: null, processed: null, confirmed: true, restore: false })
   const [discountEnabled,setDiscountEnabled]=useState(product?.discountEnabled ?? false)
   const [originalPrice,setOriginalPrice]=useState(String(product?.originalPrice ?? product?.oldPrice ?? product?.price ?? 0))
   const [salePrice,setSalePrice]=useState(product?.discountEnabled ? String(product.price) : '')
-  const [preview, setPreview] = useState<string | null>(null)
   const [status, setStatus] = useState('')
   const [pending, setPending] = useState(false)
   const [dirty, setDirty] = useState(false)
   const busy = useRef(false)
   const [error, setError] = useState('')
-  useEffect(() => {
-    if (preview) return () => URL.revokeObjectURL(preview)
-  }, [preview])
   useEffect(() => {
     const warn = (event: BeforeUnloadEvent) => { if (dirty || pending) event.preventDefault() }
     window.addEventListener('beforeunload', warn)
@@ -119,27 +109,9 @@ function FullProductEditor({ product, categories, onCancel, onSaved, onError }: 
     setDirty(true)
     setVariants(current => current.map((v, i) => i === index ? { ...v, ...patch } : v))
   }
-  useEffect(() => () => imageRequest.current?.abort(), [])
-  async function processImage(source: File | null, enabled: boolean) {
-    imageRequest.current?.abort()
-    const controller=new AbortController(); imageRequest.current=controller
-    setFile(source);setProcessed(null);setApproved(false);setRestoreImage(false);setProcessingError('');setProcessing(false)
-    setPreview(source ? URL.createObjectURL(source) : null)
-    if(!enabled || (!source && !product?.imageUrl)) return
-    setProcessing(true)
-    try {
-      const body=new FormData();if(source)body.set('image',source);body.set('productId',id);body.set('updatedAt',product?.updatedAt ?? '')
-      const response=await fetch('/api/admin/products/remove-background',{method:'POST',body,signal:controller.signal})
-      if(!response.ok) throw new Error((await response.json()).message ?? 'تعذّرت إزالة الخلفية.')
-      const output=await response.json() as { previewId: string; originalUrl: string; processedUrl: string }
-      if(controller.signal.aborted)return
-      setProcessed(output);setPreview(output.processedUrl)
-    } catch(error) {if(!controller.signal.aborted)setProcessingError(error instanceof Error?error.message:'تعذّرت معالجة الصورة.')}
-    finally {if(!controller.signal.aborted)setProcessing(false)}
-  }
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (busy.current || processing || (removeBackground && !approved)) return
+    if (busy.current || !imageChoice.confirmed) return
     setError('')
     const form = new FormData(event.currentTarget)
     const text = (key: string) => String(form.get(key) ?? '').trim()
@@ -158,16 +130,17 @@ function FullProductEditor({ product, categories, onCancel, onSaved, onError }: 
     setPending(true)
     const body = new FormData()
     body.set('product', JSON.stringify(draft))
-    if (removeBackground && processed && approved) body.set('image_preview_id', processed.previewId)
-    else if (file) body.set('image', file)
-    if (restoreImage) body.set('restore_image', 'true')
+    if (imageChoice.processed) { body.set('image', imageChoice.processed, 'product.webp'); body.set('image_processed', 'true') }
+    else if (imageChoice.file) body.set('image', imageChoice.file)
+    if (imageChoice.processed || imageChoice.file) body.set('image_confirmed', 'true')
+    if (imageChoice.restore) body.set('restore_image', 'true')
     try {
       const response = await new Promise<ActionResult>((resolve, reject) => {
         const xhr = new XMLHttpRequest()
         xhr.open('POST', '/api/admin/products')
         xhr.timeout = 120_000
         xhr.upload.onprogress = e => setStatus(e.lengthComputable ? `جارٍ إرسال البيانات والصورة… ${Math.round(e.loaded / e.total * 100)}٪` : 'جارٍ إرسال البيانات…')
-        xhr.upload.onload = () => setStatus(file ? 'جارٍ رفع الصورة وحفظ المنتج…' : 'جارٍ حفظ المنتج…')
+        xhr.upload.onload = () => setStatus(imageChoice.file || imageChoice.processed ? 'جارٍ رفع الصورة وحفظ المنتج…' : 'جارٍ حفظ المنتج…')
         xhr.onerror = xhr.ontimeout = () => reject(new Error('تعذر الاتصال. حدّثي القائمة للتحقق من الحفظ قبل إعادة المحاولة.'))
         xhr.onload = () => { try { resolve(JSON.parse(xhr.responseText)) } catch { reject(new Error('تعذر إتمام الطلب. حدّثي القائمة للتحقق ثم حاولي مجدداً.')) } }
         setStatus('جارٍ الحفظ…')
@@ -196,25 +169,8 @@ function FullProductEditor({ product, categories, onCancel, onSaved, onError }: 
       </div>
       <Field label="الوصف"><textarea name="description" rows={4} maxLength={10000} defaultValue={product?.description ?? ''} /></Field>
       <Field label="الفوائد (كل فائدة في سطر)"><textarea name="benefits" rows={3} defaultValue={product?.benefits.join('\n') ?? ''} /></Field>
-      <div className="rounded-2xl bg-cream p-4">
-        <h3 className="mb-3 font-bold">صورة المنتج</h3>
-        <div className="relative mb-3 h-48 w-48 max-w-full overflow-hidden rounded-xl" style={{background: 'repeating-conic-gradient(#ddd 0% 25%,#fff 0% 50%) 0 / 16px 16px'}}>
-          {preview ? <Image src={preview} alt="معاينة الصورة الجديدة" fill sizes="192px" unoptimized className="object-contain" /> : product?.imageUrl ? <Image src={product.imageUrl} alt={product.nameAr} fill sizes="192px" className="object-contain" /> : <span className="flex h-full items-center justify-center text-sm">لا توجد صورة</span>}
-        </div>
-        <label className="block text-sm font-bold">{product?.imageUrl ? 'تغيير الصورة' : 'اختيار صورة'}<input className="mt-2 block w-full text-sm" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif,image/tiff" onChange={e => {
-          const selected = e.target.files?.[0]
-          if (!selected) return
-          if (selected.size > MAX_UPLOAD_BYTES) { setError('حجم الصورة الأقصى 4 MB. اختاري صورة أصغر.'); e.target.value = ''; return }
-          setError(''); void processImage(selected,removeBackground); e.target.value = ''
-        }} /></label>
-        <label className="mt-3 flex items-center gap-2"><input type="checkbox" checked={removeBackground} onChange={event=>{setRemoveBackground(event.target.checked);void processImage(file,event.target.checked)}} /> إزالة خلفية الصورة</label>
-        {processing && <p role="status">جارٍ إزالة الخلفية…</p>}
-        {processed && <div className="space-y-3"><p>قبل المعالجة</p><div className="relative h-40 w-40"><Image src={processed.originalUrl} alt="الصورة الأصلية" fill sizes="160px" className="object-contain" /></div><button type="button" className={button} disabled={approved} onClick={() => setApproved(true)}>{approved ? 'تم اعتماد الصورة — احفظ المنتج للتفعيل' : 'اعتماد الصورة الشفافة'}</button><button type="button" className={button} onClick={() => { setRemoveBackground(false); void processImage(file,false) }}>استخدام الصورة الأصلية</button></div>}
-        {product?.originalImageUrl && <button type="button" className={button} onClick={() => { imageRequest.current?.abort(); setProcessing(false); setRemoveBackground(false); setProcessed(null); setFile(null); setRestoreImage(true); setPreview(product.originalImageUrl!); setDirty(true) }}>استعادة الصورة الأصلية عند الحفظ</button>}
-        {processingError && <div role="alert" className="space-y-2"><p>{processingError}</p><button type="button" className={button} onClick={()=>void processImage(file,true)}>إعادة المحاولة</button><button type="button" className={button} onClick={()=>{setRemoveBackground(false);void processImage(file,false)}}>استخدام الصورة الأصلية</button></div>}
-        <p className="mt-2 text-xs leading-6 text-cocoa/70">JPG، PNG، WebP، GIF، AVIF أو TIFF · حتى 4 MB. تُرفع الصورة الأصلية كما هي عند تعطيل إزالة الخلفية. الناتج المعالج WebP شفاف حتى 1600 بكسل.</p>
-        {file && <button type="button" className={`${button} mt-2`} onClick={() => { void processImage(null,false) }}>التراجع عن الصورة الجديدة</button>}
-      </div>
+      <ProductImageEditor productId={id} updatedAt={product?.updatedAt} imageUrl={product?.imageUrl} originalImageUrl={product?.originalImageUrl}
+        onChange={choice => { setImageChoice(choice); setDirty(true) }} />
       <section className="space-y-3 border-t border-sand pt-4">
         <div className="flex flex-wrap items-center justify-between gap-3"><h3 className="font-bold">أنواع المنتج — أسعار أصلية قبل الخصم</h3><button type="button" className={button} disabled={variants.length >= 100} onClick={() => { setDirty(true); setVariants(v => [...v, { id: crypto.randomUUID(), label: '', price: Number(originalPrice) || 0, is_active: true, sort_order: v.length }]) }}>إضافة نوع</button></div>
         {!variants.length && <p className="text-sm text-cocoa/60">لا توجد أنواع. سيستخدم المتجر السعر الأساسي.</p>}
@@ -226,7 +182,7 @@ function FullProductEditor({ product, categories, onCancel, onSaved, onError }: 
           <button type="button" className={`${button} text-rose`} onClick={() => { if (window.confirm(`إزالة النوع «${v.label || 'الجديد'}» عند حفظ المنتج؟`)) { setDirty(true); setVariants(current => current.filter(item => item.id !== v.id)) } }}>حذف النوع</button>
         </div>)}
       </section>
-      <div className="flex flex-wrap gap-3"><button type="submit" disabled={processing || !!(removeBackground && !approved)} className={primary}>{pending ? 'جارٍ الحفظ…' : 'حفظ المنتج'}</button><button type="button" className={button} onClick={() => { if (!dirty || window.confirm('تجاهل التعديلات غير المحفوظة؟')) onCancel() }}>إلغاء والعودة</button></div>
+      <div className="flex flex-wrap gap-3"><button type="submit" disabled={!imageChoice.confirmed} className={primary}>{pending ? 'جارٍ الحفظ…' : 'حفظ المنتج'}</button><button type="button" className={button} onClick={() => { if (!dirty || window.confirm('تجاهل التعديلات غير المحفوظة؟')) onCancel() }}>إلغاء والعودة</button></div>
     </fieldset>
     {pending && <p role="status" className="mt-4 text-sm">{status}</p>}
     {error && <p role="alert" className="mt-4 text-sm text-rose">{error}</p>}

@@ -74,7 +74,7 @@
   }
   .summary {
     position: sticky;
-    top: calc(var(--header-height, 96px) + 16px);
+    top: calc(var(--header-height, 96px) + var(--category-height,0px) + 16px);
   }
 }
 

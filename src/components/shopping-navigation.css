@@ -1,5 +1,5 @@
 .boutique .shop-header { position:sticky; top:0; z-index:90; background:#faf8f2; box-shadow:0 2px 12px #2b281b10; }
-.boutique :is(#home,#bestsellers,#shop,#contact) { scroll-margin-top:calc(var(--header-height,120px) + 12px); }
+.boutique :is(#home,#bestsellers,#shop,#contact) { scroll-margin-top:calc(var(--header-height,120px) + var(--category-height,0px) + 12px); }
 .boutique .world-header { background:#faf8f2; }
 .boutique .shop-breadcrumb { display:flex; align-items:center; gap:10px; color:#777368; margin-bottom:18px; font-size:14px; }
 .boutique .category-tabs { display:none; }

@@ -10,8 +10,8 @@ export async function authorizeAdminRequest(request: Request) {
   return null
 }
 
-export async function boundedFormData(request: Request) {
-  const limit = MAX_UPLOAD_BYTES + 128 * 1024
+export async function boundedFormData(request: Request, maxImageBytes = MAX_UPLOAD_BYTES) {
+  const limit = maxImageBytes + 128 * 1024
   if (Number(request.headers.get('content-length')) > limit) throw new Error('حجم الصورة الأقصى 4 MB.')
   const reader = request.body?.getReader()
   if (!reader) throw new Error('الطلب فارغ.')

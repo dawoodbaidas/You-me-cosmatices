@@ -38,4 +38,4 @@ export function interpolatePalette(a: ScenePalette, b: ScenePalette, progress: n
   return { bgA: readable(mix(a.bgA, b.bgA, progress)), bgB: readable(mix(a.bgB, b.bgB, progress)) }
 }
 
-export const showcasePosition = (distance: number, width: number) => -Math.sign(distance) * (Math.min(Math.abs(distance), 1) * .42 + Math.max(0, Math.abs(distance) - 1)) * width
+export const showcasePosition = (distance: number, width: number) => -Math.sign(distance) * (Math.min(Math.abs(distance), 1) * .33 + Math.max(0, Math.abs(distance) - 1)) * Math.min(width, 1200)

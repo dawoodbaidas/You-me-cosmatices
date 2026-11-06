@@ -11,29 +11,16 @@ export async function originalProductImage(input: Buffer) {
   return { bytes: input, extension: format[0], contentType: format[1] }
 }
 
-export async function removeProductBackground(input: Buffer, apiKey: string) {
-  if (!apiKey) throw new Error('خدمة إزالة الخلفية غير مهيأة. أضف PHOTOROOM_API_KEY على الخادم.')
-  const original = await originalProductImage(input)
-  const form = new FormData()
-  form.set('image_file', new Blob([new Uint8Array(input)], { type: original.contentType }), `product.${original.extension}`)
-  form.set('format', 'png')
-  const response = await fetch('https://sdk.photoroom.com/v1/segment', { method: 'POST', headers: { 'X-Api-Key': apiKey }, body: form, signal: AbortSignal.timeout(45_000) })
-  if (!response.ok || !response.body) throw new Error('تعذّرت إزالة الخلفية. أعد المحاولة أو استخدم الصورة الأصلية.')
-  const reader = response.body.getReader()
-  const chunks: Uint8Array[] = []
-  let size = 0
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
-    size += value.length
-    if (size > 12 * 1024 * 1024) { await reader.cancel(); throw new Error('ناتج المعالجة كبير جداً.') }
-    chunks.push(value)
+/** All approved uploads become lossless WebP; never upscale the API preview. */
+export async function approvedProductImage(input: Buffer, requireTransparency: boolean) {
+  await originalProductImage(input)
+  const result = await sharp(input, { limitInputPixels: 50_000_000, failOn: 'warning', animated: false })
+    .rotate()
+    .webp({ lossless: true, effort: 4 }).toBuffer()
+  if (requireTransparency) {
+    const alpha = (await sharp(result).stats()).channels[3]
+    if (!alpha || alpha.min === 255 || alpha.max === 0) throw new Error('الصورة المعالجة لا تحتوي منتجاً بخلفية شفافة صالحة.')
   }
-  const result = await convertProductImage(Buffer.concat(chunks))
-  const stats = await sharp(result).stats()
-  const metadata = await sharp(result).metadata()
-  const alpha = stats.channels[3]
-  if (!metadata.hasAlpha || !alpha || alpha.min === 255 || alpha.max === 0) throw new Error('لم تنتج المعالجة صورة شفافة صالحة. أعد المحاولة أو استخدم الصورة الأصلية.')
   return result
 }
 

@@ -2756,9 +2756,10 @@
 html:has(.boutique) { scroll-padding-bottom:160px; scrollbar-gutter:stable; }
 .boutique .boutique-toast-wrap { bottom:16px; }
 @media(max-width:767px) {
- .boutique:has(.mobile-shopping-bar.is-visible) { --bottom-space:calc(100px + env(safe-area-inset-bottom)); padding-bottom:var(--bottom-space); }
- .boutique:has(.mobile-shopping-bar.is-visible):has(.boutique-toast) { --bottom-space:calc(176px + env(safe-area-inset-bottom)); }
- .boutique:has(.mobile-shopping-bar.is-visible) .boutique-toast-wrap { bottom:calc(88px + env(safe-area-inset-bottom)); }
+ .boutique:has(.mobile-shopping-bar:not([data-cart-page="true"])) { --mobile-cart-clearance:calc(var(--mobile-cart-height,62px) + 22px + env(safe-area-inset-bottom)); }
+ .boutique { padding-bottom:max(24px,var(--mobile-cart-clearance,0px)); }
+
+ .boutique:has(.mobile-shopping-bar.is-visible) .boutique-toast-wrap { bottom:var(--mobile-cart-clearance,84px); }
  .boutique .quickview-purchase { padding:10px 12px calc(10px + env(safe-area-inset-bottom)); gap:8px; }
  .boutique .quickview-buy { font-size:13px; }
  .boutique .quickview-actions { flex-wrap:wrap; }

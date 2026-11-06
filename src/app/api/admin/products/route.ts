@@ -3,7 +3,7 @@ import { invalidateStoreCatalogue } from '@/lib/store-cache'
 import { createClient } from '@/lib/supabase/server'
 import { authorizeAdminRequest, boundedFormData } from '@/lib/admin-request'
 import { MAX_UPLOAD_BYTES, UUID, validateProduct } from '@/lib/products/editor'
-import { originalProductImage, IMAGE_BUCKET, managedImagePath } from '@/lib/products/images'
+import { approvedProductImage, IMAGE_BUCKET, managedImagePath } from '@/lib/products/images'
 
 export const runtime = 'nodejs'
 
@@ -38,11 +38,13 @@ export async function POST(request: Request) {
     let imageUrl: string | undefined
     if (file instanceof File && file.size) {
       if (file.size > MAX_UPLOAD_BYTES) return reply(false, 'حجم الصورة الأقصى 4 MB.', 413)
-      let image: Awaited<ReturnType<typeof originalProductImage>>
-      try { image = await originalProductImage(Buffer.from(await file.arrayBuffer())) }
+      if (form.get('image_confirmed') !== 'true') return reply(false, 'اعتمدي الصورة قبل حفظ المنتج.', 400)
+      let image: Buffer
+      try { image = await approvedProductImage(Buffer.from(await file.arrayBuffer()), form.get('image_processed') === 'true') }
       catch { return reply(false, 'تعذر قراءة الصورة. اختاري صورة سليمة JPG أو PNG أو WebP أو GIF أو AVIF وبأبعاد أقل من 50 مليون بكسل.', 400) }
-      const path = `products/${product.id}/${randomUUID()}.${image.extension}`
-      const { error } = await supabase.storage.from(IMAGE_BUCKET).upload(path, image.bytes, { contentType: image.contentType, cacheControl: '31536000', upsert: false })
+      if (image.length > MAX_UPLOAD_BYTES) return reply(false, 'الصورة بصيغة WebP أكبر من 4 MB. اختاري صورة أصغر.', 413)
+      const path = `products/${product.id}/${randomUUID()}.webp`
+      const { error } = await supabase.storage.from(IMAGE_BUCKET).upload(path, image, { contentType: 'image/webp', cacheControl: '31536000', upsert: false })
       if (error) return reply(false, 'تعذر رفع الصورة. تحققي من إعداد مخزن الصور والصلاحيات ثم حاولي مجدداً.', 400)
       imageUrl = supabase.storage.from(IMAGE_BUCKET).getPublicUrl(path).data.publicUrl
     }

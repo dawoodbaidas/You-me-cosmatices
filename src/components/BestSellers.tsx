@@ -5,6 +5,7 @@ import Price from './Price'
 import { productPricing } from '@/lib/pricing'
 import { clamp, interpolatePalette, showcasePosition, type ScenePalette } from '@/lib/scene-palette'
 import { productSceneAsset } from '@/lib/scene-products'
+import { mobileShowcaseGeometry } from '@/lib/mobile-scene-geometry'
 import type { Product } from '@/types/product'
 import SceneProductImage from './SceneProductImage'
 import { useSceneFrame, type SceneFrame } from './useSceneFrame'
@@ -37,13 +38,18 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
     if (bg) bg.style.background = `linear-gradient(165deg, rgb(${palette.bgA.join(',')}), rgb(${palette.bgB.join(',')}))`
     element.querySelectorAll<HTMLElement>('[data-showcase-item]').forEach((item, itemIndex) => {
       const delta = itemIndex - position, distance = Math.abs(delta)
-      item.style.transform = `translate3d(${showcasePosition(delta, width)}px,0,0) rotate(${delta * -6}deg) scale(${Math.max(.55, 1 - .28 * distance)})`
-      item.style.opacity = itemIndex === index ? '1' : '.85'
-      item.style.visibility = distance <= 1.02 ? 'visible' : 'hidden'
+      const arc = width < 768 ? mobileShowcaseGeometry(delta, width) : {
+        x: showcasePosition(delta, width), y: Math.min(distance, 1) ** 2 * Math.min(65, width * .08),
+        rotation: delta * -6, scale: Math.max(.55, 1 - .28 * distance),
+      }
+      item.style.transform = `translate3d(${arc.x}px,${arc.y}px,0) rotate(${arc.rotation}deg) scale(${arc.scale})`
+      item.style.opacity = String(clamp((1.5 - distance) / .5) * (1 - .15 * Math.min(distance, 1)))
+      item.inert = distance > .55
+      item.style.visibility = distance <= 1.5 ? 'visible' : 'hidden'
       item.style.zIndex = String(10 - Math.round(distance * 5))
     })
     element.querySelectorAll<HTMLElement>('[data-showcase-info]').forEach((info, infoIndex) => {
-      const opacity = Math.max(0, 1 - 2.2 * Math.abs(infoIndex - position))
+      const opacity = infoIndex === index ? 1 : 0
       info.style.opacity = String(opacity)
       info.style.pointerEvents = opacity > .5 ? 'auto' : 'none'
       info.inert = opacity <= .5
@@ -92,7 +98,7 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
           return <div key={item.id} className={styles.showcaseItem} data-showcase-item style={{ aspectRatio: String(ratio) }}>
             <span className={styles.showcaseShadow} aria-hidden="true" />
             <button className={styles.showcaseProduct} aria-label={`عرض تفاصيل ${item.nameAr}`} onClick={() => onOpenDetails(item.id)}>
-              {Math.abs(index - active) <= 1 && <SceneProductImage product={item} sizes="(max-width:599px) 60vw, 320px" />}
+              {Math.abs(index - active) <= 1 && <SceneProductImage product={item} sizes="(max-width:767px) 65vw, (max-width:1200px) 42vw, 520px" />}
               {(productPricing(item).discount || item.isNew) && <span className={styles.sceneBadge}>{productPricing(item).discount ? `-${productPricing(item).discount}%` : 'جديد'}</span>}
             </button>
           </div>
