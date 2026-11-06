@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import ProductImage from './ProductImage'
+import ProductMedia from './ProductMedia'
+import './product-quickview.css'
+import { cartLineLimit } from '@/lib/cart'
 import { productPricing } from '@/lib/pricing'
 import Price from './Price'
 import BoutiqueDialog from './BoutiqueDialog'
@@ -50,7 +52,7 @@ export default function ProductQuickView({
   const variantId = defaultVariant?.id ?? null
   const existingQuantity = cartItems.find(item => item.productId === product.id && item.variantId === variantId)?.quantity ?? 0
   const soldOut = inventory && product.stockQuantity != null && product.stockQuantity <= 0
-  const unavailable = inventory && product.stockQuantity != null && existingQuantity >= product.stockQuantity
+  const unavailable = product.isActive === false || defaultVariant?.isActive === false || (inventory && existingQuantity >= cartLineLimit(product, cartItems, variantId))
 
   const buy = () => {
     if (unavailable || onAddToCart(product, defaultVariant?.id ?? null, 1) === false) return
@@ -61,14 +63,14 @@ export default function ProductQuickView({
   }
 
   const content = (<>
-      <div data-testid="product-quickview" className="quickview-sheet">
-        {!inline && <button type="button" onClick={onClose} aria-label="إغلاق" data-dialog-autofocus className="quickview-close">
+      <div data-testid="product-quickview" className="quickview-sheet premium-quickview" dir="rtl">
+        {!inline && <header className="quickview-toolbar"><span>?????? ??????</span><button type="button" onClick={onClose} aria-label="إغلاق" data-dialog-autofocus className="quickview-close">
           <CloseIcon />
-        </button>}
+        </button></header>}
 
         <div className="quickview-body">
         <div className="quickview-media">
-          <ProductImage key={product.imageUrl} src={product.imageUrl} alt={product.nameAr} sizes="(max-width: 767px) 90vw, 440px" eager />
+          <ProductMedia key={product.imageUrl} src={product.imageUrl} alt={product.nameAr} sizes="(max-width: 767px) 90vw, 440px" eager />
           {(discount || product.isNew) && <span className="quickview-badge">{discount ? `-${discount}%` : 'جديد'}</span>}
         </div>
 
@@ -96,7 +98,7 @@ export default function ProductQuickView({
             <div className="quickview-variants-label">الأنواع المتاحة ({product.variants.length})</div>
             <ul>
               {product.variants.map(variant => <li key={variant.id}>
-                <button type="button" aria-pressed={defaultVariant?.id === variant.id} onClick={() => { setAdded(false); onSelectVariant(product.id, variant.id) }}>
+                <button type="button" disabled={variant.isActive === false} aria-pressed={defaultVariant?.id === variant.id} onClick={() => { setAdded(false); onSelectVariant(product.id, variant.id) }}>
                   <span>{variant.label}</span>
                   <span dir="ltr">{formatJod(productPricing(product, variant).price, currency)}</span>
                 </button>

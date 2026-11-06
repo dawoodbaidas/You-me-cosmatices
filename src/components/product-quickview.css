@@ -1,0 +1,30 @@
+/* Scoped ownership avoids the legacy quick-view cascade. */
+.boutique .quickview-dialog .premium-quickview { width:min(960px,100%); max-height:calc(92dvh - env(safe-area-inset-top)); padding:0; border-radius:24px; background:#faf7ef; box-shadow:0 24px 90px #24211740; }
+.boutique .premium-quickview .quickview-toolbar { display:flex; align-items:center; justify-content:space-between; flex:none; padding:6px 16px; color:#82715a; font-size:12px; }
+.boutique .premium-quickview .quickview-close { position:static; display:grid; place-items:center; width:40px; height:40px; min-height:40px; background:transparent; }
+.boutique .premium-quickview .quickview-body { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:0; min-height:0; overflow:auto; overscroll-behavior:contain; align-items:start; }
+.boutique .premium-quickview .quickview-media { position:sticky; top:0; grid-area:auto; height:clamp(320px,52dvh,520px); min-height:0; aspect-ratio:auto; background:#f1eee5; }
+.boutique .premium-quickview .quickview-info { grid-area:auto; min-width:0; padding:24px 28px 32px; overflow:visible; }
+.boutique .premium-quickview .quickview-info h3 { font-size:clamp(23px,2.2vw,30px); line-height:1.5; font-weight:600; overflow-wrap:anywhere; }
+.boutique .premium-quickview .quickview-price { margin:14px 0; gap:12px; }
+.boutique .premium-quickview .quickview-price strong { font-size:26px; }
+.boutique .premium-quickview .quickview-description { font-size:14px; line-height:1.9; margin-top:12px; }
+.boutique .premium-quickview .quickview-description button { min-height:44px; }
+.boutique .premium-quickview .quickview-variants button { border-radius:10px; min-height:48px; gap:12px; text-align:start; }
+.boutique .premium-quickview .quickview-variants button:disabled { opacity:.4; }
+.boutique .premium-quickview .quickview-purchase { display:block; flex:none; padding:14px 20px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid #ded6c6; background:#faf7ef; }
+.boutique .premium-quickview .quickview-actions { display:flex; flex-wrap:nowrap; gap:10px; margin:0; }
+.boutique .premium-quickview .quickview-buy { flex:1; min-width:0; min-height:50px; border-radius:12px; font-size:15px; background:#30342d; }
+.boutique .premium-quickview .quickview-icon-button { width:50px; height:50px; flex:none; border-radius:12px; display:grid; place-items:center; }
+.boutique .premium-quickview .quickview-note { margin:8px 0 0; font-size:11px; }
+.boutique .premium-quickview button:focus-visible,.boutique .premium-quickview a:focus-visible { outline:2px solid #8c7651; outline-offset:2px; }
+@media(max-width:767px) {
+ .boutique .quickview-dialog[open] { padding:0; place-items:end center; }
+ .boutique .quickview-dialog .premium-quickview { width:100%; border-radius:22px 22px 0 0; max-height:calc(92dvh - env(safe-area-inset-top)); }
+ .boutique .premium-quickview .quickview-body { display:block; }
+ .boutique .premium-quickview .quickview-media { position:relative; height:clamp(200px,34dvh,340px); }
+ .boutique .premium-quickview .quickview-info { padding:16px 20px 24px; }
+ .boutique .premium-quickview .quickview-info h3 { font-size:22px; }
+ .boutique .premium-quickview .quickview-price { margin:10px 0; }
+ .boutique .premium-quickview .quickview-purchase { padding:12px max(16px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left)); }
+}

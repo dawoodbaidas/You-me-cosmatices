@@ -1,11 +1,11 @@
 .boutique .category-circles{padding:40px 16px 48px;background:#faf7f0;text-align:center}
 .category-circles h2{font-size:clamp(24px,3vw,32px);font-weight:800;line-height:1.15;margin:0}.category-circles h2 span{display:inline;color:#8A7650}.category-circles>p{color:#82796b;margin:12px 0 28px}
-.category-circle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 16px;max-width:1200px;margin:auto}
-.category-circle-link{flex:0 0 calc((100% - 24px)/3);min-width:0;overflow-wrap:anywhere;display:flex;align-items:center;flex-direction:column;text-decoration:none;color:inherit}
+.category-circle-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:24px 16px;max-width:1200px;margin:auto}
+.category-circle-link{flex:0 0 calc((100% - 16px)/2);max-width:160px;min-width:0;overflow-wrap:anywhere;display:flex;align-items:center;flex-direction:column;text-decoration:none;color:inherit}
 .category-orb{position:relative;isolation:isolate;width:min(100%,160px);aspect-ratio:1;overflow:hidden;flex-shrink:0;border:1px solid #8a765033;box-shadow:0 5px 14px #4735220c;border-radius:50%;background:linear-gradient(165deg,#e8d6c4,#ceac8c);margin-bottom:12px;transition:transform .2s}
 .category-orb.tone-1{background:linear-gradient(165deg,#eeddd9,#d8afa6)}.category-orb.tone-2{background:linear-gradient(165deg,#e5e8d7,#aebda2)}.category-orb.tone-3{background:linear-gradient(165deg,#e5dfd2,#bdb49e)}
 
-.category-orb img{display:block;width:100%;height:100%;padding:12%;object-fit:contain;object-position:center;box-sizing:border-box}
+.category-orb img{display:block;width:100%;height:100%;padding:0;object-fit:cover;object-position:center;box-sizing:border-box}
 .category-empty{padding:24px;text-align:center}
 .category-circles h1{font-size:clamp(24px,3vw,32px);font-weight:800}
 .store-departments .product-image-fallback span{display:none}
@@ -15,23 +15,18 @@
 .boutique .shop-category-strip{display:flex;overflow-x:auto;gap:8px;white-space:nowrap}.boutique .shop-category-strip a{padding:9px 16px;border-radius:24px}.boutique .shop-category-strip a[aria-current=page]{background:#111;color:#faf7f0}.boutique .home-category-strip{padding:12px 16px}
 @media(prefers-reduced-motion:reduce){.category-circles *,.catalogue-page *,.category-header *,.catalogue-page{animation:none!important;transition:none!important}.category-circle-link .category-orb{transform:none!important}}
 
-@media(min-width:768px){.category-circle-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.category-orb{width:140px}.category-circle-link strong{font-size:17px}}
-@media(min-width:1024px){.category-circle-grid{gap:32px 20px;grid-template-columns:repeat(5,minmax(0,1fr))}.category-circle-link{flex-basis:calc((100% - 60px)/4)}.category-orb{width:min(100%,210px)}.category-circle-link strong{font-size:18px}}
+@media(min-width:768px){.category-circle-link{flex-basis:140px;max-width:140px}.category-orb{width:140px}.category-circle-link strong{font-size:17px}}
+@media(min-width:1024px){.category-circle-grid{gap:28px 20px}.category-circle-link{flex-basis:210px;max-width:210px}.category-orb{width:210px}.category-circle-link strong{font-size:18px}}
 
-/* Page grids fill their container even when a parent has only a few children.
-   Homepage storytelling and the compact navigation keep their own layouts. */
 .boutique .category-page-circles { max-width:1160px; margin-inline:auto; padding:20px 20px 36px; }
 .boutique .category-page-circles :is(h1,h2) { font-size:clamp(26px,3vw,38px); font-weight:700; line-height:1.3; }
 .boutique .category-page-circles > p { margin:8px 0 24px; }
-.category-page-circles .category-circle-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px 16px; }
 .category-page-circles .category-circle-link { min-height:44px; gap:10px; }
-.category-page-circles .category-orb { width:min(100%,180px); margin-bottom:0; }
+.category-page-circles .category-orb { margin-bottom:0; }
 .category-page-circles .category-circle-link strong { font-size:15px; line-height:1.5; }
 .store-breadcrumbs:has(+ .category-page-circles) { max-width:1160px; padding:16px 20px 4px; gap:8px; font-size:13px; }
 @media(min-width:768px) {
   .boutique .category-page-circles { padding:24px 28px 44px; }
-  .category-page-circles .category-circle-grid { grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:28px 24px; }
-  .category-page-circles .category-orb { width:min(100%,210px); }
   .category-page-circles .category-circle-link strong { font-size:17px; }
   .store-breadcrumbs:has(+ .category-page-circles) { padding-inline:28px; }
 }
