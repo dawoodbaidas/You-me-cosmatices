@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from './StoreNavigation'
 import { createContext, useContext, type ComponentProps } from 'react'
 import { collectionHref } from '@/lib/store-categories'
 

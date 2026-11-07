@@ -10,7 +10,14 @@ const directory=await createBrowserWorkspace(project), env={...browserTestEnviro
 await mkdir(resolve(directory,'src/app/api/qa-performance'),{recursive:true})
 await writeFile(resolve(directory,'src/app/api/qa-performance/route.ts'),`import {invalidateStoreCatalogue} from '@/lib/store-cache'
 import {prepareCheckout} from '@/app/checkout'
-export async function POST(request:Request) {const input=await request.json();if(input.mode==='invalidate'){invalidateStoreCatalogue();return Response.json({ok:true})}return Response.json(await prepareCheckout(input.items))}`)
+export async function POST(request:Request) {const input=await request.json();if(input.mode==='invalidate'){invalidateStoreCatalogue();return Response.json({ok:true})}return Response.json(await prepareCheckout(input.items,input.expected))}`)
+// Component failure/source-replacement checks also live only in the QA copy.
+await mkdir(resolve(directory,'src/app/qa-images'),{recursive:true})
+await writeFile(resolve(directory,'src/app/qa-images/page.tsx'),`'use client'
+import {useState} from 'react'
+import ProductMedia from '@/components/ProductMedia'
+const sources=['/products/package-laverne-you-miracle.webp','/products/body-mist.png','/missing-product-image.webp']
+export default function Page(){const [index,setIndex]=useState(0);return <main><div data-image-fixture={index} style={{position:'relative',width:400,height:500}}><ProductMedia src={sources[index]} alt={'Source '+index} sizes="400px" eager /></div>{sources.map((_,i)=><button key={i} data-source={i} onClick={()=>setIndex(i)}>Source {i}</button>)}</main>}`)
 const next=resolve(project,'node_modules/next/dist/bin/next')
 const build=spawn(process.execPath,[next,'build','--webpack'],{cwd:directory,env,stdio:'inherit',windowsHide:true})
 const [code]=await once(build,'exit');if(code)throw Error('Production build failed')

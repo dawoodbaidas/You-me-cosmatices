@@ -10,6 +10,8 @@ import type { Product } from '@/types/product'
 import SceneProductImage from './SceneProductImage'
 import { useSceneFrame, type SceneFrame } from './useSceneFrame'
 import styles from './scroll-scenes.module.css'
+import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
+import { prefetchProductDetails } from './CachedProductImage'
 
 const DEFAULT_PALETTE: ScenePalette = { bgA: [248, 245, 239], bgB: [236, 229, 216] }
 
@@ -23,6 +25,7 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
     return asset ? { bgA: asset.bgA, bgB: asset.bgB } : DEFAULT_PALETTE
   }), [items])
   const [active, setActive] = useState(0)
+  const [visited, setVisited] = useState<string[]>(() => items.slice(0, 2).flatMap(item => productSceneAsset(item)?.src ?? item.imageUrl ?? []))
   const [added, setAdded] = useState(false)
   const activeRef = useRef(0), manual = useRef<number | null>(null), timer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -57,6 +60,12 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
     const hint = element.querySelector<HTMLElement>('[data-showcase-hint]')
     if (hint) hint.style.opacity = reduced || progress > .002 ? '0' : '1'
     if (index !== activeRef.current) {
+      const direction = Math.sign(index - activeRef.current)
+      setVisited(previous => [...new Set([
+        ...previous.filter(source => items.some(item => (productSceneAsset(item)?.src ?? item.imageUrl) === source)),
+        ...items.filter((_, i) => Math.abs(i - index) <= 1 || i === index + direction * 2)
+          .flatMap(item => productSceneAsset(item)?.src ?? item.imageUrl ?? []),
+      ])])
       activeRef.current = index
       setActive(index)
       setAdded(false)
@@ -97,8 +106,8 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
           const ratio = asset ? asset.bounds.width / asset.bounds.height : 4 / 5
           return <div key={item.id} className={styles.showcaseItem} data-showcase-item style={{ aspectRatio: String(ratio) }}>
             <span className={styles.showcaseShadow} aria-hidden="true" />
-            <button className={styles.showcaseProduct} aria-label={`عرض تفاصيل ${item.nameAr}`} onClick={() => onOpenDetails(item.id)}>
-              {Math.abs(index - active) <= 1 && <SceneProductImage product={item} sizes="(max-width:767px) 65vw, (max-width:1200px) 42vw, 520px" />}
+            <button className={styles.showcaseProduct} aria-label={`عرض تفاصيل ${item.nameAr}`} onClick={() => onOpenDetails(item.id)} onPointerEnter={() => prefetchProductDetails(item.imageUrl)} onFocus={() => prefetchProductDetails(item.imageUrl)}>
+              {(Math.abs(index - active) <= 1 || visited.includes(asset?.src ?? item.imageUrl ?? '')) && <SceneProductImage product={item} sizes={PRODUCT_IMAGE_SIZES.scene} />}
               {(productPricing(item).discount || item.isNew) && <span className={styles.sceneBadge}>{productPricing(item).discount ? `-${productPricing(item).discount}%` : 'جديد'}</span>}
             </button>
           </div>

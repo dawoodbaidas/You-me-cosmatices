@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { StorePage } from '@/components/Storefront'
-import { getStoreCatalogue, getStoreNavigation } from '@/lib/store-catalogue'
+import { getStoreProducts, getStoreNavigation } from '@/lib/store-catalogue'
 import { storeCollections, findCollection } from '@/lib/store-categories'
 
 // Keep revision checks fresh without overriding the catalogue's explicit cache.
@@ -14,6 +14,5 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   if (slug !== 'all' && !collection && !result.unavailable) notFound()
   if (collection?.href) redirect(collection.href)
 
-  // Keep the full catalogue available to resolve cart lines across departments.
-  return <StorePage mode="category" slug={slug} data={await getStoreCatalogue()} />
+  return <StorePage routePath={`/category/${encodeURIComponent(slug)}`} mode="category" slug={slug} data={await getStoreProducts('all')} />
 }

@@ -18,7 +18,7 @@ export function publicDatabaseConfig() {
 
 // This tiny, uncached revision prevents prefetched pages and browser back/forward
 // from using an old cached catalogue after a committed administrator mutation.
-export async function readStoreRevision(): Promise<string | null> {
+export const readStoreRevision = cache(async (): Promise<string | null> => {
   const config = publicDatabaseConfig()
   if (!config) return null
   const response = await fetch(`${config.url}/rest/v1/store_revision?id=eq.1&select=version`, { headers: config.headers, cache: 'no-store' })
@@ -26,7 +26,7 @@ export async function readStoreRevision(): Promise<string | null> {
   const rows = await response.json() as { version: number | string }[]
   if (!rows[0]) throw new Error('Store revision missing')
   return String(rows[0].version)
-}
+})
 
 export async function readStoreCatalogue(fresh = false): Promise<StoreCatalogue> {
   const empty: StoreCatalogue = { products: [], categories: [], settings: EMPTY_STORE_SETTINGS, revision: null, unavailable: false }
@@ -35,7 +35,7 @@ export async function readStoreCatalogue(fresh = false): Promise<StoreCatalogue>
   try {
     const revision = await readStoreRevision()
     const response = await fetch(`${config.url}/rest/v1/rpc/get_store_catalogue?p_revision=${encodeURIComponent(revision!)}`, {
-      headers: config.headers, ...(fresh ? { cache: 'no-store' as const } : { cache: 'force-cache' as const, next: { revalidate: 300, tags: [STORE_CATALOGUE_TAG] } }),
+      headers: config.headers, ...(fresh ? { cache: 'no-store' as const } : { cache: 'force-cache' as const, next: { revalidate: 30, tags: [STORE_CATALOGUE_TAG] } }),
     })
     if (!response.ok) throw new Error('Store catalogue unavailable')
     const data = await response.json() as {
@@ -71,7 +71,7 @@ export const getStoreNavigation = cache(async (): Promise<StoreCatalogue> => {
       const response = await fetch(`${config.url}/rest/v1/${path}`, { headers: config.headers, cache: 'no-store' })
       if (!response.ok) throw new Error('Store navigation unavailable')
       return response.json()
-    }, ['store-navigation', config.url, revision ?? ''], { revalidate: 300, tags: [STORE_CATALOGUE_TAG] })
+    }, ['store-navigation', config.url, revision ?? ''], { revalidate: 30, tags: [STORE_CATALOGUE_TAG] })
     const [categories, settings] = await Promise.all([
       read('store_categories?select=*&is_active=eq.true&order=sort_order,slug'),
       read('site_settings?select=key,value'),
@@ -80,12 +80,64 @@ export const getStoreNavigation = cache(async (): Promise<StoreCatalogue> => {
   } catch { return { ...empty, unavailable: true } }
 })
 
-export async function getCategoryProducts(slug: string) {
+// Revision is part of the cache identity, never an unsupported PostgREST filter.
+// Keep all memberships in the result even when filtering by one membership.
+const PRODUCT_SELECT = '*,product_variants(*),product_categories(category_slug)'
+async function publicRead<T>(path: string, revision: string | null): Promise<T> {
   const config = publicDatabaseConfig()
-  if (!config) return []
-  const query = new URLSearchParams({ select: '*,product_variants(*),product_categories!inner(category_slug)', is_active: 'eq.true', 'product_categories.category_slug': `eq.${slug}`, order: 'sort_order,id' })
-  const response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers: config.headers, cache: 'no-store' })
-  if (!response.ok) throw new Error('تعذّر تحميل منتجات القسم. حاول مجددًا.')
-  const rows: Parameters<typeof mapProduct>[0][] = await response.json()
-  return rows.map(row => mapProduct(row))
+  if (!config) throw new Error('Store unavailable')
+  return unstable_cache(async () => {
+    const response = await fetch(`${config.url}/rest/v1/${path}`, { headers: config.headers, cache: 'no-store' })
+    if (!response.ok) throw new Error('Store products unavailable')
+    return response.json()
+  }, ['store-public', config.url, revision ?? '', path], { revalidate: 30, tags: [STORE_CATALOGUE_TAG] })()
 }
+
+async function readProducts(filters: Record<string, string>, revision: string | null, categories: StoreCategory[]) {
+  const query = new URLSearchParams({ select: PRODUCT_SELECT, is_active: 'eq.true', order: 'sort_order,id', ...filters })
+  const rows = await publicRead<Parameters<typeof mapProduct>[0][]>(`products?${query}`, revision)
+  return rows.map(row => {
+    const product = mapProduct(row)
+    const category = categories.find(item => product.categorySlugs?.includes(item.slug))
+    return category ? { ...product, categoryLabel: category.name_ar } : product
+  })
+}
+
+export const getStoreProducts = cache(async (kind: 'all' | 'ids' | 'slug' | 'category', value = ''): Promise<StoreCatalogue> => {
+  const navigation = await getStoreNavigation()
+  if (navigation.unavailable || !navigation.revision) return navigation
+  try {
+    let filters: Record<string, string> = {}
+    if (kind === 'ids') {
+      const ids = [...new Set(value.split(',').filter(Boolean))].sort()
+      if (!ids.length) return navigation
+      if (ids.length > 100 || ids.some(id => !/^[0-9a-f-]{36}$/i.test(id))) throw new Error('Invalid product IDs')
+      filters = { id: `in.(${ids.join(',')})` }
+    } else if (kind === 'slug') filters = { slug: `eq.${value}` }
+    else if (kind === 'category') {
+      // A separate filter relation preserves the complete membership relation.
+      filters = { select: `${PRODUCT_SELECT},membership:product_categories!inner(category_slug)`, 'membership.category_slug': `eq.${value}` }
+    }
+    return { ...navigation, products: await readProducts(filters, navigation.revision, navigation.categories) }
+  } catch { return { ...navigation, unavailable: true } }
+})
+
+export async function getCategoryProducts(slug: string) {
+  const store = await getStoreProducts('category', slug)
+  if (store.unavailable) throw new Error('Store products unavailable')
+  return store.products
+}
+
+export const getStoreHome = cache(async (): Promise<StoreCatalogue> => {
+  const navigation = await getStoreNavigation()
+  if (navigation.unavailable || !navigation.revision) return navigation
+  try {
+    const selections = await publicRead<{ section: 'hero' | 'bestsellers'; product_id: string; position: number }[]>(
+      'home_section_products?select=section,product_id,position&order=section,position', navigation.revision)
+    const homeSections = { hero: [] as string[], bestsellers: [] as string[] }
+    for (const row of selections) if (row.section in homeSections) homeSections[row.section].push(row.product_id)
+    const ids = [...new Set([...homeSections.hero, ...homeSections.bestsellers])]
+    const products = ids.length ? await readProducts({ id: `in.(${ids.join(',')})` }, navigation.revision, navigation.categories) : []
+    return { ...navigation, homeSections, products }
+  } catch { return { ...navigation, unavailable: true } }
+})

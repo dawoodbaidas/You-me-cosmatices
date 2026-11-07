@@ -1,0 +1,2767 @@
+[
+  {
+    "width": 390,
+    "pending": {
+      "url": "/",
+      "hero": true,
+      "heroImages": 5,
+      "skeleton": false
+    },
+    "backCategories": {
+      "url": "/categories",
+      "hero": false,
+      "skeleton": false,
+      "heading": "الأقسام"
+    },
+    "historyResult": {
+      "url": "http://127.0.0.1:5090/category/all",
+      "hero": false,
+      "skeleton": true,
+      "products": 0,
+      "history": {
+        "__NA": true,
+        "__PRIVATE_NEXTJS_INTERNALS_TREE": {
+          "tree": [
+            "",
+            {
+              "children": [
+                "(store)",
+                {
+                  "children": [
+                    "category",
+                    {
+                      "children": [
+                        [
+                          "slug",
+                          "all",
+                          "d",
+                          []
+                        ],
+                        {
+                          "children": [
+                            "__PAGE__",
+                            {},
+                            null,
+                            null,
+                            4096
+                          ]
+                        },
+                        null,
+                        null,
+                        4096
+                      ]
+                    },
+                    null,
+                    null,
+                    4096
+                  ]
+                },
+                null,
+                null,
+                4100
+              ]
+            },
+            null,
+            null,
+            4124
+          ],
+          "renderedSearch": ""
+        }
+      }
+    },
+    "modalHistory": {
+      "__NA": true,
+      "__PRIVATE_NEXTJS_INTERNALS_TREE": {
+        "tree": [
+          "",
+          {
+            "children": [
+              "(store)",
+              {
+                "children": [
+                  "category",
+                  {
+                    "children": [
+                      [
+                        "slug",
+                        "all",
+                        "d",
+                        []
+                      ],
+                      {
+                        "children": [
+                          "__PAGE__",
+                          {},
+                          null,
+                          null,
+                          4096
+                        ]
+                      },
+                      null,
+                      null,
+                      4096
+                    ]
+                  },
+                  null,
+                  null,
+                  4096
+                ]
+              },
+              null,
+              null,
+              4100
+            ]
+          },
+          null,
+          null,
+          4124
+        ],
+        "renderedSearch": ""
+      }
+    },
+    "beforeCartHistory": {
+      "__NA": true,
+      "__PRIVATE_NEXTJS_INTERNALS_TREE": {
+        "tree": [
+          "",
+          {
+            "children": [
+              "(store)",
+              {
+                "children": [
+                  "category",
+                  {
+                    "children": [
+                      [
+                        "slug",
+                        "all",
+                        "d",
+                        []
+                      ],
+                      {
+                        "children": [
+                          "__PAGE__",
+                          {},
+                          null,
+                          null,
+                          4096
+                        ]
+                      },
+                      null,
+                      null,
+                      4096
+                    ]
+                  },
+                  null,
+                  null,
+                  4096
+                ]
+              },
+              null,
+              null,
+              4100
+            ]
+          },
+          null,
+          null,
+          4124
+        ],
+        "renderedSearch": ""
+      }
+    },
+    "cartHistory": {
+      "__NA": true,
+      "__PRIVATE_NEXTJS_INTERNALS_TREE": {
+        "tree": [
+          "",
+          {
+            "children": [
+              "(store)",
+              {
+                "children": [
+                  "cart",
+                  {
+                    "children": [
+                      "__PAGE__",
+                      {},
+                      null,
+                      null,
+                      4096
+                    ]
+                  },
+                  null,
+                  null,
+                  4096
+                ]
+              },
+              null,
+              null,
+              4100
+            ]
+          },
+          null,
+          null,
+          4124
+        ],
+        "renderedSearch": ""
+      }
+    },
+    "network": [
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "D91811F77C204498F0C8320FC3EC1E47",
+        "url": "http://127.0.0.1:5090/"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "D91811F77C204498F0C8320FC3EC1E47",
+        "url": "http://127.0.0.1:5090/",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.2",
+        "url": "http://127.0.0.1:5090/_next/static/css/5b2a8c2ad8891ce3.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.3",
+        "url": "http://127.0.0.1:5090/_next/static/css/87adebb277f8c761.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.4",
+        "url": "http://127.0.0.1:5090/_next/static/css/2bd99af93c6368ed.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.5",
+        "url": "http://127.0.0.1:5090/_next/static/css/426f94c32b834947.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.6",
+        "url": "http://127.0.0.1:5090/_next/static/css/5fbe0f5ac4f4d642.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.7",
+        "url": "http://127.0.0.1:5090/_next/static/css/af6c6923b9dd2588.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.8",
+        "url": "http://127.0.0.1:5090/_next/static/css/a1e006bd3daf84f5.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.9",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/webpack-750e7288c4febd73.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.10",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/f6a6768a-87dda02e6630bb12.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.11",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4046-5376afbed7233876.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.12",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/main-app-172ece275d32e5d0.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.13",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/error-51afbf887f53abeb.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.14",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/7948-65f0346a584f6482.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.15",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-6ff6f3b65bd387d9.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.16",
+        "url": "http://127.0.0.1:5090/_next/static/css/09409035bac4cfc7.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.2",
+        "url": "http://127.0.0.1:5090/_next/static/css/5b2a8c2ad8891ce3.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.3",
+        "url": "http://127.0.0.1:5090/_next/static/css/87adebb277f8c761.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.5",
+        "url": "http://127.0.0.1:5090/_next/static/css/426f94c32b834947.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.4",
+        "url": "http://127.0.0.1:5090/_next/static/css/2bd99af93c6368ed.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.6",
+        "url": "http://127.0.0.1:5090/_next/static/css/5fbe0f5ac4f4d642.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.7",
+        "url": "http://127.0.0.1:5090/_next/static/css/af6c6923b9dd2588.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.16",
+        "url": "http://127.0.0.1:5090/_next/static/css/09409035bac4cfc7.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.8",
+        "url": "http://127.0.0.1:5090/_next/static/css/a1e006bd3daf84f5.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.33",
+        "url": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.9",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/webpack-750e7288c4febd73.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.12",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/main-app-172ece275d32e5d0.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.13",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/error-51afbf887f53abeb.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.41",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=256&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.15",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-6ff6f3b65bd387d9.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.14",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/7948-65f0346a584f6482.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.10",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/f6a6768a-87dda02e6630bb12.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.11",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4046-5376afbed7233876.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.45",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/b9becaa0-83f89d9121112a14.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.46",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/5997-de20e23bf43f6a21.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.47",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/932-a0e3fdf73d627915.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.48",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/8721-9bbddd3914b13337.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.49",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/(store)/page-29577c1062977549.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.33",
+        "url": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.35",
+        "url": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.34",
+        "url": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.37",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=96&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.49",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/(store)/page-29577c1062977549.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.46",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/5997-de20e23bf43f6a21.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.45",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/b9becaa0-83f89d9121112a14.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.48",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/8721-9bbddd3914b13337.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.47",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/932-a0e3fdf73d627915.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.34",
+        "url": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.35",
+        "url": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.41",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=256&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.37",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=96&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.51",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "6DC7716E2686A4949373803E0F48C656",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.54",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.51",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "6DC7716E2686A4949373803E0F48C656",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.54",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.59",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Faloe-foam.png&w=256&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.60",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Ffoundation.png&w=256&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.61",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fmascara.png&w=256&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.62",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fmusk-tahara-oil.png&w=256&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.63",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=640&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.64",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Faloe-foam.png&w=640&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.62",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fmusk-tahara-oil.png&w=256&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.60",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Ffoundation.png&w=256&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.61",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fmascara.png&w=256&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.71",
+        "url": "http://127.0.0.1:5090/categories?_rsc=Gq1hPPF-GR4qDHXn"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.59",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Faloe-foam.png&w=256&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.63",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=640&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.64",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Faloe-foam.png&w=640&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.71",
+        "url": "http://127.0.0.1:5090/categories?_rsc=Gq1hPPF-GR4qDHXn",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.39",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=256&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.74",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.74",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.75",
+        "url": "http://127.0.0.1:5090/?_rsc=5jh1ItLPe0n6iaqR"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.76",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.75",
+        "url": "http://127.0.0.1:5090/?_rsc=5jh1ItLPe0n6iaqR",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.76",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.39",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=256&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.85",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.86",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.85",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.86",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "0CC89A0E05CC3EB231D5B668DFA3B28C",
+        "url": "http://127.0.0.1:5090/category/all"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "0CC89A0E05CC3EB231D5B668DFA3B28C",
+        "url": "http://127.0.0.1:5090/category/all",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.89",
+        "url": "http://127.0.0.1:5090/_next/static/css/5b2a8c2ad8891ce3.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.89",
+        "url": "http://127.0.0.1:5090/_next/static/css/5b2a8c2ad8891ce3.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.90",
+        "url": "http://127.0.0.1:5090/_next/static/css/87adebb277f8c761.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.90",
+        "url": "http://127.0.0.1:5090/_next/static/css/87adebb277f8c761.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.91",
+        "url": "http://127.0.0.1:5090/_next/static/css/2bd99af93c6368ed.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.91",
+        "url": "http://127.0.0.1:5090/_next/static/css/2bd99af93c6368ed.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.92",
+        "url": "http://127.0.0.1:5090/_next/static/css/426f94c32b834947.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.92",
+        "url": "http://127.0.0.1:5090/_next/static/css/426f94c32b834947.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.93",
+        "url": "http://127.0.0.1:5090/_next/static/css/5fbe0f5ac4f4d642.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.93",
+        "url": "http://127.0.0.1:5090/_next/static/css/5fbe0f5ac4f4d642.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.94",
+        "url": "http://127.0.0.1:5090/_next/static/css/af6c6923b9dd2588.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.94",
+        "url": "http://127.0.0.1:5090/_next/static/css/af6c6923b9dd2588.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.95",
+        "url": "http://127.0.0.1:5090/_next/static/css/a1e006bd3daf84f5.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.95",
+        "url": "http://127.0.0.1:5090/_next/static/css/a1e006bd3daf84f5.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.96",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/webpack-750e7288c4febd73.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.96",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/webpack-750e7288c4febd73.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.97",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/f6a6768a-87dda02e6630bb12.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.97",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/f6a6768a-87dda02e6630bb12.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.98",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4046-5376afbed7233876.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.98",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4046-5376afbed7233876.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.99",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/main-app-172ece275d32e5d0.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.99",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/main-app-172ece275d32e5d0.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.100",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/error-51afbf887f53abeb.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.100",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/error-51afbf887f53abeb.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.101",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/7948-65f0346a584f6482.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.101",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/7948-65f0346a584f6482.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.102",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-6ff6f3b65bd387d9.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.102",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-6ff6f3b65bd387d9.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.103",
+        "url": "http://127.0.0.1:5090/_next/static/css/09409035bac4cfc7.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.103",
+        "url": "http://127.0.0.1:5090/_next/static/css/09409035bac4cfc7.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.121",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/b9becaa0-83f89d9121112a14.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.121",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/b9becaa0-83f89d9121112a14.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.122",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/5997-de20e23bf43f6a21.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.122",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/5997-de20e23bf43f6a21.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.123",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/932-a0e3fdf73d627915.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.123",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/932-a0e3fdf73d627915.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.124",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/8721-9bbddd3914b13337.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.124",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/8721-9bbddd3914b13337.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.125",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/(store)/category/%5Bslug%5D/page-29577c1062977549.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.126",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=256&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.126",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=256&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.136",
+        "url": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.136",
+        "url": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.137",
+        "url": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.137",
+        "url": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.138",
+        "url": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.138",
+        "url": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.139",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-laverne-you-miracle.webp&w=384&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.140",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-cherry-trap-boutique.webp&w=384&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.125",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/(store)/category/%5Bslug%5D/page-29577c1062977549.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.139",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-laverne-you-miracle.webp&w=384&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.140",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-cherry-trap-boutique.webp&w=384&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.149",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.149",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.147",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fvgr-shaver-trimmer-2in1.webp&w=384&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.148",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-naqaa.webp&w=384&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.157",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.148",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-naqaa.webp&w=384&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.147",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fvgr-shaver-trimmer-2in1.webp&w=384&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.157",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.158",
+        "url": "http://127.0.0.1:5090/?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.159",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.160",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.161",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.158",
+        "url": "http://127.0.0.1:5090/?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.159",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.160",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.162",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-dalal.webp&w=384&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.163",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-muzhla.webp&w=384&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.161",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.166",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.167",
+        "url": "http://127.0.0.1:5090/?_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.168",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.169",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.166",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.167",
+        "url": "http://127.0.0.1:5090/?_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.168",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.169",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.170",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.170",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.171",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.172",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.173",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.174",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.171",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.172",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.173",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.175",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.174",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.175",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.162",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-dalal.webp&w=384&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.163",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-muzhla.webp&w=384&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.176",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4523.3b4c470ba3a8e2c9.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.177",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.178",
+        "url": "http://127.0.0.1:5090/_next/static/css/3c60df7c2a9e805f.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.176",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4523.3b4c470ba3a8e2c9.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.177",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.178",
+        "url": "http://127.0.0.1:5090/_next/static/css/3c60df7c2a9e805f.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.181",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-laverne-you-miracle.webp&w=750&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.181",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-laverne-you-miracle.webp&w=750&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.186",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "3E2E09BA8C94C9B134D5D2B567B878AE",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "3E2E09BA8C94C9B134D5D2B567B878AE",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.186",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.187",
+        "url": "http://127.0.0.1:5090/category/all?product=package-laverne-you-miracle&_rsc=Ln2eHIcxKPfpgljN"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.188",
+        "url": "http://127.0.0.1:5090/?_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.187",
+        "url": "http://127.0.0.1:5090/category/all?product=package-laverne-you-miracle&_rsc=Ln2eHIcxKPfpgljN",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.188",
+        "url": "http://127.0.0.1:5090/?_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.189",
+        "url": "http://127.0.0.1:5090/?_rsc=_i_aeImnuN6u1u1r"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.189",
+        "url": "http://127.0.0.1:5090/?_rsc=_i_aeImnuN6u1u1r",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.225",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.225",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.226",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.227",
+        "url": "http://127.0.0.1:5090/cart?_rsc=KdDa7RSVaoP_f-8e"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.226",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.227",
+        "url": "http://127.0.0.1:5090/cart?_rsc=KdDa7RSVaoP_f-8e",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.228",
+        "url": "http://127.0.0.1:5090/favicon.ico"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.229",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.228",
+        "url": "http://127.0.0.1:5090/favicon.ico",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.229",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.230",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.231",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.230",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.231",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "1168.234",
+        "url": "http://127.0.0.1:5090/favicon.ico"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "1168.234",
+        "url": "http://127.0.0.1:5090/favicon.ico",
+        "status": 200
+      }
+    ],
+    "frames": []
+  },
+  {
+    "width": 1440,
+    "pending": {
+      "url": "/",
+      "hero": true,
+      "heroImages": 1,
+      "skeleton": false
+    },
+    "backCategories": {
+      "url": "/categories",
+      "hero": false,
+      "skeleton": false,
+      "heading": "الأقسام"
+    },
+    "historyResult": {
+      "url": "http://127.0.0.1:5090/category/all",
+      "hero": false,
+      "skeleton": false,
+      "products": 12,
+      "history": {
+        "__NA": true,
+        "__PRIVATE_NEXTJS_INTERNALS_TREE": {
+          "tree": [
+            "",
+            {
+              "children": [
+                "(store)",
+                {
+                  "children": [
+                    "category",
+                    {
+                      "children": [
+                        [
+                          "slug",
+                          "all",
+                          "d",
+                          []
+                        ],
+                        {
+                          "children": [
+                            "__PAGE__",
+                            {},
+                            null,
+                            null,
+                            4096
+                          ]
+                        },
+                        null,
+                        null,
+                        4096
+                      ]
+                    },
+                    null,
+                    null,
+                    4096
+                  ]
+                },
+                null,
+                null,
+                4100
+              ]
+            },
+            null,
+            null,
+            4124
+          ],
+          "renderedSearch": ""
+        }
+      }
+    },
+    "modalHistory": {
+      "__NA": true,
+      "__PRIVATE_NEXTJS_INTERNALS_TREE": {
+        "tree": [
+          "",
+          {
+            "children": [
+              "(store)",
+              {
+                "children": [
+                  "category",
+                  {
+                    "children": [
+                      [
+                        "slug",
+                        "all",
+                        "d",
+                        []
+                      ],
+                      {
+                        "children": [
+                          "__PAGE__",
+                          {},
+                          null,
+                          null,
+                          4096
+                        ]
+                      },
+                      null,
+                      null,
+                      4096
+                    ]
+                  },
+                  null,
+                  null,
+                  4096
+                ]
+              },
+              null,
+              null,
+              4100
+            ]
+          },
+          null,
+          null,
+          4124
+        ],
+        "renderedSearch": ""
+      }
+    },
+    "beforeCartHistory": {
+      "__NA": true,
+      "__PRIVATE_NEXTJS_INTERNALS_TREE": {
+        "tree": [
+          "",
+          {
+            "children": [
+              "(store)",
+              {
+                "children": [
+                  "category",
+                  {
+                    "children": [
+                      [
+                        "slug",
+                        "all",
+                        "d",
+                        []
+                      ],
+                      {
+                        "children": [
+                          "__PAGE__",
+                          {},
+                          null,
+                          null,
+                          4096
+                        ]
+                      },
+                      null,
+                      null,
+                      4096
+                    ]
+                  },
+                  null,
+                  null,
+                  4096
+                ]
+              },
+              null,
+              null,
+              4100
+            ]
+          },
+          null,
+          null,
+          4124
+        ],
+        "renderedSearch": ""
+      }
+    },
+    "cartHistory": {
+      "__NA": true,
+      "__PRIVATE_NEXTJS_INTERNALS_TREE": {
+        "tree": [
+          "",
+          {
+            "children": [
+              "(store)",
+              {
+                "children": [
+                  "cart",
+                  {
+                    "children": [
+                      "__PAGE__",
+                      {},
+                      null,
+                      null,
+                      4096
+                    ]
+                  },
+                  null,
+                  null,
+                  4096
+                ]
+              },
+              null,
+              null,
+              4100
+            ]
+          },
+          null,
+          null,
+          4124
+        ],
+        "renderedSearch": ""
+      }
+    },
+    "network": [
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "5CB5303B262AE315C65229F02CDFB526",
+        "url": "http://127.0.0.1:5090/"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "5CB5303B262AE315C65229F02CDFB526",
+        "url": "http://127.0.0.1:5090/",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.2",
+        "url": "http://127.0.0.1:5090/_next/static/css/5b2a8c2ad8891ce3.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.3",
+        "url": "http://127.0.0.1:5090/_next/static/css/87adebb277f8c761.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.4",
+        "url": "http://127.0.0.1:5090/_next/static/css/2bd99af93c6368ed.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.5",
+        "url": "http://127.0.0.1:5090/_next/static/css/426f94c32b834947.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.6",
+        "url": "http://127.0.0.1:5090/_next/static/css/5fbe0f5ac4f4d642.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.7",
+        "url": "http://127.0.0.1:5090/_next/static/css/af6c6923b9dd2588.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.8",
+        "url": "http://127.0.0.1:5090/_next/static/css/a1e006bd3daf84f5.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.9",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/webpack-750e7288c4febd73.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.10",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/f6a6768a-87dda02e6630bb12.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.11",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4046-5376afbed7233876.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.12",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/main-app-172ece275d32e5d0.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.13",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/error-51afbf887f53abeb.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.14",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/7948-65f0346a584f6482.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.15",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-6ff6f3b65bd387d9.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.16",
+        "url": "http://127.0.0.1:5090/_next/static/css/09409035bac4cfc7.css"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.33",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=1080&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.3",
+        "url": "http://127.0.0.1:5090/_next/static/css/87adebb277f8c761.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.2",
+        "url": "http://127.0.0.1:5090/_next/static/css/5b2a8c2ad8891ce3.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.4",
+        "url": "http://127.0.0.1:5090/_next/static/css/2bd99af93c6368ed.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.6",
+        "url": "http://127.0.0.1:5090/_next/static/css/5fbe0f5ac4f4d642.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.5",
+        "url": "http://127.0.0.1:5090/_next/static/css/426f94c32b834947.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.7",
+        "url": "http://127.0.0.1:5090/_next/static/css/af6c6923b9dd2588.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.8",
+        "url": "http://127.0.0.1:5090/_next/static/css/a1e006bd3daf84f5.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.16",
+        "url": "http://127.0.0.1:5090/_next/static/css/09409035bac4cfc7.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.35",
+        "url": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.9",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/webpack-750e7288c4febd73.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.12",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/main-app-172ece275d32e5d0.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.13",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/error-51afbf887f53abeb.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.14",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/7948-65f0346a584f6482.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.15",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-6ff6f3b65bd387d9.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.10",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/f6a6768a-87dda02e6630bb12.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.11",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4046-5376afbed7233876.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.47",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/b9becaa0-83f89d9121112a14.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.48",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/5997-de20e23bf43f6a21.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.49",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/932-a0e3fdf73d627915.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.50",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/8721-9bbddd3914b13337.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.51",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/(store)/page-29577c1062977549.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.35",
+        "url": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.48",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/5997-de20e23bf43f6a21.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.47",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/b9becaa0-83f89d9121112a14.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.50",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/8721-9bbddd3914b13337.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.51",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/(store)/page-29577c1062977549.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.49",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/932-a0e3fdf73d627915.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.37",
+        "url": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.36",
+        "url": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.39",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=128&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.37",
+        "url": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.36",
+        "url": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.39",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=128&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.55",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "A5C1C2E2BCB000EBD3A9822DBC097A31",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "A5C1C2E2BCB000EBD3A9822DBC097A31",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.55",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.56",
+        "url": "http://127.0.0.1:5090/categories?_rsc=5CB68i4pnAekjehf"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.33",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fcutouts%2Fbody-mist.png&w=1080&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.57",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.57",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.59",
+        "url": "http://127.0.0.1:5090/categories?_rsc=Gq1hPPF-GR4qDHXn"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.56",
+        "url": "http://127.0.0.1:5090/categories?_rsc=5CB68i4pnAekjehf",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.61",
+        "url": "http://127.0.0.1:5090/categories?_rsc=tXyZJ52UQVBCVsD3"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.59",
+        "url": "http://127.0.0.1:5090/categories?_rsc=Gq1hPPF-GR4qDHXn",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.61",
+        "url": "http://127.0.0.1:5090/categories?_rsc=tXyZJ52UQVBCVsD3",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.41",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=256&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.63",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.64",
+        "url": "http://127.0.0.1:5090/?_rsc=5jh1ItLPe0n6iaqR"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.41",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=256&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.63",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.64",
+        "url": "http://127.0.0.1:5090/?_rsc=5jh1ItLPe0n6iaqR",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.65",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.65",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.73",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.74",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.73",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.74",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "E3B29583A58F81B009D87B958DA67FB9",
+        "url": "http://127.0.0.1:5090/category/all"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "E3B29583A58F81B009D87B958DA67FB9",
+        "url": "http://127.0.0.1:5090/category/all",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.77",
+        "url": "http://127.0.0.1:5090/_next/static/css/5b2a8c2ad8891ce3.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.77",
+        "url": "http://127.0.0.1:5090/_next/static/css/5b2a8c2ad8891ce3.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.78",
+        "url": "http://127.0.0.1:5090/_next/static/css/87adebb277f8c761.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.78",
+        "url": "http://127.0.0.1:5090/_next/static/css/87adebb277f8c761.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.79",
+        "url": "http://127.0.0.1:5090/_next/static/css/2bd99af93c6368ed.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.79",
+        "url": "http://127.0.0.1:5090/_next/static/css/2bd99af93c6368ed.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.80",
+        "url": "http://127.0.0.1:5090/_next/static/css/426f94c32b834947.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.80",
+        "url": "http://127.0.0.1:5090/_next/static/css/426f94c32b834947.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.81",
+        "url": "http://127.0.0.1:5090/_next/static/css/5fbe0f5ac4f4d642.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.81",
+        "url": "http://127.0.0.1:5090/_next/static/css/5fbe0f5ac4f4d642.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.82",
+        "url": "http://127.0.0.1:5090/_next/static/css/af6c6923b9dd2588.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.82",
+        "url": "http://127.0.0.1:5090/_next/static/css/af6c6923b9dd2588.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.83",
+        "url": "http://127.0.0.1:5090/_next/static/css/a1e006bd3daf84f5.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.83",
+        "url": "http://127.0.0.1:5090/_next/static/css/a1e006bd3daf84f5.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.84",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/webpack-750e7288c4febd73.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.84",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/webpack-750e7288c4febd73.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.85",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/f6a6768a-87dda02e6630bb12.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.85",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/f6a6768a-87dda02e6630bb12.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.86",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4046-5376afbed7233876.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.86",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4046-5376afbed7233876.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.87",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/main-app-172ece275d32e5d0.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.87",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/main-app-172ece275d32e5d0.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.88",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/error-51afbf887f53abeb.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.88",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/error-51afbf887f53abeb.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.89",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/7948-65f0346a584f6482.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.89",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/7948-65f0346a584f6482.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.90",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-6ff6f3b65bd387d9.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.90",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/not-found-6ff6f3b65bd387d9.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.91",
+        "url": "http://127.0.0.1:5090/_next/static/css/09409035bac4cfc7.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.91",
+        "url": "http://127.0.0.1:5090/_next/static/css/09409035bac4cfc7.css",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.109",
+        "url": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.109",
+        "url": "http://127.0.0.1:5090/_next/static/media/c6a7cbb2d970f29e-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.110",
+        "url": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.110",
+        "url": "http://127.0.0.1:5090/_next/static/media/c3375a1c3ada5093-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.111",
+        "url": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.111",
+        "url": "http://127.0.0.1:5090/_next/static/media/da01b451037ba8ec-s.p.ttf",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.112",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/b9becaa0-83f89d9121112a14.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.112",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/b9becaa0-83f89d9121112a14.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.113",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/5997-de20e23bf43f6a21.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.113",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/5997-de20e23bf43f6a21.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.114",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/932-a0e3fdf73d627915.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.114",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/932-a0e3fdf73d627915.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.115",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/8721-9bbddd3914b13337.js"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.115",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/8721-9bbddd3914b13337.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.116",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/(store)/category/%5Bslug%5D/page-29577c1062977549.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.117",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-laverne-you-miracle.webp&w=1080&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.118",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-cherry-trap-boutique.webp&w=1080&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.119",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=256&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.119",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fbrand%2Flogo.jpg&w=256&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.116",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/app/(store)/category/%5Bslug%5D/page-29577c1062977549.js",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.117",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-laverne-you-miracle.webp&w=1080&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.134",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fvgr-shaver-trimmer-2in1.webp&w=1080&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.135",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-naqaa.webp&w=1080&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.118",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-cherry-trap-boutique.webp&w=1080&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.143",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.144",
+        "url": "http://127.0.0.1:5090/categories?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.145",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.143",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.145",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.144",
+        "url": "http://127.0.0.1:5090/categories?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.146",
+        "url": "http://127.0.0.1:5090/?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.147",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.148",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.153",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.149",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-dalal.webp&w=1080&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.150",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-muzhla.webp&w=1080&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.151",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-nasma.webp&w=1080&q=75"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.152",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fmusk-ard-alharamain.webp&w=1080&q=75"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.146",
+        "url": "http://127.0.0.1:5090/?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.147",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.148",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.158",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.159",
+        "url": "http://127.0.0.1:5090/?_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.160",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.153",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.161",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.135",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-naqaa.webp&w=1080&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.134",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fvgr-shaver-trimmer-2in1.webp&w=1080&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.149",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-dalal.webp&w=1080&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.158",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.159",
+        "url": "http://127.0.0.1:5090/?_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.162",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.163",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.160",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.164",
+        "url": "http://127.0.0.1:5090/categories?_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.161",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.162",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.163",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.151",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-nasma.webp&w=1080&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.165",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.166",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.167",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.164",
+        "url": "http://127.0.0.1:5090/categories?_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.165",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.168",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?_rsc=n0B2BZYuxSyps2yo"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.166",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.167",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.168",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?_rsc=n0B2BZYuxSyps2yo",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.152",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fmusk-ard-alharamain.webp&w=1080&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.150",
+        "url": "http://127.0.0.1:5090/_next/image?url=%2Fproducts%2Fpackage-muzhla.webp&w=1080&q=75",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.169",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4523.3b4c470ba3a8e2c9.js"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.170",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.171",
+        "url": "http://127.0.0.1:5090/_next/static/css/3c60df7c2a9e805f.css"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.171",
+        "url": "http://127.0.0.1:5090/_next/static/css/3c60df7c2a9e805f.css",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.170",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.169",
+        "url": "http://127.0.0.1:5090/_next/static/chunks/4523.3b4c470ba3a8e2c9.js",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.180",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "F5F91094EAADC10EBA637F346D6E6F18",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "F5F91094EAADC10EBA637F346D6E6F18",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.180",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.181",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.182",
+        "url": "http://127.0.0.1:5090/category/all?_rsc=Ln2eHIcxKPfpgljN"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.183",
+        "url": "http://127.0.0.1:5090/categories?_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.184",
+        "url": "http://127.0.0.1:5090/?_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.181",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.185",
+        "url": "http://127.0.0.1:5090/cart?_rsc=KdDa7RSVaoP_f-8e"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.182",
+        "url": "http://127.0.0.1:5090/category/all?_rsc=Ln2eHIcxKPfpgljN",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.183",
+        "url": "http://127.0.0.1:5090/categories?_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.184",
+        "url": "http://127.0.0.1:5090/?_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.185",
+        "url": "http://127.0.0.1:5090/cart?_rsc=KdDa7RSVaoP_f-8e",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.186",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.187",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.186",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.187",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.216",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.217",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.216",
+        "url": "http://127.0.0.1:56890/rest/v1/store_revision?select=version&id=eq.1",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.217",
+        "url": "http://127.0.0.1:5090/favicon.ico?603d046c9a6fdfbb",
+        "status": 200
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.219",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.220",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.221",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.requestWillBeSent",
+        "id": "22388.222",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=expwZ8ylbHw5nTKc"
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.219",
+        "url": "http://127.0.0.1:5090/products/package-laverne-you-miracle?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.220",
+        "url": "http://127.0.0.1:5090/products/package-cherry-trap-boutique?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.221",
+        "url": "http://127.0.0.1:5090/products/vgr-shaver-trimmer-2in1?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      },
+      {
+        "event": "Network.responseReceived",
+        "id": "22388.222",
+        "url": "http://127.0.0.1:5090/products/package-naqaa?from=all&_rsc=expwZ8ylbHw5nTKc",
+        "status": 200
+      }
+    ],
+    "frames": []
+  }
+]

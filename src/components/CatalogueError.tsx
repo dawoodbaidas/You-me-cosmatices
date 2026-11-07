@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from './StoreNavigation'
 import { AlertIcon, RefreshIcon } from '@/components/icons'
 
 /**

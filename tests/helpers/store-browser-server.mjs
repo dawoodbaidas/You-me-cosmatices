@@ -22,6 +22,7 @@ for (const section of ['hero', 'bestsellers']) {
   await db.query('select admin_save_home_section($1,$2,$3)',[section,ids,version])
 }
 let revisionReads=0,catalogueReads=0,productReads=0,categoryReads=0,delay=0
+const productQueries=[]
 const categoryImages = new Map()
 await db.exec("insert into product_categories select id,'leaf' from products where category<>'mist' limit 3")
 await db.exec("insert into product_categories select id,'child' from products where category<>'mist' order by sort_order,id limit 2")
@@ -37,7 +38,9 @@ const query = (sql,params,publicRead=false) => {
 const server=http.createServer(async(request,response)=>{
   const url=new URL(request.url,'http://127.0.0.1')
   response.setHeader('Access-Control-Allow-Origin','*')
-  response.setHeader('Access-Control-Allow-Headers','authorization,apikey,x-client-info,content-type')
+  // Mirror the requested headers in this loopback-only fixture. Current
+  // supabase-js sends accept-profile/client metadata in addition to apikey.
+  response.setHeader('Access-Control-Allow-Headers',request.headers['access-control-request-headers']??'authorization,apikey,x-client-info,content-type,accept-profile')
   if(request.method==='OPTIONS'){response.end();return}
   response.setHeader('Content-Type','application/json')
   try{
@@ -55,13 +58,23 @@ const server=http.createServer(async(request,response)=>{
       data=(await query('select * from store_categories where is_active order by sort_order,slug',[],true)).rows
     }else if(url.pathname==='/rest/v1/products'){
       productReads++
-      const slug=url.searchParams.get('product_categories.category_slug')?.slice(3)??null
+      productQueries.push(Object.fromEntries(url.searchParams))
+      const slug=(url.searchParams.get('membership.category_slug')??url.searchParams.get('product_categories.category_slug'))?.slice(3)??null
+      const productSlug=url.searchParams.get('slug')?.slice(3)??null
       const ids=url.searchParams.get('id')?.slice(4,-1).split(',')??null
-      data=(await query("select to_jsonb(p)||jsonb_build_object('product_variants',coalesce((select jsonb_agg(v) from product_variants v where v.product_id=p.id),'[]'::jsonb),'product_categories',coalesce((select jsonb_agg(jsonb_build_object('category_slug',pc.category_slug)) from product_categories pc where pc.product_id=p.id),'[]'::jsonb)) data from products p where is_active and ($1::text is null or exists(select 1 from product_categories pc where pc.product_id=p.id and pc.category_slug=$1)) and ($2::uuid[] is null or p.id=any($2::uuid[])) order by sort_order,id",[slug,ids],true)).rows.map(row=>row.data)
+      data=(await query("select to_jsonb(p)||jsonb_build_object('product_variants',coalesce((select jsonb_agg(v) from product_variants v where v.product_id=p.id),'[]'::jsonb),'product_categories',coalesce((select jsonb_agg(jsonb_build_object('category_slug',pc.category_slug)) from product_categories pc where pc.product_id=p.id),'[]'::jsonb)) data from products p where is_active and ($1::text is null or exists(select 1 from product_categories pc where pc.product_id=p.id and pc.category_slug=$1)) and ($2::uuid[] is null or p.id=any($2::uuid[])) and ($3::text is null or p.slug=$3) order by sort_order,id",[slug,ids,productSlug],true)).rows.map(row=>row.data)
+    }else if(url.pathname==='/rest/v1/home_section_products'){
+      data=(await query('select section,product_id,position from home_section_products order by section,position',[],true)).rows
     }else if(url.pathname==='/rest/v1/site_settings'){
       data=(await query('select key,value from site_settings',[],true)).rows
     }else if(url.pathname==='/__test/stats'){
-      data={revisionReads,catalogueReads,productReads,categoryReads,orders:(await query('select count(*) count from store_orders')).rows[0].count}
+      data={revisionReads,catalogueReads,productReads,categoryReads,productQueries,orders:(await query('select count(*) count from store_orders')).rows[0].count}
+    }else if(url.pathname==='/__test/product'&&request.method==='POST'){
+      let body='';for await(const chunk of request)body+=chunk
+      const args=JSON.parse(body)
+      const updated=(await query('update products set image_url=coalesce($2,image_url),price=coalesce($3,price),original_price=coalesce($3,original_price),discount_enabled=false,old_price=null,stock_quantity=coalesce($4,stock_quantity) where slug=$1 returning id',[args.slug,args.imageUrl??null,args.price??null,args.stock??null])).rows[0]
+      if(args.price!==undefined)await query('update product_variants set price=$2 where product_id=$1',[updated.id,args.price])
+      data={ok:true,revision:(await query('select version::text from store_revision')).rows[0].version}
     }else if(url.pathname.startsWith('/storage/v1/object/public/category-images/')){
       const bytes=categoryImages.get(url.pathname.split('/category-images/')[1])
       response.statusCode=bytes?200:404

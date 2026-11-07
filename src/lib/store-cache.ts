@@ -6,6 +6,9 @@ export function invalidateStoreCatalogue() {
   revalidateTag(STORE_CATALOGUE_TAG, { expire: 0 })
   revalidatePath('/category', 'layout')
   revalidatePath('/categories', 'layout')
+  revalidatePath('/products', 'layout')
+  revalidatePath('/cart')
+  revalidatePath('/favorites')
   revalidatePath('/')
   revalidatePath('/admin')
 }

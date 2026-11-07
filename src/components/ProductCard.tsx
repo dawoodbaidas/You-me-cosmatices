@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import Link from 'next/link'
+import Link from './StoreNavigation'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { BagIcon, HeartIcon } from './icons'
@@ -106,7 +106,7 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
     <div className={styles.details}>
       <div className={styles.info}>
         <p className={styles.category}>{variant?.label ?? product.categoryLabel}{discount && product.isNew && <span className={styles.newBadge}>جديد</span>}</p>
-        <h3 className={styles.title}><Link onNavigate={event => { event.preventDefault(); onOpenDetails(product.id) }} href={"/products/" + encodeURIComponent(product.slug) + (pathname.startsWith("/category/") ? "?from=" + encodeURIComponent(decodeURIComponent(pathname.split("/")[2])) : "")}>{product.nameAr}</Link></h3>
+        <h3 className={styles.title}><Link prefetch={false} onNavigate={event => { event.preventDefault(); onOpenDetails(product.id) }} href={"/products/" + encodeURIComponent(product.slug) + (pathname.startsWith("/category/") ? "?from=" + encodeURIComponent(decodeURIComponent(pathname.split("/")[2])) : "")}>{product.nameAr}</Link></h3>
         {product.variants.length > 1 && <label className={styles.variant}>النوع<select disabled={pending} aria-label={`نوع ${product.nameAr}`} value={variant?.id ?? ''} onChange={e => onSelectVariant(product.id, e.target.value)}>{product.variants.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>}
       </div>
       <div className={styles.purchase}>

@@ -4,6 +4,7 @@ import { productPricing } from '@/lib/pricing'
 
 import { useMemo, useRef, useState } from 'react'
 import ProductImage from './ProductImage'
+import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
 import { BagIcon, LockIcon, MinusIcon, PlusIcon, TrashIcon, TruckIcon } from './icons'
 import { cartShipping, cartLineLimit, canCheckoutCart, cartCount, cartTotal } from '@/lib/cart'
 import { formatJod } from '@/lib/format'
@@ -17,7 +18,8 @@ const itemCountNoun = (count: number) =>
 const itemsFromLines = (lines: CartLine[]) =>
   lines.map(line => ({ productId: line.product.id, variantId: line.variant?.id ?? null, quantity: line.quantity }))
 
-export default function CartPage({ lines, settings, onRemove, onIncrement, onDecrement, onCheckout, onBrowse }: {
+export default function CartPage({ lines, settings, onRemove, onIncrement, onDecrement, onCheckout, onBrowse, loadError }: {
+  loadError?: string | null
   lines: CartLine[]
   settings: SiteSettings
   onRemove: (id: string, variant: string | null) => void
@@ -47,6 +49,7 @@ export default function CartPage({ lines, settings, onRemove, onIncrement, onDec
 
   return (
     <section dir="rtl" className={styles.view} data-testid="cart-page">
+      {loadError && <p role="alert">{loadError}</p>}
       <header className={styles.head}>
         <div className={styles.headText}>
           <h1 className={styles.title}>سلة التسوق</h1>
@@ -73,7 +76,7 @@ export default function CartPage({ lines, settings, onRemove, onIncrement, onDec
                 <li className={styles.card} key={`${line.product.id}-${line.variant?.id ?? 'base'}`} data-testid={`cart-line-${line.product.slug}`}>
                   <div className={styles.thumb}>
                     {line.product.imageUrl
-                      ? <ProductImage src={line.product.imageUrl} alt={line.product.nameAr} sizes="(max-width: 767px) 88px, 148px" />
+                      ? <ProductImage src={line.product.imageUrl} alt={line.product.nameAr} sizes={PRODUCT_IMAGE_SIZES.cart} />
                       : <span className={styles.thumbFallback}><BagIcon /></span>}
                   </div>
 

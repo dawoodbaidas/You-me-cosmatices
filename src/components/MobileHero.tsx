@@ -1,13 +1,14 @@
 'use client'
 
-import { useCallback, useId, useRef } from 'react'
-import { getImageProps } from 'next/image'
+import { useCallback, useId, useRef, useState } from 'react'
 import { productSceneAsset } from '@/lib/scene-products'
 import { clamp } from '@/lib/scene-palette'
 import type { Product } from '@/types/product'
 import SceneProductImage from './SceneProductImage'
 import { useSceneFrame, type SceneFrame } from './useSceneFrame'
 import styles from './scroll-scenes.module.css'
+import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
+import { prefetchProductDetails } from './CachedProductImage'
 
 const ease = (t: number) => { const p = clamp(t); return p * p * (3 - 2 * p) }
 const out = (t: number) => 1 - (1 - clamp(t)) ** 3
@@ -22,7 +23,8 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
   const items = products
   const maskId = useId().replace(/:/g, '')
   const main = items[0], asset = main && productSceneAsset(main)
-  const maskSrc = asset && getImageProps({ src: asset.src, alt: '', width: 260, height: Math.round(260 * asset.height / asset.width) }).props.src
+  const [maskImage, setMaskImage] = useState<{ source: string; url: string } | null>(null)
+  const maskSrc = asset && maskImage?.source === asset.src ? maskImage.url : undefined
   const draw = useCallback(({ progress: hp, elapsed: time, reduced, width }: SceneFrame) => {
     const element = root.current
     if (!element) return
@@ -86,9 +88,10 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
         <span className={styles.heroGlow} data-glow aria-hidden="true" />
         <span className={styles.shelf} data-shelf aria-hidden="true" />
         {items.map((product, index) => <button key={product.id} className={`${styles.heroProduct} ${index === 0 ? styles.heroMain : index < 3 ? styles.heroMiddle : styles.heroOuter}`} data-hero-product style={{ aspectRatio: String((productSceneAsset(product)?.bounds.width ?? 4) / (productSceneAsset(product)?.bounds.height ?? 5)) }}
-          aria-label={`عرض تفاصيل ${product.nameAr}`} onClick={() => onOpenDetails(product.id)}>
+          aria-label={`عرض تفاصيل ${product.nameAr}`} onClick={() => onOpenDetails(product.id)} onPointerEnter={() => prefetchProductDetails(product.imageUrl)} onFocus={() => prefetchProductDetails(product.imageUrl)}>
           <span className={styles.productShadow} aria-hidden="true" />
-          <SceneProductImage product={product} preload={index === 0} mobileWeight={index === 0 ? 1 : index < 3 ? .85 : .7} sizes="(max-width:767px) 32vw, (max-width:1200px) 36vw, 480px" />
+          <SceneProductImage product={product} preload={index === 0} mobileWeight={index === 0 ? 1 : index < 3 ? .85 : .7} sizes={PRODUCT_IMAGE_SIZES.hero}
+            onLoad={index === 0 && asset ? image => setMaskImage({ source: asset.src, url: image.currentSrc }) : undefined} />
           {index === 0 && asset && <svg className={styles.shine} viewBox={`${asset.bounds.x} ${asset.bounds.y} ${asset.bounds.width} ${asset.bounds.height}`} preserveAspectRatio="none" aria-hidden="true">
             <defs><clipPath id={`${maskId}-clip`}><rect x={asset.bounds.x} y={asset.bounds.y} width={asset.bounds.width} height={asset.bounds.height} /></clipPath>
               <mask id={`${maskId}-mask`} maskUnits="userSpaceOnUse" x="0" y="0" width={asset.width} height={asset.height} style={{ maskType: 'alpha' }}><image href={maskSrc} width={asset.width} height={asset.height} /></mask></defs>

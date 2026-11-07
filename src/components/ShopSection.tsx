@@ -1,6 +1,6 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import CategoryLink from './CategoryLink'
 import BoutiqueDialog from './BoutiqueDialog'
@@ -41,19 +41,19 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
     const frame = requestAnimationFrame(() => { try { const saved = JSON.parse(sessionStorage.getItem('store-return') || 'null'); if (saved?.url === location.pathname + location.search && Number.isFinite(saved?.y)) { setRestore({ url: saved.url, y: Number(saved.y), count: Number.isInteger(saved.count) ? saved.count : 0 }); } sessionStorage.removeItem('store-return') } catch {} }); return () => cancelAnimationFrame(frame)
   }, [])
   const params = useSearchParams()
+  const router = useRouter()
   const sort = params.get('sort') ?? 'featured'
   const onlyAvailable = params.get('available') === '1'
   const onlyDiscounted = params.get('discounted') === '1'
   const onlyNew = params.get('new') === '1'
-  const update = (key: string, value: string | null) => {
+  const update = (changes: Record<string, string | null>) => {
     const next = new URLSearchParams(window.location.search)
-    if (value) next.set(key, value); else next.delete(key)
-    window.history.pushState(null, '', window.location.pathname + (next.size ? '?' + next : ''))
+    for (const [key, value] of Object.entries(changes)) {
+      if (value) next.set(key, value); else next.delete(key)
+    }
+    router.push(window.location.pathname + (next.size ? '?' + next : ''), { scroll: false })
   }
-  const setSort = (value: string) => update('sort', value === 'featured' ? null : value)
-  const setOnlyAvailable = (value: boolean) => update('available', value ? '1' : null)
-  const setOnlyDiscounted = (value: boolean) => update('discounted', value ? '1' : null)
-  const setOnlyNew = (value: boolean) => update('new', value ? '1' : null)
+  const setSort = (value: string) => update({ sort: value === 'featured' ? null : value })
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [filterPosition, setFilterPosition] = useState({ top: 0, right: 0 })
   // Pending choices stay local until the user presses the apply button, so
@@ -62,15 +62,13 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
   const [draft, setDraft] = useState({ available: false, discounted: false, new: false })
   const openFilters = () => { setDraft({ available: onlyAvailable, discounted: onlyDiscounted, new: onlyNew }); setFiltersOpen(true) }
   const applyDraft = () => {
-    setOnlyAvailable(draft.available)
-    setOnlyDiscounted(draft.discounted)
-    setOnlyNew(draft['new'])
+    update({ available: draft.available ? '1' : null, discounted: draft.discounted ? '1' : null, new: draft['new'] ? '1' : null })
     setFiltersOpen(false)
     window.dispatchEvent(new Event('boutique:layout'))
   }
   const clearFilters = () => {
     setDraft({ available: false, discounted: false, new: false })
-    setOnlyAvailable(false); setOnlyDiscounted(false); setOnlyNew(false)
+    update({ available: null, discounted: null, new: null })
   }
   const activeFilterCount = Number(onlyAvailable) + Number(onlyDiscounted) + Number(onlyNew)
   const viewKey = `${category}:${pageTitle ?? 'home'}:${query}`

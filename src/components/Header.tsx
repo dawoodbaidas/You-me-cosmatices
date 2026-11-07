@@ -1,7 +1,6 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import Link, { useStoreNavigation } from './StoreNavigation'
 import StoreBrand from './StoreBrand'
 import CategoryLink from './CategoryLink'
 import CategoryCircles from './CategoryCircles'
@@ -17,7 +16,7 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
   onScrollTo: (id: string) => void
   groups: Collection[]; selected: string | null; cataloguePage: boolean
 }) {
-  const pathname = usePathname()
+  const { activePath: pathname } = useStoreNavigation()
   const [open, setOpen] = useState(false)
   const [mega, setMega] = useState(false)
   const [active, setActive] = useState('home')
@@ -33,7 +32,8 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
       boundaries?.disconnect()
       const sections = [...root.querySelectorAll<HTMLElement>('main > section, footer')]
       const paint = () => {
-        const section = sections.find(section => { const rect = section.getBoundingClientRect(); return rect.top <= height + 1 && rect.bottom > height + 1 }) ?? sections[0]
+        const attached = sections.filter(section => section.isConnected)
+        const section = attached.find(section => { const rect = section.getBoundingClientRect(); return rect.top <= height + 1 && rect.bottom > height + 1 }) ?? attached[0]
         if (!section) return
         const style = getComputedStyle(section)
         element.style.backgroundColor = style.backgroundColor

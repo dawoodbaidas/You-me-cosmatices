@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import CachedProductImage from './CachedProductImage'
 import { useEffect, useRef, useState } from 'react'
 import { BagIcon } from './icons'
 
@@ -19,10 +19,10 @@ export default function ProductMedia({ src, alt, sizes, eager = false, listing =
     observer.observe(frame.current)
     return () => observer.disconnect()
   }, [nearby])
-  return <span ref={frame} style={{ position: 'absolute', inset: 0, background: '#f1eee5' }}>
+  return <span ref={frame} data-media-listing={listing || undefined} style={{ position: 'absolute', inset: 0, background: '#f1eee5' }}>
     {(!src || failed === src) ? <span className="product-image-fallback" role="img" aria-label={alt}>
       <BagIcon /><span>الصورة غير متاحة</span>
-    </span> : nearby ? <Image src={src} alt={alt} fill sizes={sizes} quality={listing ? 70 : 90}
+    </span> : nearby ? <CachedProductImage src={src} alt={alt} sizes={sizes}
       style={{ objectFit: mode === 'cover' ? 'cover' : 'contain', objectPosition: 'center', padding: 0 }}
       loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : 'auto'}
       onError={() => setFailed(src)} /> : null}

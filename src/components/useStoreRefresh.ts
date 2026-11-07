@@ -4,25 +4,29 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-export function useStoreRefresh(revision: string | null) {
+export function useStoreRefresh(revision: string | null, onRevision?: (revision: string) => void) {
   const router = useRouter()
   useEffect(() => {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return
     const client = createClient()
     let disposed = false
     let checking = false
-    let refreshing = false
+    let refreshRetryAt = 0
     // Render cached pages immediately; refresh their payload only on a change.
     const refresh = async () => {
-      if (disposed || document.hidden || checking || refreshing) return
+      if (disposed || document.hidden || checking || Date.now() < refreshRetryAt) return
       checking = true
       try {
         const { data, error } = await client.from('store_revision').select('version').eq('id', 1)
+        if (!disposed && !error && data?.[0]) onRevision?.(String(data[0].version))
         if (!disposed && !error && data?.[0] && String(data[0].version) !== revision) {
-          refreshing = true
+          // A refresh can fail or retain the same revision. Bound suppression so
+          // the next poll can retry even when this effect has not remounted.
+          refreshRetryAt = Date.now() + 5_000
           router.refresh()
         }
       } catch {
+        refreshRetryAt = 0
         // Retry on the next focus, reconnect or database event.
       } finally { checking = false }
     }
@@ -34,7 +38,7 @@ export function useStoreRefresh(revision: string | null) {
     const channel = client.channel('store-revision').on('postgres_changes', {
       event: 'UPDATE', schema: 'public', table: 'store_revision',
     }, visible).subscribe()
-    const poll = window.setInterval(() => void refresh(), 30_000)
+    const poll = window.setInterval(() => void refresh(), 15_000)
     void refresh()
     return () => {
       window.clearInterval(poll)
@@ -45,5 +49,5 @@ export function useStoreRefresh(revision: string | null) {
       document.removeEventListener('visibilitychange', visible)
       void client.removeChannel(channel)
     }
-  }, [router, revision])
+  }, [router, revision, onRevision])
 }

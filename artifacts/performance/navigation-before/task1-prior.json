@@ -1,0 +1,69 @@
+{
+  "routeResults": [
+    {
+      "route": "/",
+      "revisionReads": 1,
+      "productReads": 1,
+      "catalogueReads": 0
+    },
+    {
+      "route": "/cart",
+      "revisionReads": 1,
+      "productReads": 0,
+      "catalogueReads": 0
+    },
+    {
+      "route": "/products/body-mist",
+      "revisionReads": 1,
+      "productReads": 1,
+      "catalogueReads": 0
+    },
+    {
+      "route": "/categories/%D8%A7%D9%84%D8%B9%D9%86%D8%A7%D9%8A%D8%A9/%D8%A7%D9%84%D8%B9%D9%86%D8%A7%D9%8A%D8%A9-%D8%A7%D9%84%D9%8A%D9%88%D9%85%D9%8A%D8%A9",
+      "revisionReads": 1,
+      "productReads": 1,
+      "catalogueReads": 0
+    },
+    {
+      "route": "/category/all",
+      "revisionReads": 1,
+      "productReads": 1,
+      "catalogueReads": 0
+    }
+  ],
+  "results": [
+    {
+      "width": 390,
+      "knownCartAndModalProductRequests": 0,
+      "concurrentSearchRequests": 1,
+      "directCartIdRequests": 1,
+      "freshnessMs": 13589,
+      "updatedImageModalCartSearch": true,
+      "updatedPriceAndStock": true,
+      "historyReconciliation": false,
+      "historyIssue": {
+        "url": "http://127.0.0.1:5090/category/all",
+        "products": 0,
+        "body": "جارٍ تحميل القسمجارٍ تحميل المنتجات…"
+      },
+      "reconnectFreshData": true
+    },
+    {
+      "width": 1440,
+      "knownCartAndModalProductRequests": 0,
+      "concurrentSearchRequests": 1,
+      "directCartIdRequests": 1,
+      "freshnessMs": 13965,
+      "updatedImageModalCartSearch": true,
+      "updatedPriceAndStock": true,
+      "historyReconciliation": false,
+      "historyIssue": {
+        "url": "http://127.0.0.1:5090/category/all",
+        "products": 0,
+        "body": "جارٍ تحميل القسمجارٍ تحميل المنتجات…"
+      },
+      "reconnectFreshData": true
+    }
+  ],
+  "errors": []
+}

@@ -9,7 +9,8 @@ import { formatJod } from '@/lib/format'
 import { cartShipping, cartLineLimit, canCheckoutCart, cartCount, cartTotal } from '@/lib/cart'
 import type { CartLine, SiteSettings } from '@/types/product'
 
-export default function CartDrawer({ side, open, lines, settings, onClose, onRemove, onIncrement, onDecrement, onCheckout, onBrowse }: {
+export default function CartDrawer({ side, open, lines, settings, onClose, onRemove, onIncrement, onDecrement, onCheckout, onBrowse, loadError }: {
+ loadError?: string | null
  side: 'left' | 'right'; open:boolean; lines:CartLine[]; settings:SiteSettings; onClose:()=>void; onRemove:(id:string,variant:string|null)=>void; onIncrement:(id:string,variant:string|null)=>void; onDecrement:(id:string,variant:string|null)=>void; onCheckout:()=>void; onBrowse:()=>void
 }) {
  const subtotal=cartTotal(lines), count=cartCount(lines), threshold=settings.storeFreeShippingThreshold, remaining=Math.max(0,threshold-subtotal)
@@ -19,6 +20,7 @@ export default function CartDrawer({ side, open, lines, settings, onClose, onRem
  const lastCheckout=useRef(0)
  const content = <>
   <div className="cart-sheet" data-testid="cart-drawer" dir="rtl"><div className="cart-handle" aria-hidden="true"/>
+   {loadError&&<p role="alert">{loadError}</p>}
     <div className="cart-heading"><h2>سلة التسوق <span>({count})</span></h2><button className="icon-button" aria-label="إغلاق السلة" onClick={onClose}><CloseIcon/></button></div>
    <div className="cart-content">{!lines.length?<div className="cart-empty"><span className="empty-bag"><BagIcon/></span><h3>سلتك فاضية، ابدأ بإضافة منتج</h3><button className="scene-button" onClick={onBrowse}>تسوّق الآن</button></div>:<ul>{lines.map(line=><li className="cart-line" key={`${line.product.id}-${line.variant?.id??'base'}`}>
     <div className="cart-thumbnail">{line.product.imageUrl?<ProductImage src={line.product.imageUrl} alt={line.product.nameAr} sizes="72px" eager/>:<BagIcon/>}</div>

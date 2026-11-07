@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react'
 import ProductImage from './ProductImage'
 import { coverLens } from '@/lib/cover-lens'
 import styles from './ProductCard.module.css'
+import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
+import { prefetchProductDetails } from './CachedProductImage'
 
 export default function ProductLens({ src, name, eager, onOpen, defer = false }: { src: string | null; name: string; eager: boolean; defer?: boolean; onOpen: () => void }) {
   const area = useRef<HTMLDivElement>(null)
@@ -77,7 +79,7 @@ export default function ProductLens({ src, name, eager, onOpen, defer = false }:
     }
   }, [src])
   return <><div ref={area} className={styles.imageArea}>
-    <button className={styles.imageButton} onClick={onOpen} aria-label={`عرض تفاصيل ${name}`}><ProductImage src={src} alt={name} eager={eager} defer={defer} listing sizes="(max-width: 599px) calc((100vw - 30px) / 2), (max-width: 767px) calc((100vw - 40px) / 3), (max-width: 1199px) calc((100vw - 52px) / 2), (max-width: 1439px) calc((100vw - 76px) / 3), 455px" /></button>
+    <button className={styles.imageButton} onClick={onOpen} onPointerEnter={() => prefetchProductDetails(src)} onFocus={() => prefetchProductDetails(src)} aria-label={`عرض تفاصيل ${name}`}><ProductImage src={src} alt={name} eager={eager} defer={defer} listing sizes={PRODUCT_IMAGE_SIZES.listing} /></button>
     <span data-lens hidden className={styles.lens}><span className={styles.magnified} /></span>
   </div></>
 }

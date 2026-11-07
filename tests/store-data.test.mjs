@@ -100,7 +100,7 @@ test('public catalogue uses only database rows and revisioned cache; admin write
       assert.equal(options.headers.Authorization, 'Bearer public-anon')
       if (url.includes('/store_revision?')) { revisionReads++;assert.equal(options.cache,'no-store');return Response.json((await db.query('select version::text from store_revision')).rows) }
       assert.equal(options.cache,'force-cache')
-      assert.equal(options.next.revalidate,300)
+      assert.equal(options.next.revalidate,30)
       assert.deepEqual(options.next.tags,['store-catalogue'])
       if (!cached.has(url)) { reads++;cached.set(url,(await db.query('select get_store_catalogue(null) data')).rows[0].data) }
       return Response.json(cached.get(url))

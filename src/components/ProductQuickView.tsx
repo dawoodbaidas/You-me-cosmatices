@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import ProductMedia from './ProductMedia'
+import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
 import './product-quickview.css'
 import { cartLineLimit } from '@/lib/cart'
 import { productPricing } from '@/lib/pricing'
@@ -64,13 +65,13 @@ export default function ProductQuickView({
 
   const content = (<>
       <div data-testid="product-quickview" className="quickview-sheet premium-quickview" dir="rtl">
-        {!inline && <header className="quickview-toolbar"><span>?????? ??????</span><button type="button" onClick={onClose} aria-label="إغلاق" data-dialog-autofocus className="quickview-close">
+        {!inline && <header className="quickview-toolbar"><span>تفاصيل المنتج</span><button type="button" onClick={onClose} aria-label="إغلاق" data-dialog-autofocus className="quickview-close">
           <CloseIcon />
         </button></header>}
 
         <div className="quickview-body">
         <div className="quickview-media">
-          <ProductMedia key={product.imageUrl} src={product.imageUrl} alt={product.nameAr} sizes="(max-width: 767px) 90vw, 440px" eager />
+          <ProductMedia src={product.imageUrl} alt={product.nameAr} sizes={PRODUCT_IMAGE_SIZES.detail} eager />
           {(discount || product.isNew) && <span className="quickview-badge">{discount ? `-${discount}%` : 'جديد'}</span>}
         </div>
 

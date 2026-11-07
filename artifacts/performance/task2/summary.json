@@ -1,0 +1,127 @@
+{
+  "source": "measurements.json",
+  "sha256": "b273fda00b14f64fbe4878127d7e75a023e9506b544bea2b76590f0ddb6dd872",
+  "profile": {
+    "width": 390,
+    "height": 844,
+    "dpr": 2,
+    "cpu": 4,
+    "latency": 150,
+    "download": 1600000,
+    "upload": 750000
+  },
+  "summary": [
+    {
+      "flow": "/ cold",
+      "runs": 5,
+      "lcp": {
+        "median": 2084,
+        "worst": 2368
+      },
+      "cls": {
+        "median": 0.09360031092263547,
+        "worst": 0.09701576762695349
+      },
+      "inpObserved": {
+        "median": 96,
+        "worst": 128
+      },
+      "images": {
+        "median": 209998,
+        "worst": 209998
+      },
+      "js": {
+        "median": 246780,
+        "worst": 246780
+      },
+      "requests": {
+        "median": 36,
+        "worst": 36
+      }
+    },
+    {
+      "flow": "/ warm",
+      "runs": 5,
+      "lcp": {
+        "median": 724,
+        "worst": 1052
+      },
+      "cls": {
+        "median": 0.08518452121178674,
+        "worst": 0.08518452121178674
+      },
+      "inpObserved": {
+        "median": 48,
+        "worst": 64
+      },
+      "images": {
+        "median": 0,
+        "worst": 0
+      },
+      "js": {
+        "median": 0,
+        "worst": 0
+      },
+      "requests": {
+        "median": 35,
+        "worst": 36
+      }
+    },
+    {
+      "flow": "/category/all cold",
+      "runs": 5,
+      "lcp": {
+        "median": 2008,
+        "worst": 2196
+      },
+      "cls": {
+        "median": 0.001684577019509376,
+        "worst": 0.001684577019509376
+      },
+      "inpObserved": {
+        "median": 40,
+        "worst": 80
+      },
+      "images": {
+        "median": 201784,
+        "worst": 201784
+      },
+      "js": {
+        "median": 246780,
+        "worst": 246780
+      },
+      "requests": {
+        "median": 49,
+        "worst": 49
+      }
+    },
+    {
+      "flow": "/category/all warm",
+      "runs": 5,
+      "lcp": {
+        "median": 780,
+        "worst": 832
+      },
+      "cls": {
+        "median": 0,
+        "worst": 0
+      },
+      "inpObserved": {
+        "median": 32,
+        "worst": 40
+      },
+      "images": {
+        "median": 0,
+        "worst": 0
+      },
+      "js": {
+        "median": 0,
+        "worst": 0
+      },
+      "requests": {
+        "median": 49,
+        "worst": 49
+      }
+    }
+  ]
+}

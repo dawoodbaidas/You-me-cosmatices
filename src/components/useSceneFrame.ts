@@ -12,8 +12,9 @@ export function useSceneFrame(root: RefObject<HTMLElement | null>, draw: (frame:
     const element = root.current
     if (!element) return
     const reduced = matchMedia('(prefers-reduced-motion: reduce)')
-    let frame = 0, start = 0, last = 0, elapsed = 0, visible = true
+    let frame = 0, start = 0, last = 0, elapsed = 0, visible = true, disposed = false
     const render = (time: number) => {
+      if (disposed) return
       frame = 0
       if (!start) start = time
       if (last) elapsed += Math.min(time - last, 64)
@@ -26,7 +27,7 @@ export function useSceneFrame(root: RefObject<HTMLElement | null>, draw: (frame:
       if (continuous && visible && !reduced.matches && !document.hidden) frame = requestAnimationFrame(render)
       else last = 0
     }
-    const schedule = () => { if (!frame && !document.hidden) frame = requestAnimationFrame(render) }
+    const schedule = () => { if (!disposed && !frame && !document.hidden) frame = requestAnimationFrame(render) }
     redraw.current = schedule
     const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; schedule() })
     observer.observe(element)
@@ -42,6 +43,7 @@ export function useSceneFrame(root: RefObject<HTMLElement | null>, draw: (frame:
     reduced.addEventListener('change', schedule)
     schedule()
     return () => {
+      disposed = true
       cancelAnimationFrame(frame); observer.disconnect(); sizeObserver.disconnect(); redraw.current = () => {}
       window.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule)
       window.removeEventListener('boutique:layout', schedule); element.removeEventListener('load', schedule, true)
