@@ -4,9 +4,13 @@ import type { CartItem, CartLine, Product, SiteSettings } from '@/types/product'
 
 export const CART_STORAGE_KEY = 'you-and-me-cart-v1'
 
+export function isProductOutOfStock(product: Product): boolean {
+  return product.isOutOfStock === true || (product.stockQuantity != null && product.stockQuantity <= 0)
+}
+
 /** NULL stock means tracking was not configured, not that the item is sold out. */
 export function cartLineLimit(product: Product, items: CartItem[], variantId: string | null): number {
-  if (product.isActive === false || (variantId !== null && !product.variants.some(variant => variant.id === variantId && variant.isActive !== false))) return 0
+  if (isProductOutOfStock(product) || product.isActive === false || (variantId !== null && !product.variants.some(variant => variant.id === variantId && variant.isActive !== false))) return 0
   if (variantId === null && product.variants.some(variant => variant.isActive !== false)) return 0
   if (product.stockQuantity == null) return 99
   const otherVariants = items.filter(item => item.productId === product.id && item.variantId !== variantId && product.variants.some(variant => variant.id === item.variantId && variant.isActive !== false)).reduce((count, item) => count + item.quantity, 0)

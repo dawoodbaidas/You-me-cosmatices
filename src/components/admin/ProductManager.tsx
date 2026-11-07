@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { moveProducts } from '@/app/admin/actions'
+import { moveProducts, setProductAvailability } from '@/app/admin/actions'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import type { Product } from '@/types/product'
@@ -12,6 +12,8 @@ import { formatJod } from '@/lib/format'
 import { validateProduct, type ProductDraft } from '@/lib/products/editor'
 import type { StoreCategory } from '@/types/store'
 import ProductImageEditor, { type ProductImageChoice } from './ProductImageEditor'
+import { isProductOutOfStock } from '@/lib/cart'
+import StockBadge from '@/components/StockBadge'
 
 const button = 'rounded-full border border-sand px-4 py-2 text-sm font-bold disabled:opacity-40'
 const primary = `${button} bg-cocoa text-white`
@@ -48,6 +50,17 @@ export default function ProductManager({ products, total, page, initialQuery, ca
     finally { busy.current = false; setPending(null) }
   }
 
+  async function toggleAvailability(product: Product) {
+    if (busy.current) return
+    busy.current = true; setPending(`availability:${product.id}`)
+    try {
+      const response = await setProductAvailability(product.id, !product.isOutOfStock, product.updatedAt ?? '')
+      notify(response)
+      if (response.ok) router.refresh()
+    } catch { notify({ ok: false, message: 'تعذّر تحديث التوفر. حدّث القائمة للتحقق ثم حاول مجددًا.' }) }
+    finally { busy.current = false; setPending(null) }
+  }
+
   return <section className="mt-6" dir="rtl">
     {editing ? <FullProductEditor key={editing === 'new' ? 'new' : editing.id} categories={categories} product={editing === 'new' ? null : editing}
       onCancel={() => { setEditing(null); onEditingChange(false) }} onSaved={(response) => { notify(response); setEditing(null); onEditingChange(false); router.refresh() }} onError={notify} /> : <>
@@ -72,7 +85,13 @@ export default function ProductManager({ products, total, page, initialQuery, ca
             {product.imageUrl ? <Image src={product.imageUrl} alt={product.nameAr} fill sizes="80px" className="object-contain" /> : <span className="flex h-full items-center justify-center text-xs">بدون صورة</span>}
           </div>
           <div className="min-w-0 flex-1"><h2 className="font-bold">{product.nameAr}</h2><p className="text-sm text-cocoa/60">{product.categoryLabel} · {formatJod(product.price, currency)}</p><p className="mt-1 text-xs">{product.isActive ? 'نشط' : 'غير نشط'}{product.isFeatured ? ' · مميز' : ''} · الترتيب {product.sortOrder ?? 0} · {product.variants.length} نوع</p></div>
-          <div className="flex gap-2"><button type="button" className={button} disabled={!!pending} onClick={() => { setResult(null); setEditing(product); onEditingChange(true) }}>تعديل</button><button type="button" className={`${button} text-rose`} disabled={!!pending} onClick={() => remove(product)}>{pending === product.id ? 'جارٍ الحذف…' : 'حذف'}</button></div>
+          <div className="flex flex-wrap items-center gap-2">
+            <StockBadge outOfStock={isProductOutOfStock(product)} />
+            <button type="button" role="switch" aria-checked={product.isOutOfStock === true} aria-label={`إيقاف شراء ${product.nameAr} يدويًا: نفد من المخزون`} className={`${button} bg-cream text-cocoa`} disabled={!!pending} onClick={() => toggleAvailability(product)}>
+              {pending === `availability:${product.id}` ? 'جارٍ التحديث…' : product.isOutOfStock ? 'إلغاء نفاد المخزون' : 'تعيين: نفد من المخزون'}
+            </button>
+            <button type="button" className={button} disabled={!!pending} onClick={() => { setResult(null); setEditing(product); onEditingChange(true) }}>تعديل</button><button type="button" className={`${button} text-rose`} disabled={!!pending} onClick={() => remove(product)}>{pending === product.id ? 'جارٍ الحذف…' : 'حذف'}</button>
+          </div>
         </article>)}
         {!products.length && <p className="p-6 text-center">لا توجد منتجات بعد. أضيفي أول منتج.</p>}
       </div>
@@ -87,12 +106,13 @@ export default function ProductManager({ products, total, page, initialQuery, ca
   </section>
 }
 
-function FullProductEditor({ product, categories, onCancel, onSaved, onError }: { product: Product | null; categories: StoreCategory[]; onCancel: () => void; onSaved: (r: ActionResult) => void; onError: (r: ActionResult) => void }) {
+export function FullProductEditor({ product, categories, onCancel, onSaved, onError }: { product: Product | null; categories: StoreCategory[]; onCancel: () => void; onSaved: (r: ActionResult) => void; onError: (r: ActionResult) => void }) {
   const [id] = useState(() => product?.id ?? crypto.randomUUID())
   const [variants, setVariants] = useState<ProductDraft['variants']>(() => product?.variants.map(v => ({ id: v.id, label: v.label, price: v.price, is_active: v.isActive ?? true, sort_order: v.sortOrder ?? 0 })) ?? [])
   const [categorySlugs, setCategorySlugs] = useState<string[]>(() => product?.categorySlugs ?? [])
   const [imageChoice, setImageChoice] = useState<ProductImageChoice>({ file: null, processed: null, confirmed: true, restore: false })
   const [discountEnabled,setDiscountEnabled]=useState(product?.discountEnabled ?? false)
+  const [isOutOfStock, setIsOutOfStock] = useState(product?.isOutOfStock ?? false)
   const [originalPrice,setOriginalPrice]=useState(String(product?.originalPrice ?? product?.oldPrice ?? product?.price ?? 0))
   const [salePrice,setSalePrice]=useState(product?.discountEnabled ? String(product.price) : '')
   const [status, setStatus] = useState('')
@@ -118,7 +138,7 @@ function FullProductEditor({ product, categories, onCancel, onSaved, onError }: 
     const draft: ProductDraft = {
       id, updatedAt: product?.updatedAt ?? null, slug: text('slug'), name_ar: text('name_ar'), name_en: text('name_en'),
       description: text('description') || null, category: product?.category ?? categorySlugs[0] ?? 'uncategorized', category_label: categories.find(category => categorySlugs.includes(category.slug))?.name_ar ?? 'بدون قسم',
-      category_slugs: categorySlugs, stock_quantity: text('stock_quantity') === '' ? null : Number(text('stock_quantity')),
+      category_slugs: categorySlugs, stock_quantity: text('stock_quantity') === '' ? null : Number(text('stock_quantity')), is_out_of_stock: isOutOfStock,
       price: discountEnabled ? (salePrice.trim() ? Number(salePrice) : NaN) : Number(originalPrice), old_price: discountEnabled ? Number(originalPrice) : null,
       original_price: Number(originalPrice), discount_enabled: discountEnabled, is_new: form.has('is_new'),
       badge: product?.badge ?? null, benefits: text('benefits').split('\n').map(s => s.trim()).filter(Boolean),
@@ -160,6 +180,10 @@ function FullProductEditor({ product, categories, onCancel, onSaved, onError }: 
         <Field label="الرابط المختصر (slug)"><input name="slug" dir="ltr" required maxLength={200} defaultValue={product?.slug} /></Field>
         <fieldset className="sm:col-span-2"><legend className="mb-2 text-sm font-bold">أقسام المنتج</legend><label className="mb-3 block"><input type="checkbox" checked={!categorySlugs.length} onChange={()=>setCategorySlugs([])} /> بدون قسم</label><div className="flex flex-wrap gap-3">{categories.map(category => <label key={category.slug} className="text-sm"><input type="checkbox" checked={categorySlugs.includes(category.slug)} onChange={event => setCategorySlugs(current => event.target.checked ? [...current, category.slug] : current.filter(slug => slug !== category.slug))} /> {category.name_ar}{!category.is_active && ' (مخفي)'}</label>)}</div>{!categories.length && <p className="text-sm">أضف قسماً من تبويب الأقسام أولاً.</p>}</fieldset>
         <Field label="المخزون (فارغ إذا لم يُسجّل)"><input name="stock_quantity" type="number" min="0" max="2147483647" step="1" defaultValue={product?.stockQuantity ?? ''} /></Field>
+        <div className="rounded-2xl border border-sand bg-cream p-4 sm:col-span-2">
+          <label className="flex items-center gap-3 font-bold"><input type="checkbox" role="switch" name="is_out_of_stock" checked={isOutOfStock} onChange={event => setIsOutOfStock(event.target.checked)} className="h-5 w-5 accent-cocoa" />نفد من المخزون</label>
+          <p className="mt-2 text-sm text-cocoa/70">فعّل هذا المفتاح لإيقاف الشراء دون إخفاء المنتج أو تغيير الكمية المسجلة. إلغاؤه لا يعيد توفر منتج كميته صفر.</p>
+        </div>
         <label className="flex items-center gap-2"><input type="checkbox" name="is_new" defaultChecked={product?.isNew ?? false} /> جديد</label>
         <label className="flex items-center gap-2"><input type="checkbox" checked={discountEnabled} onChange={event=>setDiscountEnabled(event.target.checked)} /> عليه خصم</label>
         <Field label="السعر الأصلي"><input name="original_price" type="number" min={discountEnabled?'0.001':'0'} max="100000" step="0.001" required value={originalPrice} onChange={event=>setOriginalPrice(event.target.value)} /></Field>

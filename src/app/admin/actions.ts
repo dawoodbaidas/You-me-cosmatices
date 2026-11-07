@@ -131,6 +131,17 @@ export async function setProductFlags(
   return { ok: true, message: 'تم التحديث ✅' }
 }
 
+export async function setProductAvailability(productId: string, isOutOfStock: boolean, updatedAt: string): Promise<ActionResult> {
+  if (!(await isAdmin())) return { ok: false, message: 'غير مصرّح.' }
+  if (!UUID.test(productId) || typeof isOutOfStock !== 'boolean' || !Number.isFinite(Date.parse(updatedAt))) return { ok: false, message: 'بيانات توفر المنتج غير صالحة.' }
+  const supabase = await createClient()
+  const { error } = await supabase.from('products').update({ is_out_of_stock: isOutOfStock })
+    .eq('id', productId).eq('updated_at', updatedAt).select('id').single()
+  if (error) return { ok: false, message: 'تعذّر تحديث التوفر أو عُدّل المنتج في جلسة أخرى. حدّث القائمة ثم حاول مجددًا.' }
+  invalidateStoreCatalogue()
+  return { ok: true, message: isOutOfStock ? 'تم تعيين المنتج: نفد من المخزون.' : 'تم إلغاء الإيقاف اليدوي. تبقى الكمية المسجلة هي المحدِّدة للتوفر.' }
+}
+
 export async function saveSettings(payload: SettingsPayload): Promise<ActionResult> {
   if (!(await isAdmin())) return { ok: false, message: 'غير مصرّح — سجّلي الدخول كمسؤول.' }
 

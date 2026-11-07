@@ -54,6 +54,7 @@ interface ProductRow {
   updated_at?: string
   product_variants?: VariantRow[] | null
   stock_quantity?: number | null
+  is_out_of_stock?: boolean
   product_categories?: { category_slug: string }[] | null
 }
 
@@ -125,6 +126,7 @@ export function mapProduct(row: ProductRow, includeInactiveVariants = false): Pr
     sortOrder: row.sort_order,
     variants,
     stockQuantity: row.stock_quantity ?? null,
+    isOutOfStock: row.is_out_of_stock ?? false,
     categorySlugs: row.product_categories?.map(category => category.category_slug) ?? [],
   }
 }

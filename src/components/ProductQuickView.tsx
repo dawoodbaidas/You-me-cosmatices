@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import ProductMedia from './ProductMedia'
 import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
 import './product-quickview.css'
-import { cartLineLimit } from '@/lib/cart'
+import { cartLineLimit, isProductOutOfStock } from '@/lib/cart'
+import StockBadge from './StockBadge'
 import { productPricing } from '@/lib/pricing'
 import Price from './Price'
 import BoutiqueDialog from './BoutiqueDialog'
@@ -52,8 +53,8 @@ export default function ProductQuickView({
   const { price: unitPrice, oldPrice, discount } = productPricing(product, defaultVariant)
   const variantId = defaultVariant?.id ?? null
   const existingQuantity = cartItems.find(item => item.productId === product.id && item.variantId === variantId)?.quantity ?? 0
-  const soldOut = inventory && product.stockQuantity != null && product.stockQuantity <= 0
-  const unavailable = product.isActive === false || defaultVariant?.isActive === false || (inventory && existingQuantity >= cartLineLimit(product, cartItems, variantId))
+  const soldOut = isProductOutOfStock(product)
+  const unavailable = soldOut || product.isActive === false || defaultVariant?.isActive === false || (inventory && existingQuantity >= cartLineLimit(product, cartItems, variantId))
 
   const buy = () => {
     if (unavailable || onAddToCart(product, defaultVariant?.id ?? null, 1) === false) return
@@ -72,13 +73,14 @@ export default function ProductQuickView({
         <div className="quickview-body">
         <div className="quickview-media">
           <ProductMedia src={product.imageUrl} alt={product.nameAr} sizes={PRODUCT_IMAGE_SIZES.detail} eager />
+          {soldOut && <StockBadge overlay />}
           {(discount || product.isNew) && <span className="quickview-badge">{discount ? `-${discount}%` : 'جديد'}</span>}
         </div>
 
         <div className="quickview-info">
           <p className="scene-label">{product.categoryLabel}{discount && product.isNew && <span className="quickview-badge-inline"> جديد</span>}</p>
           <h3>{product.nameAr}</h3>
-          {inventory && product.stockQuantity != null && <p className="quickview-en">{soldOut ? 'نفدت الكمية' : `${product.stockQuantity} متوفر`}</p>}
+          {soldOut ? <p className="quickview-en" role="status">نفد من المخزون</p> : inventory && product.stockQuantity != null && <p className="quickview-en">{product.stockQuantity} متوفر</p>}
           {!inventory && <p className="quickview-en">مختار بعناية لك</p>}
 
           <div className="quickview-price">
@@ -113,7 +115,7 @@ export default function ProductQuickView({
           <div className="quickview-actions">
             <button type="button" onClick={buy} disabled={unavailable} data-added={inventory && added} className="quickview-buy">
               {inventory && added ? <CheckIcon /> : <BagIcon />}
-              <span aria-live="polite">{!inventory ? 'أضف للسلة' : soldOut ? 'نفدت الكمية' : unavailable ? 'الكمية المتاحة في السلة' : existingQuantity > 0 ? 'في السلة ✓' : added ? 'تمت الإضافة ✓' : 'أضف إلى السلة'}</span>
+              <span aria-live="polite">{soldOut ? 'نفد من المخزون' : !inventory ? 'أضف للسلة' : unavailable ? 'الكمية المتاحة في السلة' : existingQuantity > 0 ? 'في السلة ✓' : added ? 'تمت الإضافة ✓' : 'أضف إلى السلة'}</span>
             </button>
 
             <button

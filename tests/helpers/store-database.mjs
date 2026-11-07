@@ -2,7 +2,7 @@ import { PGlite } from '@electric-sql/pglite'
 import { readFile } from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 
-export async function storeDatabase(migrationCount = 6) {
+export async function storeDatabase(migrationCount = 7) {
   const db = new PGlite()
   await db.exec(`
     create role anon; create role authenticated;
@@ -15,7 +15,7 @@ export async function storeDatabase(migrationCount = 6) {
     alter table storage.objects enable row level security;
     set check_function_bodies=off;
   `)
-  for (const migration of ['001_initial_schema.sql','002_product_management.sql','003_store_catalogue.sql','004_admin_merchandising.sql','005_category_hierarchy.sql','006_product_image_previews.sql'].slice(0, migrationCount)) {
+  for (const migration of ['001_initial_schema.sql','002_product_management.sql','003_store_catalogue.sql','004_admin_merchandising.sql','005_category_hierarchy.sql','006_product_image_previews.sql','007_product_availability.sql'].slice(0, migrationCount)) {
     let sql = await readFile(new URL(`../../supabase/migrations/${migration}`, import.meta.url), 'utf8')
     sql = sql.replace('create extension if not exists "pgcrypto";', '')
     await db.exec(sql)

@@ -6,7 +6,7 @@ import { useMemo, useRef, useState } from 'react'
 import ProductImage from './ProductImage'
 import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
 import { BagIcon, LockIcon, MinusIcon, PlusIcon, TrashIcon, TruckIcon } from './icons'
-import { cartShipping, cartLineLimit, canCheckoutCart, cartCount, cartTotal } from '@/lib/cart'
+import { cartShipping, cartLineLimit, canCheckoutCart, cartCount, cartTotal, isProductOutOfStock } from '@/lib/cart'
 import { formatJod } from '@/lib/format'
 import type { CartLine, SiteSettings } from '@/types/product'
 import styles from './CartPage.module.css'
@@ -50,6 +50,7 @@ export default function CartPage({ lines, settings, onRemove, onIncrement, onDec
   return (
     <section dir="rtl" className={styles.view} data-testid="cart-page">
       {loadError && <p role="alert">{loadError}</p>}
+      {lines.some(line => isProductOutOfStock(line.product)) && <p role="alert" className={styles.stockNote}>بعض المنتجات نفدت من المخزون. احذفها من السلة للمتابعة؛ إتمام الطلب غير متاح.</p>}
       <header className={styles.head}>
         <div className={styles.headText}>
           <h1 className={styles.title}>سلة التسوق</h1>
@@ -101,7 +102,7 @@ export default function CartPage({ lines, settings, onRemove, onIncrement, onDec
                         <strong><bdi>{formatJod(line.lineTotal, settings.currency)}</bdi></strong>
                       </div>
                     </div>
-                    {atLimit && <p role="status" className={styles.stockNote}>{limit === 0 ? "هذا المنتج غير متاح حالياً؛ يرجى حذفه للمتابعة." : line.quantity > limit ? `الكمية المطلوبة تتجاوز المتاح (${limit})؛ خفّض الكمية أو احذف المنتج.` : `تم الوصول إلى الكمية المتاحة (${limit}).`}</p>}
+                    {atLimit && <p role="status" className={styles.stockNote}>{isProductOutOfStock(line.product) ? 'نفد من المخزون. احذف هذا المنتج للمتابعة.' : limit === 0 ? "هذا المنتج غير متاح حالياً؛ يرجى حذفه للمتابعة." : line.quantity > limit ? `الكمية المطلوبة تتجاوز المتاح (${limit})؛ خفّض الكمية أو احذف المنتج.` : `تم الوصول إلى الكمية المتاحة (${limit}).`}</p>}
 
                   <button type="button" className={styles.remove} aria-label={`حذف ${line.product.nameAr}${line.variant ? ` — ${line.variant.label}` : ''}`} onClick={() => onRemove(line.product.id, line.variant?.id ?? null)}>
                     <TrashIcon />

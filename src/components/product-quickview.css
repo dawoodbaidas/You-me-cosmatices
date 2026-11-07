@@ -28,3 +28,5 @@
  .boutique .premium-quickview .quickview-price { margin:10px 0; }
  .boutique .premium-quickview .quickview-purchase { padding:12px max(16px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left)); }
 }
+.boutique .quickview-buy:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+.boutique .quickview-buy:disabled:hover{transform:none}

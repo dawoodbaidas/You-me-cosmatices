@@ -21,6 +21,7 @@ export interface ProductDraft {
   is_featured: boolean
   sort_order: number
   stock_quantity?: number | null
+  is_out_of_stock?: boolean
   category_slugs?: string[]
   variants: { id: string; label: string; price: number; is_active: boolean; sort_order: number }[]
 }
@@ -28,6 +29,7 @@ export interface ProductDraft {
 export function validateProduct(value: unknown): asserts value is ProductDraft {
   if (!value || typeof value !== 'object') throw new Error('بيانات المنتج غير صالحة.')
   const p = value as ProductDraft
+  if (p.is_out_of_stock !== undefined && typeof p.is_out_of_stock !== 'boolean') throw new Error('حالة توفر المنتج غير صالحة.')
   const string = (s: unknown, max: number, required = false) => typeof s === 'string' && s.length <= max && (!required || s.trim().length > 0)
   const price = (n: unknown) => typeof n === 'number' && Number.isFinite(n) && n >= 0 && n <= 100_000 && Math.abs(n * 1000 - Math.round(n * 1000)) < 0.00001
   const order = (n: unknown) => typeof n === 'number' && Number.isInteger(n) && Math.abs(n) <= 2147483647

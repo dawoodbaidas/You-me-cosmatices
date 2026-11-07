@@ -39,6 +39,7 @@ export interface Product {
   variants: ProductVariant[]
   categorySlugs?: string[]
   stockQuantity?: number | null
+  isOutOfStock?: boolean
 }
 
 /** Cart ids/quantity and the observed price, which is never a checkout authority. */

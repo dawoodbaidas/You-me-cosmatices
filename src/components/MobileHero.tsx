@@ -9,6 +9,8 @@ import { useSceneFrame, type SceneFrame } from './useSceneFrame'
 import styles from './scroll-scenes.module.css'
 import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
 import { prefetchProductDetails } from './CachedProductImage'
+import { isProductOutOfStock } from '@/lib/cart'
+import StockBadge from './StockBadge'
 
 const ease = (t: number) => { const p = clamp(t); return p * p * (3 - 2 * p) }
 const out = (t: number) => 1 - (1 - clamp(t)) ** 3
@@ -90,6 +92,7 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
         {items.map((product, index) => <button key={product.id} className={`${styles.heroProduct} ${index === 0 ? styles.heroMain : index < 3 ? styles.heroMiddle : styles.heroOuter}`} data-hero-product style={{ aspectRatio: String((productSceneAsset(product)?.bounds.width ?? 4) / (productSceneAsset(product)?.bounds.height ?? 5)) }}
           aria-label={`عرض تفاصيل ${product.nameAr}`} onClick={() => onOpenDetails(product.id)} onPointerEnter={() => prefetchProductDetails(product.imageUrl)} onFocus={() => prefetchProductDetails(product.imageUrl)}>
           <span className={styles.productShadow} aria-hidden="true" />
+          {isProductOutOfStock(product) && <StockBadge overlay />}
           <SceneProductImage product={product} preload={index === 0} mobileWeight={index === 0 ? 1 : index < 3 ? .85 : .7} sizes={PRODUCT_IMAGE_SIZES.hero}
             onLoad={index === 0 && asset ? image => setMaskImage({ source: asset.src, url: image.currentSrc }) : undefined} />
           {index === 0 && asset && <svg className={styles.shine} viewBox={`${asset.bounds.x} ${asset.bounds.y} ${asset.bounds.width} ${asset.bounds.height}`} preserveAspectRatio="none" aria-hidden="true">

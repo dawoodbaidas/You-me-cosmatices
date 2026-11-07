@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from 'react'
 import { BagIcon, HeartIcon } from './icons'
 import { formatJod } from '@/lib/format'
 import { productPricing } from '@/lib/pricing'
+import { cartLineLimit, isProductOutOfStock } from '@/lib/cart'
+import StockBadge from './StockBadge'
 import type { Product } from '@/types/product'
 import ProductLens from './ProductLens'
 import styles from './ProductCard.module.css'
@@ -41,7 +43,8 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
   }, [])
   const variant = product.variants.find(item => item.id === selectedVariantId) ?? product.variants[0] ?? null
   const { price, oldPrice, discount } = productPricing(product, variant)
-  const disabled = (product.stockQuantity != null && product.stockQuantity <= 0) || product.isActive === false || variant?.isActive === false
+  const soldOut = isProductOutOfStock(product)
+  const disabled = cartLineLimit(product, [], variant?.id ?? null) <= 0
   const add = async () => {
     if (adding.current || disabled) return false
     adding.current = true
@@ -96,6 +99,7 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
     <div className={styles.visual}>
       <div className={styles.tile}>
         <ProductLens src={product.imageUrl} name={product.nameAr} eager={eager} defer={deferImage} onOpen={() => onOpenDetails(product.id)} />
+        {soldOut && <StockBadge overlay />}
         {(discount || product.isNew) && <span className={styles.badge}>{discount ? `-${discount}%` : 'جديد'}</span>}
         <button className={styles.wishlist} aria-label={isFavorite ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={isFavorite} onClick={() => onToggleFavorite(product.id)}><HeartIcon /></button>
       </div>
@@ -111,7 +115,7 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
       </div>
       <div className={styles.purchase}>
         <button className={styles.add} disabled={pending || quantity > 0 || disabled} aria-busy={pending} onClick={add} aria-live="polite">
-          <BagIcon />{pending ? 'جارٍ الإضافة…' : quantity > 0 ? added ? 'تمت الإضافة ✓' : 'في السلة ✓' : disabled ? 'غير متوفر' : 'أضف إلى السلة'}
+          <BagIcon />{soldOut ? 'نفد من المخزون' : pending ? 'جارٍ الإضافة…' : quantity > 0 ? added ? 'تمت الإضافة ✓' : 'في السلة ✓' : disabled ? 'غير متوفر' : 'أضف إلى السلة'}
         </button>
         {error && <p className={styles.addError} role="alert">{error}</p>}
       </div>

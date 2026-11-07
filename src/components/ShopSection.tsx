@@ -9,6 +9,7 @@ import type { CartItem, Product } from '@/types/product'
 import ProductCard from './ProductCard'
 import productStyles from './ProductCard.module.css'
 import { productPricing } from '@/lib/pricing'
+import { isProductOutOfStock } from '@/lib/cart'
 import { matchesProduct } from '@/lib/search'
 import { ArrowIcon } from './icons'
 import type { Collection } from '@/lib/taxonomy'
@@ -75,7 +76,7 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
 
   const visible = useMemo(() => {
     const result = products.filter(product => matchesProduct(product, query)
-      && (!onlyAvailable || product.stockQuantity == null || product.stockQuantity > 0)
+      && (!onlyAvailable || !isProductOutOfStock(product))
       && (!onlyDiscounted || Boolean(productPricing(product).discount))
       && (!onlyNew || product.isNew === true))
     const priceOf = (product: Product) => productPricing(product, product.variants[0]).price

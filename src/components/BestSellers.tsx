@@ -12,6 +12,8 @@ import { useSceneFrame, type SceneFrame } from './useSceneFrame'
 import styles from './scroll-scenes.module.css'
 import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
 import { prefetchProductDetails } from './CachedProductImage'
+import { cartLineLimit, isProductOutOfStock } from '@/lib/cart'
+import StockBadge from './StockBadge'
 
 const DEFAULT_PALETTE: ScenePalette = { bgA: [248, 245, 239], bgB: [236, 229, 216] }
 
@@ -108,6 +110,7 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
             <span className={styles.showcaseShadow} aria-hidden="true" />
             <button className={styles.showcaseProduct} aria-label={`عرض تفاصيل ${item.nameAr}`} onClick={() => onOpenDetails(item.id)} onPointerEnter={() => prefetchProductDetails(item.imageUrl)} onFocus={() => prefetchProductDetails(item.imageUrl)}>
               {(Math.abs(index - active) <= 1 || visited.includes(asset?.src ?? item.imageUrl ?? '')) && <SceneProductImage product={item} sizes={PRODUCT_IMAGE_SIZES.scene} />}
+              {isProductOutOfStock(item) && <StockBadge overlay />}
               {(productPricing(item).discount || item.isNew) && <span className={styles.sceneBadge}>{productPricing(item).discount ? `-${productPricing(item).discount}%` : 'جديد'}</span>}
             </button>
           </div>
@@ -120,12 +123,13 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
           {item.description && <p>{item.description}</p>}
           <div className={styles.showcaseBuy}>
             <Price value={productPricing(item, item.variants[0]).price} oldPrice={productPricing(item, item.variants[0]).oldPrice} currency={currency} />
-            <button onClick={() => {
+            <button disabled={cartLineLimit(item, [], item.variants[0]?.id ?? null) <= 0} onClick={() => {
+              if (cartLineLimit(item, [], item.variants[0]?.id ?? null) <= 0) return
               onAddToCart(item.id, item.variants[0]?.id ?? null)
               setAdded(true)
               if (timer.current) clearTimeout(timer.current)
               timer.current = setTimeout(() => setAdded(false), 1600)
-            }}>{added && index === active ? 'تمت الإضافة ✓' : 'أضف للسلة'}</button>
+            }}>{isProductOutOfStock(item) ? 'نفد من المخزون' : added && index === active ? 'تمت الإضافة ✓' : 'أضف للسلة'}</button>
           </div>
         </div>)}
       </div>

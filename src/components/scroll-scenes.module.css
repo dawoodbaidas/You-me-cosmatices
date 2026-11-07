@@ -579,3 +579,4 @@
 @media (max-width: 767px) and (prefers-reduced-motion: reduce) {
   .hero { height: auto; }
 }
+.showcaseBuy button:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
