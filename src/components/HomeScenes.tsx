@@ -2,6 +2,7 @@
 
 import Hero from './Hero'
 import BestSellers from './BestSellers'
+import HomeEntrance from './HomeEntrance'
 import { selectedSceneProducts } from '@/lib/scene-products'
 import { useHomepageServices } from './Storefront'
 import type { StoreCatalogue } from '@/types/store'
@@ -13,5 +14,5 @@ export default function HomeScenes({ data }: { data: StoreCatalogue }) {
   const products = productCache.resolve(data.products, data.revision)
   const hero = selectedSceneProducts(products, data.homeSections?.hero, 'hero')
   const bestsellers = selectedSceneProducts(products, data.homeSections?.bestsellers, 'bestsellers')
-  return <>{hero.length > 0 && <Hero products={hero} {...actions} />}<BestSellers products={bestsellers} {...actions} /></>
+  return <>{hero.length > 0 && <><Hero products={hero} {...actions} /><HomeEntrance /></>}<BestSellers products={bestsellers} {...actions} /></>
 }

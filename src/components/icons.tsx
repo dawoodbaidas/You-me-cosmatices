@@ -100,6 +100,12 @@ export const CloseIcon = (props: IconProps) => (
   </svg>
 )
 
+export const MenuIcon = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+)
+
 export const PlusIcon = (props: IconProps) => (
   <svg {...base(props)}>
     <path d="M5 12h14M12 5v14" />

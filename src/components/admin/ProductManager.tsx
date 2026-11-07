@@ -1,5 +1,6 @@
 'use client'
 
+import { adminCategoryLabel } from '@/lib/admin-categories'
 import Image from 'next/image'
 import Link from 'next/link'
 import { moveProducts, setProductAvailability } from '@/app/admin/actions'
@@ -14,12 +15,19 @@ import type { StoreCategory } from '@/types/store'
 import ProductImageEditor, { type ProductImageChoice } from './ProductImageEditor'
 import { isProductOutOfStock } from '@/lib/cart'
 import StockBadge from '@/components/StockBadge'
+import { useAdminEditing } from './AdminEditing'
 
 const button = 'rounded-full border border-sand px-4 py-2 text-sm font-bold disabled:opacity-40'
 const primary = `${button} bg-cocoa text-white`
 
-export default function ProductManager({ products, total, page, initialQuery, categories, currency, onEditingChange }: { total: number; page: number; initialQuery: string; products: Product[]; categories: StoreCategory[]; currency: string; onEditingChange: (editing: boolean) => void }) {
+export default function ProductManager({ products, total, page, initialQuery, initialCategory = '', initialAvailability = '', categories, currency, onEditingChange }: { total: number; page: number; initialQuery: string; initialCategory?: string; initialAvailability?: string; products: Product[]; categories: StoreCategory[]; currency: string; onEditingChange?: (editing: boolean) => void }) {
+  const productPage = (next: number) => '/admin/products?' + new URLSearchParams({ q: initialQuery, category: initialCategory, availability: initialAvailability, page: String(next) })
   const router = useRouter()
+  const adminEditing = useAdminEditing()
+  const noteEditing = (value: boolean) => {
+    onEditingChange?.(value)
+    adminEditing?.setEditing(value)
+  }
   const [editing, setEditing] = useState<Product | 'new' | null>(null)
   const [selected, setSelected] = useState<string[]>([])
   const [target, setTarget] = useState('')
@@ -63,15 +71,17 @@ export default function ProductManager({ products, total, page, initialQuery, ca
 
   return <section className="mt-6" dir="rtl">
     {editing ? <FullProductEditor key={editing === 'new' ? 'new' : editing.id} categories={categories} product={editing === 'new' ? null : editing}
-      onCancel={() => { setEditing(null); onEditingChange(false) }} onSaved={(response) => { notify(response); setEditing(null); onEditingChange(false); router.refresh() }} onError={notify} /> : <>
-      <form className="flex flex-wrap gap-3" onSubmit={event => { event.preventDefault(); const query = String(new FormData(event.currentTarget).get('q') ?? ''); router.push('/admin?q=' + encodeURIComponent(query) + '&page=1') }}>
+      onCancel={() => { setEditing(null); noteEditing(false) }} onSaved={(response) => { notify(response); setEditing(null); noteEditing(false); router.refresh() }} onError={notify} /> : <>
+      <form className="flex flex-wrap gap-3" onSubmit={event => { event.preventDefault(); const data = new FormData(event.currentTarget); router.push('/admin/products?' + new URLSearchParams({ q: String(data.get('q') ?? ''), category: String(data.get('category') ?? ''), availability: String(data.get('availability') ?? ''), page: '1' })) }}>
         <input name="q" key={initialQuery} aria-label="البحث عن منتج" type="search" placeholder="ابحثي بالاسم أو الرابط" defaultValue={initialQuery} maxLength={150} className="min-w-0 flex-1 rounded-full border border-sand bg-white px-4 py-2" />
-        <button className={button}>بحث</button>
-        <button type="button" className={primary} disabled={!!pending} onClick={() => { setResult(null); setEditing('new'); onEditingChange(true) }}>إضافة منتج</button>
+        <select name="category" aria-label="تصفية حسب القسم" defaultValue={initialCategory} className="min-w-0 max-w-full rounded-xl border border-sand bg-white p-2"><option value="">كل الأقسام</option>{categories.map(category => <option key={category.slug} value={category.slug}>{adminCategoryLabel(category, categories)}</option>)}</select>
+        <select name="availability" aria-label="تصفية حسب التوفر" defaultValue={initialAvailability} className="rounded-xl border border-sand bg-white p-2"><option value="">كل حالات التوفر</option><option value="available">متاح للشراء</option><option value="unavailable">نفد من المخزون</option><option value="hidden">غير منشور</option></select>
+        <button className={button}>تطبيق الفلاتر</button><Link className={button} href="/admin/products">مسح الفلاتر</Link>
+        <button type="button" className={primary} disabled={!!pending} onClick={() => { setResult(null); setEditing('new'); noteEditing(true) }}>إضافة منتج</button>
       </form>
       <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-sand p-3">
         <span>{selected.length} منتج محدد</span>
-        <label>القسم الهدف <select aria-label="القسم الهدف للنقل" className="rounded-lg border border-sand p-2" value={target} onChange={event=>setTarget(event.target.value)}><option value="">بدون قسم</option>{categories.map(category=><option key={category.slug} value={category.slug}>{category.name_ar}</option>)}</select></label>
+        <label>القسم الهدف <select aria-label="القسم الهدف للنقل" className="min-w-0 max-w-full rounded-lg border border-sand p-2" value={target} onChange={event=>setTarget(event.target.value)}><option value="">بدون قسم</option>{categories.map(category=><option key={category.slug} value={category.slug}>{adminCategoryLabel(category, categories)}</option>)}</select></label>
         <button className={button} disabled={!selected.length || !!pending} onClick={async()=>{
           if (busy.current || !confirm('نقل '+selected.length+' منتج إلى «'+(categories.find(category=>category.slug===target)?.name_ar ?? 'بدون قسم')+'»؟ سيُستبدل تصنيف المنتجات المحددة.')) return
           busy.current=true; setPending('bulk')
@@ -90,15 +100,15 @@ export default function ProductManager({ products, total, page, initialQuery, ca
             <button type="button" role="switch" aria-checked={product.isOutOfStock === true} aria-label={`إيقاف شراء ${product.nameAr} يدويًا: نفد من المخزون`} className={`${button} bg-cream text-cocoa`} disabled={!!pending} onClick={() => toggleAvailability(product)}>
               {pending === `availability:${product.id}` ? 'جارٍ التحديث…' : product.isOutOfStock ? 'إلغاء نفاد المخزون' : 'تعيين: نفد من المخزون'}
             </button>
-            <button type="button" className={button} disabled={!!pending} onClick={() => { setResult(null); setEditing(product); onEditingChange(true) }}>تعديل</button><button type="button" className={`${button} text-rose`} disabled={!!pending} onClick={() => remove(product)}>{pending === product.id ? 'جارٍ الحذف…' : 'حذف'}</button>
+            <button type="button" className={button} disabled={!!pending} onClick={() => { setResult(null); setEditing(product); noteEditing(true) }}>تعديل</button><button type="button" className={`${button} text-rose`} disabled={!!pending} onClick={() => remove(product)}>{pending === product.id ? 'جارٍ الحذف…' : 'حذف'}</button>
           </div>
         </article>)}
-        {!products.length && <p className="p-6 text-center">لا توجد منتجات بعد. أضيفي أول منتج.</p>}
+        {!products.length && <p className="p-6 text-center">لا توجد منتجات مطابقة. غيّري الفلاتر أو أضيفي منتجًا جديدًا.</p>}
       </div>
       <nav className="mt-5 flex flex-wrap items-center justify-center gap-4" aria-label="صفحات المنتجات">
-        {page>1 && <Link className={button} href={'/admin?q='+encodeURIComponent(initialQuery)+'&page='+(page-1)}>السابق</Link>}
+        {page>1 && <Link className={button} href={productPage(page - 1)}>السابق</Link>}
         <span>صفحة {page} من {Math.max(1,Math.ceil(total/30))} · {total} منتج</span>
-        {page*30<total && <Link className={button} href={'/admin?q='+encodeURIComponent(initialQuery)+'&page='+(page+1)}>التالي</Link>}
+        {page*30<total && <Link className={button} href={productPage(page + 1)}>التالي</Link>}
       </nav>
     </>}
     {result && <p role={result.ok ? 'status' : 'alert'} className={`mt-4 text-sm ${result.ok ? 'text-cocoa' : 'text-rose'}`}>{result.message}</p>}
@@ -174,27 +184,23 @@ export function FullProductEditor({ product, categories, onCancel, onSaved, onEr
   return <form onSubmit={save} onChange={() => setDirty(true)} className="rounded-[24px] border border-sand bg-white p-4 md:p-6">
     <h2 className="mb-5 text-xl font-extrabold">{product ? `تعديل ${product.nameAr}` : 'إضافة منتج جديد'}</h2>
     <fieldset disabled={pending} className="min-w-0 space-y-5 disabled:opacity-70">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="الاسم العربي"><input name="name_ar" required maxLength={250} defaultValue={product?.nameAr} /></Field>
+      <EditorGroup title="المعلومات الأساسية">        <Field label="الاسم العربي"><input name="name_ar" required maxLength={250} defaultValue={product?.nameAr} /></Field>
         <Field label="الاسم الإنجليزي"><input name="name_en" dir="ltr" required maxLength={250} defaultValue={product?.nameEn} /></Field>
-        <Field label="الرابط المختصر (slug)"><input name="slug" dir="ltr" required maxLength={200} defaultValue={product?.slug} /></Field>
-        <fieldset className="sm:col-span-2"><legend className="mb-2 text-sm font-bold">أقسام المنتج</legend><label className="mb-3 block"><input type="checkbox" checked={!categorySlugs.length} onChange={()=>setCategorySlugs([])} /> بدون قسم</label><div className="flex flex-wrap gap-3">{categories.map(category => <label key={category.slug} className="text-sm"><input type="checkbox" checked={categorySlugs.includes(category.slug)} onChange={event => setCategorySlugs(current => event.target.checked ? [...current, category.slug] : current.filter(slug => slug !== category.slug))} /> {category.name_ar}{!category.is_active && ' (مخفي)'}</label>)}</div>{!categories.length && <p className="text-sm">أضف قسماً من تبويب الأقسام أولاً.</p>}</fieldset>
-        <Field label="المخزون (فارغ إذا لم يُسجّل)"><input name="stock_quantity" type="number" min="0" max="2147483647" step="1" defaultValue={product?.stockQuantity ?? ''} /></Field>
+        <Field label="الرابط المختصر (slug)"><input name="slug" dir="ltr" required maxLength={200} defaultValue={product?.slug} /></Field>      <Field label="الوصف"><textarea name="description" rows={4} maxLength={10000} defaultValue={product?.description ?? ''} /></Field>
+      <Field label="الفوائد (كل فائدة في سطر)"><textarea name="benefits" rows={3} defaultValue={product?.benefits.join('\n') ?? ''} /></Field></EditorGroup>
+      <EditorGroup title="التسعير والخصم">        <label className="flex items-center gap-2"><input type="checkbox" checked={discountEnabled} onChange={event=>setDiscountEnabled(event.target.checked)} /> عليه خصم</label>
+        <Field label="السعر الأصلي"><input name="original_price" type="number" min={discountEnabled?'0.001':'0'} max="100000" step="0.001" required value={originalPrice} onChange={event=>setOriginalPrice(event.target.value)} /></Field>
+        {discountEnabled && <Field label="السعر بعد الخصم"><input name="sale_price" type="number" min="0" max="100000" step="0.001" required value={salePrice} onChange={event=>setSalePrice(event.target.value)} /><small>{Number(originalPrice)>0 && salePrice!=='' && Number(salePrice)<Number(originalPrice) ? 'خصم '+Number(((1-Number(salePrice)/Number(originalPrice))*100).toPrecision(3))+'٪' : 'يجب أن يكون السعر المخفّض أقل من السعر الأصلي.'}</small></Field>}</EditorGroup>
+      <EditorGroup title="صور المنتج"><div className="min-w-0 sm:col-span-2"><ProductImageEditor productId={id} updatedAt={product?.updatedAt} imageUrl={product?.imageUrl} originalImageUrl={product?.originalImageUrl}
+        onChange={choice => { setImageChoice(choice); setDirty(true) }} /></div></EditorGroup>
+      <EditorGroup title="الأقسام الرئيسية والفرعية">        <fieldset className="sm:col-span-2"><legend className="mb-2 text-sm font-bold">أقسام المنتج</legend><label className="mb-3 block"><input type="checkbox" checked={!categorySlugs.length} onChange={()=>setCategorySlugs([])} /> بدون قسم</label><div className="flex flex-wrap gap-3">{categories.map(category => <label key={category.slug} className="text-sm"><input type="checkbox" checked={categorySlugs.includes(category.slug)} onChange={event => setCategorySlugs(current => event.target.checked ? [...current, category.slug] : current.filter(slug => slug !== category.slug))} /> {adminCategoryLabel(category, categories)}{!category.is_active && ' (مخفي)'}</label>)}</div>{!categories.length && <p className="text-sm">أضف قسماً من تبويب الأقسام أولاً.</p>}</fieldset></EditorGroup>
+      <EditorGroup title="المخزون والتوفر">        <Field label="المخزون (فارغ إذا لم يُسجّل)"><input name="stock_quantity" type="number" min="0" max="2147483647" step="1" defaultValue={product?.stockQuantity ?? ''} /></Field>
         <div className="rounded-2xl border border-sand bg-cream p-4 sm:col-span-2">
           <label className="flex items-center gap-3 font-bold"><input type="checkbox" role="switch" name="is_out_of_stock" checked={isOutOfStock} onChange={event => setIsOutOfStock(event.target.checked)} className="h-5 w-5 accent-cocoa" />نفد من المخزون</label>
           <p className="mt-2 text-sm text-cocoa/70">فعّل هذا المفتاح لإيقاف الشراء دون إخفاء المنتج أو تغيير الكمية المسجلة. إلغاؤه لا يعيد توفر منتج كميته صفر.</p>
-        </div>
-        <label className="flex items-center gap-2"><input type="checkbox" name="is_new" defaultChecked={product?.isNew ?? false} /> جديد</label>
-        <label className="flex items-center gap-2"><input type="checkbox" checked={discountEnabled} onChange={event=>setDiscountEnabled(event.target.checked)} /> عليه خصم</label>
-        <Field label="السعر الأصلي"><input name="original_price" type="number" min={discountEnabled?'0.001':'0'} max="100000" step="0.001" required value={originalPrice} onChange={event=>setOriginalPrice(event.target.value)} /></Field>
-        {discountEnabled && <Field label="السعر بعد الخصم"><input name="sale_price" type="number" min="0" max="100000" step="0.001" required value={salePrice} onChange={event=>setSalePrice(event.target.value)} /><small>{Number(originalPrice)>0 && salePrice!=='' && Number(salePrice)<Number(originalPrice) ? 'خصم '+Number(((1-Number(salePrice)/Number(originalPrice))*100).toPrecision(3))+'٪' : 'يجب أن يكون السعر المخفّض أقل من السعر الأصلي.'}</small></Field>}
-        <Field label="الترتيب (الأصغر أولاً)"><input name="sort_order" type="number" min="-2147483647" max="2147483647" step="1" required defaultValue={product?.sortOrder ?? 0} /></Field>
-        <div className="flex items-center gap-5"><label><input type="checkbox" name="is_active" defaultChecked={product?.isActive ?? true} /> نشط</label><label><input type="checkbox" name="is_featured" defaultChecked={product?.isFeatured ?? false} /> مميز</label></div>
-      </div>
-      <Field label="الوصف"><textarea name="description" rows={4} maxLength={10000} defaultValue={product?.description ?? ''} /></Field>
-      <Field label="الفوائد (كل فائدة في سطر)"><textarea name="benefits" rows={3} defaultValue={product?.benefits.join('\n') ?? ''} /></Field>
-      <ProductImageEditor productId={id} updatedAt={product?.updatedAt} imageUrl={product?.imageUrl} originalImageUrl={product?.originalImageUrl}
-        onChange={choice => { setImageChoice(choice); setDirty(true) }} />
+        </div></EditorGroup>
+      <EditorGroup title="الظهور والترتيب">        <label className="flex items-center gap-2"><input type="checkbox" name="is_new" defaultChecked={product?.isNew ?? false} /> جديد</label>        <Field label="الترتيب (الأصغر أولاً)"><input name="sort_order" type="number" min="-2147483647" max="2147483647" step="1" required defaultValue={product?.sortOrder ?? 0} /></Field>
+        <div className="flex items-center gap-5"><label><input type="checkbox" name="is_active" defaultChecked={product?.isActive ?? true} /> نشط</label><label><input type="checkbox" name="is_featured" defaultChecked={product?.isFeatured ?? false} /> مميز</label></div></EditorGroup>
       <section className="space-y-3 border-t border-sand pt-4">
         <div className="flex flex-wrap items-center justify-between gap-3"><h3 className="font-bold">أنواع المنتج — أسعار أصلية قبل الخصم</h3><button type="button" className={button} disabled={variants.length >= 100} onClick={() => { setDirty(true); setVariants(v => [...v, { id: crypto.randomUUID(), label: '', price: Number(originalPrice) || 0, is_active: true, sort_order: v.length }]) }}>إضافة نوع</button></div>
         {!variants.length && <p className="text-sm text-cocoa/60">لا توجد أنواع. سيستخدم المتجر السعر الأساسي.</p>}
@@ -215,4 +221,8 @@ export function FullProductEditor({ product, categories, onCancel, onSaved, onEr
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return <label className="block min-w-0 text-sm"><span className="mb-1 block font-bold text-cocoa/70">{label}</span><span className="block [&_input]:w-full [&_input]:min-w-0 [&_input]:rounded-xl [&_input]:border [&_input]:border-sand [&_input]:p-2.5 [&_textarea]:w-full [&_textarea]:rounded-xl [&_textarea]:border [&_textarea]:border-sand [&_textarea]:p-2.5 [&_select]:w-full [&_select]:rounded-xl [&_select]:border [&_select]:border-sand [&_select]:p-2.5">{children}</span></label>
+}
+
+function EditorGroup({ title, children }: { title: string; children: React.ReactNode }) {
+  return <fieldset className="min-w-0 rounded-2xl border border-sand p-4"><legend className="px-2 font-bold">{title}</legend><div className="grid min-w-0 gap-4 sm:grid-cols-2">{children}</div></fieldset>
 }

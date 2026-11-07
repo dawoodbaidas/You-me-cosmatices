@@ -1,0 +1,36 @@
+.entrance {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  overflow: hidden;
+  contain: layout paint;
+}
+.entrance[hidden] { display: none; }
+.left, .right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(50% + 1px);
+  background: var(--color-cream, #fff6f1);
+  will-change: transform;
+}
+.left { left: 0; }
+.right { right: 0; }
+.logo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  will-change: transform, opacity;
+}
+.logo img {
+  width: 144px;
+  height: 144px;
+  border-radius: 50%;
+  object-fit: contain;
+  box-shadow: 0 16px 64px rgb(77 45 36 / 8%);
+}
+@media (prefers-reduced-motion: reduce), (prefers-reduced-data: reduce) {
+  .entrance { display: none; }
+}

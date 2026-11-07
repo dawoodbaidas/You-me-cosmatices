@@ -1,16 +1,23 @@
 'use client'
 
+import { adminCategoryLabel } from '@/lib/admin-categories'
 import CategoryImage from '../CategoryImage'
 import { categoryImage, categoryPath } from '@/lib/store-categories'
 import { useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { deleteStoreCategory, type ActionResult } from '@/app/admin/actions'
 import type { StoreCategory } from '@/types/store'
+import { useAdminEditing } from './AdminEditing'
 
 const button = 'rounded-full border border-sand px-4 py-2 text-sm font-bold disabled:opacity-40'
 
-export default function CategoryManager({ categories, counts, onEditingChange }: { categories: StoreCategory[]; counts: Record<string, number>; onEditingChange: (editing: boolean) => void }) {
+export default function CategoryManager({ categories, counts, onEditingChange }: { categories: StoreCategory[]; counts: Record<string, number>; onEditingChange?: (editing: boolean) => void }) {
   const router = useRouter()
+  const adminEditing = useAdminEditing()
+  const noteEditing = (value: boolean) => {
+    onEditingChange?.(value)
+    adminEditing?.setEditing(value)
+  }
   const [editing, setEditing] = useState<StoreCategory | 'new' | null>(null)
   const [result, setResult] = useState<ActionResult | null>(null)
   const [pending, start] = useTransition()
@@ -29,8 +36,22 @@ export default function CategoryManager({ categories, counts, onEditingChange }:
     }
     return true
   }
-  const edit = (category: StoreCategory | 'new' | null) => { setEditing(category); onEditingChange(category !== null); setResult(null); setFile(null); setPreview(null); setImagePath(category && category !== 'new' ? category.image_path ?? null : null) }
+  const edit = (category: StoreCategory | 'new' | null) => { setEditing(category); noteEditing(category !== null); setResult(null); setFile(null); setPreview(null); setImagePath(category && category !== 'new' ? category.image_path ?? null : null) }
   const current = editing && editing !== 'new' ? editing : null
+
+  function renderCategory(category: StoreCategory, ancestors: string[] = []): React.ReactNode {
+    if (ancestors.includes(category.slug)) return null
+    const children = categories.filter(child => child.parent_slug === category.slug)
+    const populated = (counts[category.slug] ?? 0) > 0 || children.length > 0
+    return <div key={category.slug} className="min-w-0 rounded-2xl border border-sand bg-white p-3 sm:p-4">
+      <article className="flex flex-wrap items-center gap-3">
+        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full"><CategoryImage src={categoryImage(category.image_path)} alt={category.name_ar} sizes="56px" /></div>
+        <div className="min-w-0 flex-1"><span className="text-xs text-cocoa/60">{category.parent_slug ? 'قسم فرعي' : 'قسم رئيسي'}</span><h2 className="break-words font-bold">{category.name_ar}</h2><p className="text-sm text-cocoa/70">{counts[category.slug] ?? 0} منتج · الترتيب {category.sort_order} · {category.is_active ? 'ظاهر' : 'مخفي'}</p><p className="break-all text-xs text-cocoa/60" dir="ltr">{decodeURIComponent(categoryPath(category, categories))}</p></div>
+        <div className="flex flex-wrap gap-2"><button disabled={pending || !!deleting} className={button} onClick={() => edit(category)}>تعديل</button><button disabled={pending || !!deleting} className={button + ' text-rose'} onClick={() => { setDeleting(category); setTransfer(null); noteEditing(true) }}>{populated ? 'إعادة التصنيف والحذف' : 'حذف القسم الفارغ'}</button></div>
+      </article>
+      {!!children.length && <details className="mt-3"><summary className="cursor-pointer rounded-lg bg-cream p-3 font-bold focus-visible:outline-2">الأقسام الفرعية ({children.length})</summary><div className="mt-3 grid gap-3 border-s-2 border-sand ps-2 sm:ps-4">{children.map(child => renderCategory(child, [...ancestors, category.slug]))}</div></details>}
+    </div>
+  }
 
   return <section className="mt-6" dir="rtl">
     {deleting && <form className="mb-5 space-y-4 rounded-2xl border border-sand bg-white p-5" onSubmit={event => {
@@ -41,16 +62,16 @@ export default function CategoryManager({ categories, counts, onEditingChange }:
         try {
           const response = await deleteStoreCategory(deleting.slug, deleting.updated_at, target)
           setResult(response)
-          if (response.ok) { setDeleting(null); onEditingChange(false); router.refresh() }
+          if (response.ok) { setDeleting(null); noteEditing(false); router.refresh() }
         } catch { setResult({ ok: false, message: 'تعذّر الاتصال. حدّث القائمة للتحقق قبل إعادة المحاولة.' }) }
       })
     }}>
       <h2 className="font-bold">حذف «{deleting.name_ar}» — {counts[deleting.slug] ?? 0} منتج مرتبط مباشرةً</h2>
-      <p>لن يُحذف أي منتج أو قسم فرعي. اختر نقل السجلات أو فصلها صراحةً.</p>
+      <p>لا يمكن حذف قسم مرتبط بمنتجات أو أقسام فرعية دون تحديد مصيرها. لن يُحذف أي منتج أو قسم فرعي؛ اختاري النقل أو الفصل صراحةً.</p>
       <label className="block"><input type="radio" name="mode" required checked={transfer === false} onChange={() => setTransfer(false)} /> فصل المنتجات عن هذا القسم وجعل الأقسام الفرعية أقسامًا رئيسية</label>
       <label className="block"><input type="radio" name="mode" required checked={transfer === true} onChange={() => setTransfer(true)} /> نقل المنتجات والأقسام الفرعية إلى قسم آخر</label>
-      {transfer && <label className="block">القسم الهدف<select className="mx-3 rounded-xl border border-sand p-2" name="target" required defaultValue=""><option value="" disabled>اختر القسم</option>{categories.filter(category => allowedParent(category, deleting.slug)).map(category => <option key={category.slug} value={category.slug}>{category.name_ar}</option>)}</select></label>}
-      <div className="flex gap-3"><button className={`${button} bg-cocoa text-white`} disabled={pending}>تأكيد حذف القسم</button><button type="button" className={button} disabled={pending} onClick={() => { setDeleting(null); onEditingChange(false) }}>إلغاء</button></div>
+      {transfer && <label className="block">القسم الهدف<select className="mx-3 rounded-xl border border-sand p-2" name="target" required defaultValue=""><option value="" disabled>اختر القسم</option>{categories.filter(category => allowedParent(category, deleting.slug)).map(category => <option key={category.slug} value={category.slug}>{adminCategoryLabel(category, categories)}</option>)}</select></label>}
+      <div className="flex gap-3"><button className={`${button} bg-cocoa text-white`} disabled={pending || transfer === null}>تأكيد إعادة التصنيف وحذف القسم</button><button type="button" className={button} disabled={pending} onClick={() => { setDeleting(null); noteEditing(false) }}>إلغاء</button></div>
     </form>}
     {editing ? <form key={current?.slug ?? 'new'} className="space-y-4 rounded-3xl border border-sand bg-white p-5" onSubmit={event => {
       event.preventDefault()
@@ -68,7 +89,7 @@ export default function CategoryManager({ categories, counts, onEditingChange }:
           const response = await saved.json() as ActionResult
           if (!saved.ok && response.ok) throw new Error('Invalid save response')
           setResult(response)
-          if (response.ok) { setEditing(null); onEditingChange(false); router.refresh() }
+          if (response.ok) { setEditing(null); noteEditing(false); router.refresh() }
         } catch { setResult({ ok: false, message: 'تعذّر الاتصال. حدّث القائمة للتحقق قبل إعادة المحاولة.' }) }
       })
     }}>
@@ -97,10 +118,8 @@ export default function CategoryManager({ categories, counts, onEditingChange }:
       <div className="flex gap-3"><button disabled={pending} className={`${button} bg-cocoa text-white`}>{pending ? 'جارٍ الحفظ…' : 'حفظ القسم'}</button><button type="button" disabled={pending} className={button} onClick={() => edit(null)}>إلغاء</button></div>
     </form> : <>
       <button disabled={!!deleting} className={`${button} bg-cocoa text-white`} onClick={() => edit('new')}>إضافة قسم</button>
-      <div className="mt-4 grid gap-3">{categories.map(category => <article key={category.slug} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-sand bg-white p-4">
-        <div><h2 className="font-bold">{category.name_ar}</h2><p className="text-sm text-cocoa/60">{category.parent_slug ? categories.find(parent => parent.slug === category.parent_slug)?.name_ar : 'قسم رئيسي'} · الترتيب {category.sort_order} · {category.is_active ? 'ظاهر' : 'مخفي'}</p><p className="text-xs" dir="ltr">{decodeURIComponent(categoryPath(category, categories))}</p></div>
-        <div className="flex gap-2"><button disabled={pending || !!deleting} className={button} onClick={() => edit(category)}>تعديل</button><button disabled={pending || !!deleting} className={`${button} text-rose`} onClick={() => { setDeleting(category); setTransfer(null); onEditingChange(true) }}>حذف</button></div>
-      </article>)}</div>
+      <p className="mt-3 text-sm text-cocoa/70">افتحي القسم الرئيسي لإدارة أقسامه الفرعية. الأعداد تخص المنتجات المرتبطة مباشرةً بكل قسم.</p>
+      <div className="mt-4 grid gap-3">{categories.filter(category => !category.parent_slug || !categories.some(parent => parent.slug === category.parent_slug)).map(category => renderCategory(category))}</div>
       {!categories.length && <p className="p-6 text-center">لا توجد أقسام بعد.</p>}
     </>}
     {result && <p role={result.ok ? 'status' : 'alert'} className="mt-4">{result.message}</p>}

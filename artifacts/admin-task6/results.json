@@ -1,0 +1,25 @@
+{
+  "fixtureOnly": true,
+  "results": [
+    {
+      "width": 390,
+      "overflow": false,
+      "groupedEditor": true,
+      "expandableCategories": true,
+      "explicitDeletion": true,
+      "keyboardReorder": true,
+      "touchReorder": true,
+      "preview": true
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "groupedEditor": true,
+      "expandableCategories": true,
+      "explicitDeletion": true,
+      "keyboardReorder": true,
+      "touchReorder": "not tested",
+      "preview": true
+    }
+  ]
+}

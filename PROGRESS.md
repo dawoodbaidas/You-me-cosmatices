@@ -242,3 +242,63 @@ Evidence: `artifacts/performance/navigation-after/results.json` and screenshots 
 - The browser matrix uses current Chrome, DPR 2 and the isolated anonymous-role database fixture with real local product artwork. It does not establish physical-device, all-browser or live production-network behavior. The existing unrelated toolbar text and broader plan limitations remain recorded above; no navigation failure remains in the requested tested flows.
 - A QA screenshot attempt hit a full disk. With approval, six explicitly identified stopped temporary QA copies were removed through the existing validated cleanup helper; the workspace, saved evidence, shared dependencies and active server were excluded. The completed runs were rerun successfully. Nonfatal lockfile warnings remain unchanged.
 - No push, deployment, production database mutation or later feature work was performed.
+
+## Task 5 admin navigation restructure — 2026-11-07
+
+Implemented Task 5 only on top of the verified Task 1–4 tree at `69aca46`, preserving the existing server actions, Supabase access, inventory rules and storefront. The working-tree plan revision (which removes the admin orders section and moves the logo entrance to Task 7) was followed; no Task 6 or later feature work was started. No commit, push, deployment or migration was performed.
+
+### Implemented behavior
+
+- Added request-cached `requireAdmin()` in `src/lib/admin.ts`, called by the admin layout and every admin page so a page never relies on the layout alone. Unauthenticated or non-admin visitors redirect to `/admin/login`; an authenticated non-admin now sees a sign-out action there.
+- Replaced the single tabbed admin page with a route group that keeps the same URLs: `/admin` overview, `/admin/products`, `/admin/categories`, `/admin/storefront`, `/admin/settings`. `/admin/login` remains outside the authenticated layout. No `/admin/orders` route was added, per the revised plan.
+- Overview uses count-only queries (`head: true`, no product rows) for total/active/unavailable products and categories, plus links to each section. Legacy `/admin?q=...&page=...` links redirect to `/admin/products` with the same query.
+- Data loading is route-owned:
+  - Products loads only the current product page, the category list needed for assignment, and currency settings.
+  - Categories loads only `store_categories` and `admin_category_counts`.
+  - Storefront loads only the selected `hero` or `bestsellers` section.
+  - Settings loads only `site_settings`.
+- Added `AdminShell`: responsive RTL sidebar on desktop, mobile header/drawer with scroll lock and Escape close, active-section navigation, store link, signed-in email and sign-out. Mobile navigation closes on route change.
+- Storefront subsections are URL-backed via `/admin/storefront?section=hero|bestsellers`; product search and pagination remain URL-backed via `q`/`page`.
+- Added unsaved-edit coordination: `AdminEditingProvider`, `AdminLink`, and `beforeunload` warning. Product, category, storefront and settings editors report dirty state through context; the optional `onEditingChange` test prop remains supported.
+- Removed `src/app/admin/page.tsx` and `src/components/admin/AdminDashboard.tsx`. Added `MenuIcon` to the shared icon set.
+
+### Verification
+
+- `node --test --test-concurrency=1 tests/*.test.mjs`: **69 passed, 0 failed**. Earlier the same suite OOM'd with `NODE_OPTIONS=--max-old-space-size=4096`; without that option it passed. Each file that OOM'd in the earlier run also passed individually without code changes.
+- `npx tsc --noEmit`: passed.
+- `npx eslint`: passed.
+- `npx next typegen`: passed after the route move, clearing stale generated route types.
+- `npx next build`: passed the Next.js 16.3.8 Turbopack production build, TypeScript and page generation. The route table shows separate dynamic `/admin`, `/admin/products`, `/admin/categories`, `/admin/storefront` and `/admin/settings` routes plus `/admin/login`.
+- Data-isolation proof is source-level: the categories and settings pages import/query only their own managers and tables; no product-editor or merchandising dataset is requested on those routes. The build output confirms separate route modules.
+
+### Limits
+
+- No authenticated staging browser pass was performed, so responsive layout, mobile drawer behavior, unsaved-edit prompts and zero horizontal overflow were not re-verified in a real browser in this session.
+- The revised plan intentionally has no admin orders view; order snapshots and checkout behavior are unchanged. Task 6 and later tasks remain unstarted.
+- `plan.md` in the working tree already contains the revised plan with reformatted Markdown; it was not edited as part of Task 5.
+- No commit, push, deployment, production database mutation or Task 6 work was performed.
+
+## Task 6 — Admin Management UX Improvements — 2026-11-07
+
+Implemented Task 6 on top of the existing uncommitted Task 5 changes. No later task, commit, push, deployment, migration, or production database write was performed.
+
+### Implemented
+
+- Products retain 30-row server pagination and now support URL-backed category and availability filters alongside search. Pagination retains the filters. Availability distinguishes purchasable active products, manual/quantity-based stock exhaustion, and unpublished products. A separate filtered relation preserves all category memberships in each returned product. Changing filters/pages resets local row selection to prevent accidentally moving unseen selections.
+- Product editing is organized into basic information, pricing/discounts, images, main/subcategory assignment, stock/availability, visibility/order, and the existing variants section. All submitted fields, background removal, approval/restoration, uploads, variant controls, bulk movement, version checks and feedback remain. Category selectors and assignment labels show full ancestry.
+- Categories render as expandable parent groups, recursively including deeper descendants, with optimized thumbnails, direct product counts, visibility, order and existing public paths. Populated categories offer an explicit reassignment/deletion workflow instead of ordinary deletion. Confirmation remains disabled until transfer or detach is explicitly selected. Existing target exclusions, atomic database deletion/reassignment and cycle protections are unchanged.
+- Hero and Best-Selling retain separate URL-backed interfaces and save contracts. Added selection counts, search empty states, duplicate-selection feedback, stock badges in results/selections, and thumbnail previews of draft ordering. Preview omits unpublished products while retaining sold-out active products. Reorder buttons have 44px minimum targets and announce moves; native dragging and keyboard/touch controls remain. Numeric counts use isolated direction and currency is not duplicated.
+- Preserved the Task 5 authenticated layout, section-specific loading, navigation, unsaved-edit protection and Supabase integration. Lint exposed two pre-existing synchronous state resets inside effects in AdminEditing/AdminShell; moved those resets to conditional pathname-change state adjustment, preserving the navigation behavior without suppressing lint.
+
+### Verification
+
+- `node --test --test-concurrency=1 tests/*.test.mjs`: **72 passed, 0 failed**. Includes CRUD/concurrency, category parent changes/cycle rejection, atomic reassignment/deletion, image replacement/approval/restoration, duplicate merchandising selections, stale saves, persisted ordering, inventory, public cache and checkout regressions.
+- Three new focused tests cover server filters and pagination, complete category memberships, ancestry labels/cycle tolerance, and retention of submitted product fields and the image editor.
+- `npm run typecheck`, `npm run lint`, final `npm run build` (Next.js 16.3.8 Turbopack), and `git diff --check`: passed. Existing nonfatal lockfile/module-type/line-ending warnings remain.
+- `node tests/admin-management-browser.mjs`: passed in isolated Chrome at **390px and 1440px**. Verified no horizontal overflow in product list/editor, category workflow and both merchandising interfaces; expandable categories; disabled deletion confirmation until an explicit choice; keyboard reordering in both interfaces at both widths; touch reordering at 390px; and previews excluding unpublished products while retaining sold-out products.
+- Evidence: `artifacts/admin-task6/results.json` and product/editor/category/Hero/Best-Selling screenshots at both widths. Mobile product/editor and desktop merchandising screenshots were visually inspected. The browser harness uses a temporary copy with fixture data and no real database credentials. Chrome required approved execution outside the sandbox. Test input simulation was corrected to send Enter text and settle scrolling before touch coordinates; final checks passed.
+
+### Limits
+
+- Browser checks exercise actual client components with fixture data, not authenticated staging Supabase. Mutation, permission and concurrency coverage comes from isolated database/API tests. No live save-to-public propagation timing or physical-device test was performed; existing invalidation and revision freshness were preserved, not newly benchmarked.
+- The preview shows ordered thumbnails, price and availability; it does not recreate storefront animation. No new schema, order-management UI, dependencies or Task 7 entrance work was introduced.

@@ -5,6 +5,7 @@ import { getViewer } from '@/lib/auth'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
 import AdminLoginForm from '@/components/admin/AdminLoginForm'
 import { AlertIcon, LockIcon } from '@/components/icons'
+import { signOut } from '@/app/admin/actions'
 
 export const metadata = {
   title: 'دخول المسؤول | You&Me Cosmetics',
@@ -48,11 +49,21 @@ export default async function AdminLoginPage() {
         </p>
 
         {user && !admin && (
-          <Notice>
-            سجّلتِ الدخول باسم {user.email}، لكن هذا البريد غير مُدرج في قائمة المساحين. أضفيه إلى{' '}
-            <code className="ltr">admin_emails</code> ومنح الحساب{' '}
-            <code className="ltr">app_metadata.role = admin</code>.
-          </Notice>
+          <>
+            <Notice>
+              سجّلتِ الدخول باسم {user.email}، لكن هذا البريد غير مُدرج في قائمة المساحين. أضفيه إلى{' '}
+              <code className="ltr">admin_emails</code> ومنح الحساب{' '}
+              <code className="ltr">app_metadata.role = admin</code>.
+            </Notice>
+            <form action={signOut} className="mt-3">
+              <button
+                type="submit"
+                className="w-full rounded-full border border-sand bg-white px-5 py-2.5 text-[12.5px] font-bold text-cocoa"
+              >
+                تسجيل الخروج
+              </button>
+            </form>
+          </>
         )}
 
         <AdminLoginForm />
