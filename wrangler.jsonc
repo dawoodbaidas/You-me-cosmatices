@@ -3,7 +3,7 @@
   "name": "you-me-cosmetics",
   "main": ".open-next/worker.js",
   "upload_source_maps": true,
-  "compatibility_date": "2026-11-09",
+"compatibility_date": "2026-11-08",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": ".open-next/assets",
