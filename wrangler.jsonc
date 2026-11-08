@@ -1,9 +1,12 @@
+
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "you-me-cosmetics",
   "main": ".open-next/worker.js",
+  "keep_vars": true,
+  "workers_dev": true,
   "upload_source_maps": true,
-"compatibility_date": "2026-11-08",
+  "compatibility_date": "2026-11-08",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": ".open-next/assets",
