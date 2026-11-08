@@ -1,1 +1,0 @@
-const fs=require('fs');let p='src/components/storefront.css',s=fs.readFileSync(p,'utf8');s=s.replace('.quickview-buy {','.boutique .quickview-buy {').replace('.quickview-close {','.boutique .quickview-close {');fs.writeFileSync(p,s);

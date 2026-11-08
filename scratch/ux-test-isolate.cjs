@@ -1,1 +1,0 @@
-const fs=require('fs');const p='scripts/ux-fix-qa.mjs';let s=fs.readFileSync(p,'utf8');s=s.replace("await page.waitForSelector('.editorial-central')","await page.evaluate(()=>localStorage.clear());await page.reload({waitUntil:'networkidle0'});await page.waitForSelector('.editorial-central')");fs.writeFileSync(p,s)
