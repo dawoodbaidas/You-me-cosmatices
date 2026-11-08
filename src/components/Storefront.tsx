@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, type ReactNode, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { Suspense, createContext, useContext, type ReactNode, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import Link, { useStoreNavigation } from './StoreNavigation'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
@@ -25,6 +25,7 @@ import CategoryLink, { CategoryUrls } from './CategoryLink'
 import './category-shopping.css'
 import './store-routes.css'
 import './store-shell.css'
+import './header.css'
 import ShopSection from '@/components/ShopSection'
 import Toast, { type ToastMessage } from '@/components/Toast'
 import { cartLineLimit, cartCount as countItems, cartTotal as sumTotal, resolveCart, cartShipping } from '@/lib/cart'
@@ -360,7 +361,7 @@ export default function Storefront({ settings, children, footer, categories, sto
 
       <main id="store-content"><HomepageServices.Provider value={{ productCache, currency: settings.currency, onAddToCart: addSceneProduct, onScrollTo: scrollTo, onOpenDetails: setQuickViewId }}>{children}</HomepageServices.Provider></main>
 
-      {footer}
+      <>{footer}</>
 
       {searchOpen && <SearchOverlay currency={settings.currency} onClose={() => setSearchOpen(false)} onSubmit={submitSearch} onSelect={product => { setSearchOpen(false); navigation.push(`/products/${encodeURIComponent(product.slug)}`) }} />}
       <CartDrawer
@@ -377,7 +378,7 @@ export default function Storefront({ settings, children, footer, categories, sto
         onBrowse={browse}
       />
 
-      {quickViewProduct && <ProductQuickView
+      <Suspense fallback={null}>{quickViewProduct && <ProductQuickView
         key={quickViewProduct.id}
         product={quickViewProduct}
         cartItems={cart}
@@ -390,7 +391,7 @@ export default function Storefront({ settings, children, footer, categories, sto
         onClose={closeProduct}
         onToggleFavorite={toggleFavorite}
         onAddToCart={(product, variantId, quantity) => addProduct(product.id, variantId, quantity)}
-      />}
+      />}</Suspense>
 
       <MobileCartBar
         count={totalCount}

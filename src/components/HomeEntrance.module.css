@@ -27,8 +27,12 @@
 .logo img {
   width: 144px;
   height: 144px;
+  aspect-ratio: 1;
+  overflow: hidden;
   border-radius: 50%;
   object-fit: contain;
+  box-sizing: border-box;
+  background: #f7e8df;
   box-shadow: 0 16px 64px rgb(77 45 36 / 8%);
 }
 @media (prefers-reduced-motion: reduce), (prefers-reduced-data: reduce) {

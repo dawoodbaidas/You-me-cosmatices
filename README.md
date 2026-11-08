@@ -160,7 +160,7 @@ live unit prices and a computed total.
 | Public reads | RLS `select` allows anonymous access to active rows |
 | Catalogue writes | RLS requires `public.is_admin()` (email allow-list **and** `app_metadata.role`) |
 | Settings writes | Same, plus server-action validation of the WhatsApp number |
-| Admin routes | `src/proxy.ts` redirects logged-out visitors; `src/app/admin/page.tsx` re-checks session **and** `is_admin()` server-side. The proxy is UX only — the page check and RLS are the real gates |
+| Admin routes | `src/middleware.ts` redirects logged-out visitors; `src/app/admin/page.tsx` re-checks session **and** `is_admin()` server-side. The middleware is UX only — the page check and RLS are the real gates |
 | `admin_emails` | Not readable by anon; it holds addresses |
 | Passwords | Supabase Auth only. The prototype's client-side plaintext password check is gone |
 | Headers | `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` in `next.config.ts` |
@@ -211,7 +211,7 @@ src/
       login/page.tsx        Supabase password sign-in
       actions.ts            'use server' actions (all re-check isAdmin())
     ../
-  proxy.ts                  Supabase cookie refresh + admin redirect (Next 16 name for middleware)
+  middleware.ts             Supabase cookie refresh + admin redirect (edge runtime for Netlify)
   components/               Header, Hero, FeatureStrip, ShopSection, ProductCard,
                             ProductQuickView, StorySection, Testimonials, Footer,
                             CartDrawer, MobileCartBar, Toast, icons, Backdrop
@@ -231,7 +231,7 @@ scripts/build-import.mjs      seed generator + match report
 supabase/migrations/001_initial_schema.sql
 supabase/seed.sql             generated
 public/products/              38 product images
-public/brand/logo.jpg
+public/brand/logo.png
 ```
 
 ---

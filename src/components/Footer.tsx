@@ -4,13 +4,14 @@ import { FacebookIcon, InstagramIcon, WhatsappIcon } from './icons'
 import { whatsappLink } from '@/lib/whatsapp'
 import type { SiteSettings } from '@/types/product'
 import styles from './Footer.module.css'
+import Logo from './Logo'
 
 export default function Footer({ settings }: { settings: SiteSettings }) {
   return <footer id="contact" className={styles.footer} dir="rtl">
     <div className={styles.inner}>
       <div className={styles.identity}>
-        <div className={styles.wordmark} dir="ltr" aria-label="You and Me Cosmetics">
-          <strong>you <i>&amp;</i> me</strong><span>COSMETICS</span>
+        <div className={styles.wordmark}>
+          <Logo />
         </div>
         <h2 className={styles.heading}>معك، بكل <em>حب.</em></h2>
       </div>

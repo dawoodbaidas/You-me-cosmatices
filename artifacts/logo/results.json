@@ -1,0 +1,206 @@
+[
+  {
+    "width": 390,
+    "path": "/",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 62.399993896484375,
+        "height": 62.400001525878906,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/categories",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 62.399993896484375,
+        "height": 62.400001525878906,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/favorites",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 62.399993896484375,
+        "height": 62.400001525878906,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/cart",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 62.399993896484375,
+        "height": 62.400001525878906,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/products/frankel-black-elixir",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 62.399993896484375,
+        "height": 62.400001525878906,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/admin/login",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 44,
+        "height": 44,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "path": "/",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 96,
+        "height": 96,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "path": "/categories",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 96,
+        "height": 96,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "path": "/favorites",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 96,
+        "height": 96,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "path": "/cart",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 96,
+        "height": 96,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "path": "/products/frankel-black-elixir",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 96,
+        "height": 96,
+        "fit": "contain"
+      },
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 49.578125,
+        "height": 49.578125,
+        "fit": "contain"
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "path": "/admin/login",
+    "logos": [
+      {
+        "src": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo-circular.0lkfx3z20sqi-.png&w=3840&q=75",
+        "width": 50,
+        "height": 50,
+        "fit": "contain"
+      }
+    ]
+  }
+]

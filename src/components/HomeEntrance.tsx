@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import logo from '../../public/brand/logo-circular.png'
 import { useLayoutEffect, useRef } from 'react'
 import { startHomeEntrance } from '@/lib/home-entrance'
 import styles from './HomeEntrance.module.css'
@@ -15,7 +16,7 @@ export default function HomeEntrance() {
     <div className={styles.left} data-entrance-panel />
     <div className={styles.right} data-entrance-panel />
     <div className={styles.logo} data-entrance-logo>
-      <Image src="/brand/logo.jpg" alt="" width={144} height={144} sizes="144px" quality={75} loading="eager" />
+      <Image src={logo} alt="" sizes="144px" quality={75} loading="eager" />
     </div>
   </div>
 }

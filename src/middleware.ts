@@ -10,7 +10,7 @@ import { isSupabaseConfigured } from '@/lib/supabase/config'
  * `src/app/admin/page.tsx` (session + `public.is_admin()`) and in the RLS
  * policies, so a user cannot bypass it by calling the app directly.
  */
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   if (!isSupabaseConfigured()) return NextResponse.next({ request })
 
   let response = NextResponse.next({ request })
@@ -61,5 +61,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
+  runtime: 'experimental-edge',
   matcher: ['/admin/:path*'],
 }

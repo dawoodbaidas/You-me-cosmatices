@@ -27,19 +27,6 @@
   isolation: isolate;
 }
 
-.curtainTop,
-.curtainBottom {
-  position: absolute;
-  inset-inline: 0;
-  z-index: 30;
-  height: 50%;
-  background: var(--cream-deep);
-  pointer-events: none;
-}
-
-.curtainTop { top: 0; }
-.curtainBottom { bottom: 0; }
-
 .heroTitle {
   position: relative;
   z-index: 4;
@@ -546,8 +533,6 @@
 @media (prefers-reduced-motion: reduce) {
   .hero { height: auto; }
   .heroPin { position: relative; height: 100svh; }
-  .curtainTop,
-  .curtainBottom { display: none; }
   .heroTitle i { transform: none; }
   .showcase { height: auto; }
   .showcasePin { position: relative; height: 100svh; }

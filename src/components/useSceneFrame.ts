@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, type RefObject } from 'react'
+import { useCallback, useEffect, useEffectEvent, useRef, type RefObject } from 'react'
 import { clamp } from '@/lib/scene-palette'
 
 export type SceneFrame = { progress: number; elapsed: number; reduced: boolean; width: number; height: number }
@@ -8,6 +8,9 @@ export type SceneFrame = { progress: number; elapsed: number; reduced: boolean; 
 // Both scenes share one lifecycle: passive input, RAF writes, no offscreen loop.
 export function useSceneFrame(root: RefObject<HTMLElement | null>, draw: (frame: SceneFrame) => void, continuous = false) {
   const redraw = useRef<() => void>(() => {})
+  // The scene owns its clock, not the identity of a product array or callback.
+  // Store/modal updates must use fresh data without replaying the entrance.
+  const drawFrame = useEffectEvent(draw)
   useEffect(() => {
     const element = root.current
     if (!element) return
@@ -23,7 +26,7 @@ export function useSceneFrame(root: RefObject<HTMLElement | null>, draw: (frame:
       const pin = element.querySelector<HTMLElement>('[data-scene-pin]')
       const height = pin?.offsetHeight ?? innerHeight
       const progress = clamp(-rect.top / Math.max(1, element.offsetHeight - height))
-      draw({ progress, elapsed: elapsed / 1000, reduced: reduced.matches, width: element.clientWidth, height })
+      drawFrame({ progress, elapsed: elapsed / 1000, reduced: reduced.matches, width: element.clientWidth, height })
       if (continuous && visible && !reduced.matches && !document.hidden) frame = requestAnimationFrame(render)
       else last = 0
     }
@@ -49,6 +52,7 @@ export function useSceneFrame(root: RefObject<HTMLElement | null>, draw: (frame:
       window.removeEventListener('boutique:layout', schedule); element.removeEventListener('load', schedule, true)
       document.removeEventListener('visibilitychange', schedule); reduced.removeEventListener('change', schedule)
     }
-  }, [root, draw, continuous])
+  }, [root, continuous])
+  useEffect(() => { redraw.current() }, [draw])
   return useCallback(() => redraw.current(), [])
 }

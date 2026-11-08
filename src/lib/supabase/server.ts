@@ -6,7 +6,7 @@ import { cookies } from 'next/headers'
  * so Server Components, Server Actions and Route Handlers all see the same user.
  *
  * `cookies().set()` throws during a Server Component render, which is why
- * `setAll` swallows that error — session refresh is then handled by `proxy.ts`.
+ * `setAll` swallows that error — session refresh is then handled by `middleware.ts`.
  */
 export async function createClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL

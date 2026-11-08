@@ -33,9 +33,6 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
     const element = root.current
     if (!element) return
     const u = Math.min(2.8, width / 390), exit = reduced ? 0 : ease((hp - .55) / .45)
-    element.querySelectorAll<HTMLElement>('[data-curtain]').forEach((panel, i) => {
-      panel.style.transform = `translateY(${(i ? 1 : -1) * 101 * (reduced ? 1 : ease(time / 1.1))}%)`
-    })
     element.querySelectorAll<HTMLElement>('[data-word]').forEach((word, i) => {
       word.style.transform = `translateY(${110 * (1 - (reduced ? 1 : out((time - 1.1 - i * .1) / .55)))}%)`
     })
@@ -118,7 +115,6 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
   if (!items.length) return null
   return <section id="home" ref={root} className={styles.hero} aria-label="الرئيسية">
     <div className={styles.heroPin} data-scene-pin>
-      <div className={styles.curtainTop} data-curtain aria-hidden="true" /><div className={styles.curtainBottom} data-curtain aria-hidden="true" />
       <div className={`${styles.heroTitle} ${styles.heroCopy}`}><h1 data-hero-copy><span>إلك وإلها،</span><span>كل التفاصيل هون.</span></h1><p>عطور، عناية وإكسسوارات للرجال والنساء.</p></div>
       <div className={styles.heroStage} data-hero-stage>
         <span className={styles.heroWordmark} data-wordmark aria-hidden="true" dir="ltr">YOU&amp;ME</span>

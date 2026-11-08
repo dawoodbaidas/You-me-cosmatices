@@ -1,7 +1,7 @@
 'use client'
 
 import Link, { useStoreNavigation } from './StoreNavigation'
-import StoreBrand from './StoreBrand'
+import Logo from './Logo'
 import CategoryLink from './CategoryLink'
 import CategoryCircles from './CategoryCircles'
 import { findCollection } from '@/lib/store-categories'
@@ -51,13 +51,13 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
 
   return <>
       <div className="announcement"><span>{settings.storeAnnouncement}</span><span className="announcement-tag">You&amp;Me / الأردن</span></div>
-      <header ref={header} className="world-header shop-header">
-        <button className="menu-trigger" aria-label="فتح القائمة" aria-expanded={open} onClick={() => setOpen(true)}><span /><span /><small>القائمة</small></button>
-        <Link className="world-brand" href="/" prefetch={false}><StoreBrand /></Link>
+      <header ref={header} className="site-header world-header shop-header">
+        <button className="menu-trigger" aria-label="فتح القائمة" aria-expanded={open} onClick={() => setOpen(true)}><span /><span /></button>
+        <Link className="world-brand" href="/" prefetch={false} aria-label="You & Me Cosmetics"><Logo preload /></Link>
         <nav className="world-desktop-nav" aria-label="التنقل الرئيسي">
           <Link href="/" prefetch={false} aria-current={!cataloguePage && active === 'home' ? 'page' : undefined}>الرئيسية</Link>
-          <Link href="/#bestsellers" prefetch={false} aria-current={!cataloguePage && active === 'bestsellers' ? 'location' : undefined}>الأكثر طلبًا</Link>
-          <Link href="/categories" onClick={closeMenus}>المتجر</Link>
+          <Link href="/#bestsellers" prefetch={false} aria-current={!cataloguePage && active === 'bestsellers' ? 'page' : undefined}>الأكثر طلبًا</Link>
+          <Link href="/categories" onClick={closeMenus} aria-current={cataloguePage || (!cataloguePage && active === 'shop') ? 'page' : undefined}>المتجر</Link>
           <div className="mega-anchor" onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} onKeyDown={event => { if (event.key === 'Escape') setMega(false) }}>
             <button aria-expanded={mega} aria-controls="shop-mega" onClick={() => setMega(true)}>الأقسام ▾</button>
             {mega && <div id="shop-mega" className="shop-mega">{groups.map(group => <div key={group.id}>
@@ -66,7 +66,7 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
             </div>)}</div>}
           </div>
           
-          <button onClick={() => onScrollTo('contact')}>عن العلامة</button>
+          <button onClick={() => onScrollTo('contact')} aria-current={!cataloguePage && active === 'contact' ? 'page' : undefined}>عن العلامة</button>
         </nav>
         <div className="world-nav-actions">
           <button className="nav-search" aria-label="البحث" onClick={search}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="m15 15 6 6" /></svg></button>
@@ -77,11 +77,13 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
       {pathname !== '/' && <CategoryCircles compact groups={groups} selected={groups.find(group => group.id === selected || !!findCollection(group.children, selected))?.id} />}
     <BoutiqueDialog open={open} onClose={() => setOpen(false)} label="قائمة المتجر" className="menu-dialog">
       <div className="shopping-menu" dir="rtl">
-        <div className="shopping-menu-head"><StoreBrand /><button className="icon-button" aria-label="إغلاق القائمة" onClick={() => setOpen(false)}><CloseIcon /></button></div>
+        <div className="shopping-menu-head"><Logo compact /><button className="icon-button" aria-label="إغلاق القائمة" onClick={() => setOpen(false)}><CloseIcon /></button></div>
         <nav aria-label="التنقل">
-          <Link href="/" prefetch={false} onClick={closeMenus}>الرئيسية</Link>
-          <Link href="/#bestsellers" prefetch={false} onClick={closeMenus}>الأكثر طلبًا</Link>
-          <Link href="/categories" onClick={closeMenus}>المتجر</Link>
+          <Link href="/" prefetch={false} onClick={closeMenus} aria-current={!cataloguePage && active === 'home' ? 'page' : undefined}>الرئيسية</Link>
+          <Link href="/#bestsellers" prefetch={false} onClick={closeMenus} aria-current={!cataloguePage && active === 'bestsellers' ? 'page' : undefined}>الأكثر طلبًا</Link>
+          <Link href="/categories" onClick={closeMenus} aria-current={cataloguePage || (!cataloguePage && active === 'shop') ? 'page' : undefined}>المتجر</Link>
+          <button type="button" className="menu-search" onClick={search}>البحث</button>
+          <Link href="/favorites" prefetch={false} onClick={closeMenus}>المفضلة{favoriteCount > 0 ? ` (${favoriteCount})` : ''}</Link>
         </nav>
         <p className="shopping-menu-label">تسوق حسب القسم</p>
         <CategoryBranches groups={groups} selected={selected} onNavigate={closeMenus} />
