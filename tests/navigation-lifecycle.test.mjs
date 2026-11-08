@@ -7,6 +7,7 @@ test('route-aware links report only actual non-cancelled client navigations', ()
   const load=modules({
     react:{createContext:()=>({}),useContext:()=>({begin:href=>begun.push(href)})},
     'next/link':{__esModule:true,default:'a'},
+    'next/navigation':{usePathname:()=>'/'} ,
   })
   const Link=load('@/components/StoreNavigation').default
   Link({href:'/categories'}).props.onNavigate({preventDefault(){throw Error('unexpected')}})

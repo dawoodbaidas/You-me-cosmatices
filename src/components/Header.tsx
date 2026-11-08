@@ -25,28 +25,14 @@ export default function Header({ settings, cartCount, favoriteCount, onScrollTo,
   useEffect(() => {
     const element = header.current, root = element?.closest<HTMLElement>('.boutique')
     if (!element || !root) return
-    let boundaries: IntersectionObserver | undefined
     const update = () => {
       const height = element.getBoundingClientRect().height
       root.style.setProperty('--header-height', `${height}px`)
-      boundaries?.disconnect()
-      const sections = [...root.querySelectorAll<HTMLElement>('main > section, footer')]
-      const paint = () => {
-        const attached = sections.filter(section => section.isConnected)
-        const section = attached.find(section => { const rect = section.getBoundingClientRect(); return rect.top <= height + 1 && rect.bottom > height + 1 }) ?? attached[0]
-        if (!section) return
-        const style = getComputedStyle(section)
-        element.style.backgroundColor = style.backgroundColor
-        element.style.color = style.color
-      }
-      boundaries = new IntersectionObserver(paint, { rootMargin: `-${height}px 0px -${Math.max(0, window.innerHeight - height - 2)}px 0px` })
-      sections.forEach(section => boundaries!.observe(section))
-      paint()
     }
     const observer = new ResizeObserver(update)
     observer.observe(element)
     window.addEventListener('resize', update)
-    return () => { observer.disconnect(); boundaries?.disconnect(); window.removeEventListener('resize', update) }
+    return () => { observer.disconnect(); window.removeEventListener('resize', update) }
   }, [pathname])
 
   useEffect(() => {

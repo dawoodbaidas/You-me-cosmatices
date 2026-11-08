@@ -28,6 +28,7 @@ export default async function CategoryPage({ params, searchParams }: { params: P
     notFound()
   }
   if (category && !findCollection(storeCollections(catalogue.categories, catalogue.products), category.slug)) notFound()
-  const products = category?.parent_slug ? await getCategoryProducts(category.slug) : []
+  const hasChildren = catalogue.categories.some(item => item.parent_slug === category?.slug)
+  const products = category && (category.parent_slug !== null || !hasChildren) ? await getCategoryProducts(category.slug) : []
   return <StorePage routePath={requested} mode="category" slug={category?.slug} data={{ ...catalogue, products }} />
 }

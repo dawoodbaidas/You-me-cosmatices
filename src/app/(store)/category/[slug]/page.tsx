@@ -6,7 +6,7 @@ import { storeCollections, findCollection } from '@/lib/store-categories'
 // Keep revision checks fresh without overriding the catalogue's explicit cache.
 export const revalidate = 0
 
-export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function CategoryPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ q?: string | string[] }> }) {
   const { slug } = await params
   const result = await getStoreNavigation()
 
@@ -14,5 +14,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   if (slug !== 'all' && !collection && !result.unavailable) notFound()
   if (collection?.href) redirect(collection.href)
 
-  return <StorePage routePath={`/category/${encodeURIComponent(slug)}`} mode="category" slug={slug} data={await getStoreProducts('all')} />
+  const value = (await searchParams).q
+  const query = (Array.isArray(value) ? value[0] : value)?.trim().slice(0, 120)
+  return <StorePage routePath={`/category/${encodeURIComponent(slug)}`} dataQuery={query ?? ''} mode="category" slug={slug} data={await getStoreProducts(query ? 'search' : 'all', query)} />
 }

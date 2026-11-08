@@ -1,5 +1,5 @@
-import StoreSkeleton from '@/components/StoreSkeleton'
+import DelayedStoreLoading from '@/components/DelayedStoreLoading'
 
 export default function Loading() {
-  return <StoreSkeleton />
+  return <DelayedStoreLoading shell />
 }

@@ -1,0 +1,39 @@
+.footer {
+  background:var(--wine-deep);
+  color:var(--paper);
+  padding:24px 20px 18px;
+}
+.inner { max-width:1160px; margin-inline:auto; }
+.identity { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.wordmark { flex:none; color:#e2b5bd; text-align:center; }
+.wordmark strong { display:block; font:700 32px/.95 var(--serif); white-space:nowrap; }
+.wordmark i { font-weight:400; }
+.wordmark span { display:block; margin-top:8px; font:500 8px/1.4 Arial,sans-serif; letter-spacing:.3em; padding-inline-start:.3em; }
+.footer .heading { font-size:21px; line-height:1.5; font-weight:500; }
+.heading em { color:#e2b5bd; font-style:normal; }
+.contact { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:12px; }
+.footer a,.story summary { min-height:44px; display:inline-flex; align-items:center; gap:8px; font-size:13px; }
+.footer a { min-width:44px; }
+.whatsapp svg { width:18px; height:18px; flex:none; }
+.socials { display:flex; gap:2px; }
+.socials a { width:44px; justify-content:center; border-radius:50%; }
+.socials svg { width:19px; height:19px; }
+.links { display:flex; flex-wrap:wrap; align-items:start; gap:0 20px; }
+.story { min-width:0; }
+.story summary { cursor:pointer; list-style:none; }
+.story summary::-webkit-details-marker { display:none; }
+.story summary::after { content:'+'; color:#e2b5bd; }
+.story[open] { flex-basis:100%; }
+.story[open] summary::after { content:'−'; }
+.story p { max-width:480px; padding-bottom:8px; color:#d4d3cb; font-size:13px; line-height:1.8; }
+.copyright { display:flex; flex-wrap:wrap; gap:2px 20px; margin-top:10px; padding-top:12px; border-top:1px solid var(--cream-line); color:#bcbeb5; font-size:10px; line-height:1.8; }
+.copyright span { display:block; }
+.footer a:hover,.story summary:hover { color:#e2b5bd; }
+.footer a:focus-visible,.story summary:focus-visible { outline:2px solid #e2b5bd; outline-offset:3px; border-radius:4px; }
+@media(min-width:768px) {
+  .footer { padding:28px 4.2vw 20px; }
+  .inner { display:grid; grid-template-columns:1fr 1fr; column-gap:64px; align-items:center; }
+  .identity { grid-row:span 2; justify-content:start; gap:32px; }
+  .contact { margin-top:0; }
+  .copyright { grid-column:1/-1; justify-content:space-between; margin-top:16px; }
+}

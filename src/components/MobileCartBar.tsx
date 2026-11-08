@@ -26,8 +26,9 @@ export default function MobileCartBar({ count, total, settings, open, onOpenCart
     measure()
     return () => { observer.disconnect(); root.style.removeProperty('--mobile-cart-height') }
   }, [])
-  const hidden = count === 0 || open || pathname === '/cart'
-  return <div ref={bar} data-cart-page={pathname === '/cart'} className={`mobile-shopping-bar ${hidden ? '' : 'is-visible'}`} aria-hidden={hidden} inert={hidden}>
+  const excluded = pathname === '/cart' || pathname.startsWith('/checkout') || pathname.startsWith('/admin') || pathname.startsWith('/products/')
+  const hidden = count === 0 || open || excluded
+  return <div ref={bar} data-cart-page={excluded} className={`mobile-shopping-bar ${hidden ? '' : 'is-visible'}`} aria-hidden={hidden} inert={hidden}>
     <button onClick={onOpenCart} aria-label={`عرض السلة، ${itemCountNoun(count)}، ${formatJod(total, settings.currency)}`}>
       <span className="mobile-bag-count"><BagIcon /><b>{count}</b></span>
       <span className="mobile-bag-copy">عرض السلة<small>{itemCountNoun(count)}</small></span>

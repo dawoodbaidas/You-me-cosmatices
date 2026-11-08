@@ -7,7 +7,7 @@
 .shop-ornament { display: flex; align-items: center; gap: 14px; margin-top: 20px; color: var(--line, var(--edge)); }
 .shop-ornament span { width: clamp(50px, 10vw, 120px); height: 1px; background: currentColor; }
 .boutique .quickview-badge { background: var(--ink); color: var(--ivory, #fff8ec); font-size: 11.5px; font-weight: 700; border-radius: 13px; padding: 5px 10px; }
-.boutique strong.store-price { display: inline-flex; align-items: baseline; gap: 5px; font-size: 18px; font-weight: 800; }
+.boutique strong.store-price { white-space:nowrap; unicode-bidi:isolate; display: inline-flex; align-items: baseline; gap: 5px; font-size: 18px; font-weight: 800; }
 .boutique strong.store-price small { font-size: 11.5px; font-weight: 700; direction: rtl; }
 .boutique .quickview-price del { font-size: 13px; }
 .boutique .quickview-buy { transition: background-color .18s ease; }
@@ -18,13 +18,10 @@
 /* The only available logo is a square JPEG, so use the wordmark by itself. */
 .boutique .store-brand { display:inline-flex; align-items:center; margin:0; color:inherit; font-style:normal; line-height:1; }
 .boutique .store-brand strong { font:700 20px/1.2 Arial,sans-serif; white-space:nowrap; }
-.boutique .footer-brand { display:flex; justify-content:center; padding-block:20px; }
-.boutique .footer-brand strong { font-size:26px; }
 .boutique .collection-heading { animation:collectionEnter 120ms ease-out; }
 @keyframes collectionEnter { from { transform:translateY(2px); } to { transform:none; } }
 @media(max-width:899px) {
   .boutique .store-brand strong { font-size:18px; }
-  .boutique .footer-brand strong { font-size:24px; }
 }
 @media(prefers-reduced-motion:reduce) {
   .boutique .collection-heading,.boutique .shopping-subgroups { animation:none; }

@@ -21,7 +21,8 @@ export default function ProductLens({ src, name, eager, onOpen, defer = false }:
       if (!img?.naturalWidth) return
       const rect = root.getBoundingClientRect()
       const px = Math.max(0, Math.min(rect.width, x - rect.left)), py = Math.max(0, Math.min(rect.height, y - rect.top))
-      const cover = coverLens(rect.width, rect.height, img.naturalWidth, img.naturalHeight, px, py, getComputedStyle(img).objectFit)
+      const imageRect=img.getBoundingClientRect()
+      const cover = coverLens(imageRect.width, imageRect.height, img.naturalWidth, img.naturalHeight, x-imageRect.left, y-imageRect.top, getComputedStyle(img).objectFit)
       const left = Math.max(0, Math.min(rect.width - 112, px - 56))
       const visibleTop = Math.max(0, -rect.top)
       const visibleBottom = Math.min(rect.height, window.innerHeight - rect.top)

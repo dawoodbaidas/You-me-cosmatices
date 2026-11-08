@@ -63,6 +63,13 @@ const server=http.createServer(async(request,response)=>{
       const productSlug=url.searchParams.get('slug')?.slice(3)??null
       const ids=url.searchParams.get('id')?.slice(4,-1).split(',')??null
       data=(await query("select to_jsonb(p)||jsonb_build_object('product_variants',coalesce((select jsonb_agg(v) from product_variants v where v.product_id=p.id),'[]'::jsonb),'product_categories',coalesce((select jsonb_agg(jsonb_build_object('category_slug',pc.category_slug)) from product_categories pc where pc.product_id=p.id),'[]'::jsonb)) data from products p where is_active and ($1::text is null or exists(select 1 from product_categories pc where pc.product_id=p.id and pc.category_slug=$1)) and ($2::uuid[] is null or p.id=any($2::uuid[])) and ($3::text is null or p.slug=$3) order by sort_order,id",[slug,ids,productSlug],true)).rows.map(row=>row.data)
+      const search = url.searchParams.get('and')
+      if (search) {
+        const patterns = [...search.matchAll(/name_ar\.imatch\.("(?:\\.|[^"\\])*")/g)].map(match => JSON.parse(match[1]))
+        const matching = (await query('select id from products where is_active and not exists (select 1 from unnest($1::text[]) pattern where not (coalesce(name_ar,\'\') ~* pattern or coalesce(name_en,\'\') ~* pattern))', [patterns], true)).rows
+        data = data.filter(row => matching.some(item => item.id === row.id))
+      }
+      if (url.searchParams.has('limit')) data = data.slice(0, Number(url.searchParams.get('limit')))
     }else if(url.pathname==='/rest/v1/home_section_products'){
       data=(await query('select section,product_id,position from home_section_products order by section,position',[],true)).rows
     }else if(url.pathname==='/rest/v1/site_settings'){

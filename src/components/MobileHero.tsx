@@ -7,7 +7,8 @@ import type { Product } from '@/types/product'
 import SceneProductImage from './SceneProductImage'
 import { useSceneFrame, type SceneFrame } from './useSceneFrame'
 import styles from './scroll-scenes.module.css'
-import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
+import { PRODUCT_IMAGE_SIZES, productImageFrame } from '@/lib/product-media'
+import { mobileSubjectScale } from '@/lib/mobile-scene-geometry'
 import { prefetchProductDetails } from './CachedProductImage'
 import { isProductOutOfStock } from '@/lib/cart'
 import StockBadge from './StockBadge'
@@ -22,6 +23,7 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
   onAddToCart: (id: string, variant: string | null) => void; onOpenDetails: (id: string) => void
 }) {
   const root = useRef<HTMLElement>(null)
+  const pointer = useRef({ x: 0, y: 0, scroll: 0, moved: false })
   const items = products
   const maskId = useId().replace(/:/g, '')
   const main = items[0], asset = main && productSceneAsset(main)
@@ -39,7 +41,28 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
     })
     const shelf = element.querySelector<HTMLElement>('[data-shelf]')!
     shelf.style.transform = `scaleX(${reduced ? 1 : out((time - 1.1) / .6)})`
-    element.querySelectorAll<HTMLElement>('[data-hero-product]').forEach((card, index) => {
+    const cards = Array.from(element.querySelectorAll<HTMLButtonElement>('[data-hero-product]'))
+    const mobile = width < 768
+    const stage = element.querySelector<HTMLElement>('[data-hero-stage]')!
+    // Match the clickable bounds to the same visible subject used by the image renderer.
+    const subjects = cards.map((card, index) => {
+      const product = items[index], scene = productSceneAsset(product)
+      const source = scene?.src ?? product.imageUrl
+      const frame = source ? productImageFrame(source) : undefined
+      const image = card.querySelector('img')
+      const subject = frame?.subject ?? scene?.bounds ?? { width: image?.naturalWidth || 4, height: image?.naturalHeight || 5 }
+      const scale = mobile
+        ? mobileSubjectScale(subject.width, subject.height, card.clientWidth, card.clientHeight, index === 0 ? 1 : index < 3 ? .85 : .7)
+        : Math.min(card.clientWidth / subject.width, card.clientHeight / subject.height)
+      const w = subject.width * scale, h = subject.height * scale
+      card.style.setProperty('--subject-width', `${w}px`)
+      card.style.setProperty('--subject-height', `${h}px`)
+      return { width: w, height: h }
+    })
+    const middleWidth = Math.max(...subjects.slice(1, 3).map(subject => subject.width), 0)
+    const outerWidth = Math.max(...subjects.slice(3).map(subject => subject.width), 0)
+    const gap = Math.max(12, Math.min(52, stage.clientWidth * .035, (stage.clientWidth - subjects[0].width - 2 * middleWidth - 2 * outerWidth) / 4 - 8))
+    cards.forEach((card, index) => {
       if (index === 0) {
         const rise = reduced ? 1 : back((time - .55) / 1.1)
         card.style.transform = `translate3d(0,${90 * (1 - rise) + 70 * exit}px,0) scale(${1 + .55 * exit})`
@@ -47,14 +70,26 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
         return
       }
       const side = index % 2 ? 1 : -1, outer = index > 2
-      const mobile = width < 768
-      const distance = (mobile ? outer ? 136 : 100 : outer ? 158 : 100) * u, productWidth = (outer ? 52 : 80) * u
+      const distance = mobile ? (outer ? 136 : 100) * u
+        : subjects[0].width / 2 + (outer ? middleWidth + subjects[index].width / 2 + 2 * gap : subjects[index].width / 2 + gap)
+      const productWidth = subjects[index].width
       const enter = reduced ? 1 : ease((hp - (outer ? .08 : 0)) / .4)
       const start = mobile ? distance + 12 * u : width / 2 + productWidth + 30
       const x = side * (distance * enter + start * (1 - enter) + exit * width * .28)
       const y = mobile && outer ? -Math.min(150, width * .36) : 0
       card.style.transform = `translate3d(${x}px,${y}px,0) rotate(${side * (mobile ? 8 : 22) * (1 - enter)}deg) scale(${1 + .2 * exit})`
       card.style.opacity = String(1 - .92 * exit)
+    })
+    const pin = element.querySelector<HTMLElement>('[data-scene-pin]')!.getBoundingClientRect()
+    cards.forEach(card => {
+      const rect = card.querySelector<HTMLElement>('[data-hero-hit]')!.getBoundingClientRect()
+      const image = card.querySelector('img')
+      const visible = Boolean(image?.complete && image.naturalWidth) && (reduced || time > .9) && Number(card.style.opacity) > .15
+        && Math.min(rect.right, pin.right, innerWidth) - Math.max(rect.left, pin.left, 0) > 8
+        && Math.min(rect.bottom, pin.bottom, innerHeight) - Math.max(rect.top, pin.top, 0) > 8
+      card.inert = !visible
+      card.tabIndex = visible ? 0 : -1
+      card.setAttribute('aria-hidden', String(!visible))
     })
     element.querySelectorAll<HTMLElement>('[data-hero-copy]').forEach((copy, index) => {
       copy.style.transform = `translateY(${(index ? 30 : -35) * exit}px)`
@@ -77,7 +112,7 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
     const dot = hint.querySelector<HTMLElement>('i')!
     dot.style.transform = `translateY(${reduced ? 0 : time % 1.8 / 1.8 * 24}px)`
     element.querySelector<HTMLElement>('[data-marquee]')!.style.transform = `translateX(${reduced ? 0 : time % 26 / 26 * 50}%)`
-  }, [asset])
+  }, [asset, items])
   useSceneFrame(root, draw, true)
 
   if (!items.length) return null
@@ -85,12 +120,25 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
     <div className={styles.heroPin} data-scene-pin>
       <div className={styles.curtainTop} data-curtain aria-hidden="true" /><div className={styles.curtainBottom} data-curtain aria-hidden="true" />
       <div className={`${styles.heroTitle} ${styles.heroCopy}`}><h1 data-hero-copy><span>إلك وإلها،</span><span>كل التفاصيل هون.</span></h1><p>عطور، عناية وإكسسوارات للرجال والنساء.</p></div>
-      <div className={styles.heroStage}>
+      <div className={styles.heroStage} data-hero-stage>
         <span className={styles.heroWordmark} data-wordmark aria-hidden="true" dir="ltr">YOU&amp;ME</span>
         <span className={styles.heroGlow} data-glow aria-hidden="true" />
         <span className={styles.shelf} data-shelf aria-hidden="true" />
-        {items.map((product, index) => <button key={product.id} className={`${styles.heroProduct} ${index === 0 ? styles.heroMain : index < 3 ? styles.heroMiddle : styles.heroOuter}`} data-hero-product style={{ aspectRatio: String((productSceneAsset(product)?.bounds.width ?? 4) / (productSceneAsset(product)?.bounds.height ?? 5)) }}
-          aria-label={`عرض تفاصيل ${product.nameAr}`} onClick={() => onOpenDetails(product.id)} onPointerEnter={() => prefetchProductDetails(product.imageUrl)} onFocus={() => prefetchProductDetails(product.imageUrl)}>
+        {items.map((product, index) => <button key={product.id} type="button" className={`${styles.heroProduct} ${index === 0 ? styles.heroMain : index < 3 ? styles.heroMiddle : styles.heroOuter}`} data-hero-product={product.id} data-product-slug={product.slug} inert tabIndex={-1} aria-hidden="true" style={{ aspectRatio: String((productSceneAsset(product)?.bounds.width ?? 4) / (productSceneAsset(product)?.bounds.height ?? 5)) }}
+          aria-label={`عرض تفاصيل ${product.nameAr}`}
+          onPointerDown={event => {
+            pointer.current = { x: event.clientX, y: event.clientY, scroll: scrollY, moved: false }
+            event.currentTarget.setPointerCapture(event.pointerId)
+          }}
+          onPointerMove={event => {
+            if (Math.hypot(event.clientX - pointer.current.x, event.clientY - pointer.current.y) > 8) pointer.current.moved = true
+          }}
+          onPointerCancel={() => { pointer.current.moved = true }}
+          onDragStart={event => event.preventDefault()}
+          onClick={event => {
+            if (event.detail > 0 && (pointer.current.moved || Math.abs(scrollY - pointer.current.scroll) > 8)) return
+            onOpenDetails(product.id)
+          }} onPointerEnter={() => prefetchProductDetails(product.imageUrl)} onFocus={() => prefetchProductDetails(product.imageUrl)}>
           <span className={styles.productShadow} aria-hidden="true" />
           {isProductOutOfStock(product) && <StockBadge overlay />}
           <SceneProductImage product={product} preload={index === 0} mobileWeight={index === 0 ? 1 : index < 3 ? .85 : .7} sizes={PRODUCT_IMAGE_SIZES.hero}
@@ -100,6 +148,7 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
               <mask id={`${maskId}-mask`} maskUnits="userSpaceOnUse" x="0" y="0" width={asset.width} height={asset.height} style={{ maskType: 'alpha' }}><image href={maskSrc} width={asset.width} height={asset.height} /></mask></defs>
             <g clipPath={`url(#${maskId}-clip)`} mask={`url(#${maskId}-mask)`}><rect data-shine x="0" y="0" width={asset.width * .2} height={asset.height} fill="white" /></g>
           </svg>}
+          <span className={styles.heroHitArea} data-hero-hit aria-hidden="true" />
         </button>)}
       </div>
       <div className={styles.heroActions} data-hero-copy><button onClick={() => onScrollTo('shop')}>تسوّق الآن</button><button onClick={() => onScrollTo('bestsellers')}>الأكثر مبيعاً</button></div>

@@ -26,14 +26,14 @@ export function useProductOverlay() {
   const open = (product: string) => {
     const url = new URL(window.location.href)
     url.hash = new URLSearchParams({ product }).toString()
-    window.history.pushState({ storeProductOverlay: true }, '', url)
+    window.history.pushState({ ...window.history.state, storeProductOverlay: true }, '', url)
     window.dispatchEvent(new Event(CHANGE))
   }
   const close = () => {
     if (window.history.state?.storeProductOverlay) window.history.back()
     else {
       const url = new URL(window.location.href); url.hash = ''
-      window.history.replaceState(null, '', url)
+      window.history.replaceState({ ...window.history.state, storeProductOverlay:false }, '', url)
       window.dispatchEvent(new Event(CHANGE))
     }
   }

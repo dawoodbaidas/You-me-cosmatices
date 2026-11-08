@@ -2,7 +2,7 @@
 export const PRODUCT_IMAGE_QUALITY = 75
 export const PRODUCT_IMAGE_SIZES = {
   cart: '(max-width: 767px) 88px, 148px',
-  listing: '(max-width: 599px) calc((100vw - 30px) / 2), (max-width: 767px) calc((100vw - 40px) / 3), (max-width: 1199px) calc((100vw - 52px) / 2), (max-width: 1439px) calc((100vw - 76px) / 3), 455px',
+  listing: '(max-width: 767px) calc((100vw - 36px) / 2), (max-width: 1099px) calc((100vw - 92px) / 3), (max-width: 1439px) calc((100vw - 114px) / 4), 332px',
   detail: '(max-width: 767px) 90vw, 440px',
   hero: '(max-width:767px) 32vw, (max-width:1200px) 36vw, 480px',
   scene: '(max-width:767px) 65vw, (max-width:1200px) 42vw, 520px',

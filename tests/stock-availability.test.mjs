@@ -64,7 +64,7 @@ test('stock UI renders Arabic controls, overlay badges, disabled purchase action
   assert.match(card, /<button[^>]*data-price-tag[^>]*disabled/)
   for (const inline of [false, true]) for (const inventory of [false, true]) {
     const detail = render('@/components/ProductQuickView', { product: sold, inline, inventory, cartItems: [], settings, currency: 'JOD', selectedVariantId: null })
-    const buy = detail.match(/<button\b[^>]*>/g).find(tag => tag.includes('quickview-buy'))
+    const buy = detail.match(/<button\b[^>]*>/g).find(tag => tag.includes('data-testid="product-add"'))
     assert.match(buy, /disabled/)
     assert.match(detail, /نفد من المخزون/)
   }

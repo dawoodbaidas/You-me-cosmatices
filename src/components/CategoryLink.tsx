@@ -12,9 +12,6 @@ export default function CategoryLink({ slug, onNavigate, ...props }: { slug: str
   return <Link prefetch={false} {...props} href={href} onNavigate={event => {
     let prevented = false
     onNavigate?.({ preventDefault: () => { prevented = true; event.preventDefault() } })
-    if (!prevented && window.location.pathname !== href) {
-      window.history.replaceState({ ...window.history.state, categoryScrollY: window.scrollY, categoryScrollCount: Number(document.getElementById('shop')?.dataset.visibleCount) || 12, categoryScrollUrl: location.pathname + location.search }, '')
-      window.scrollTo({ top: 0, behavior: 'instant' })
-    }
+    if(prevented)event.preventDefault()
   }} />
 }

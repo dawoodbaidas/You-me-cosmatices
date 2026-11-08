@@ -1,13 +1,13 @@
 import styles from './ProductCard.module.css'
 
 export function ProductGridSkeleton() {
-  return <div role="status" aria-label="جارٍ تحميل المنتجات" aria-busy="true">
+  return <div className={styles.listing} role="status" aria-label="جارٍ تحميل المنتجات" aria-busy="true">
     <span className="sr-only">جارٍ تحميل المنتجات…</span>
     <div className={styles.grid} aria-hidden="true">
       {Array.from({ length: 8 }, (_, index) => <div className={styles.card} key={index}>
         <div className={`${styles.tile} ${styles.skeleton}`} />
         <div className={styles.details}>
-          <div>
+          <div className={styles.info}>
             <div className={`${styles.skeleton} ${styles.skeletonCategory}`} />
             <div className={`${styles.skeleton} ${styles.skeletonName}`} />
             <div className={`${styles.skeleton} ${styles.skeletonCategory}`} />

@@ -65,11 +65,4 @@
  .boutique .object-indicator-badge,.boutique .object-indicator-discount { font-size:10px; padding:5px 9px; }
  .boutique .object-wishlist { top:14px; inset-inline-end:14px; }
  .boutique .object-quick-action { inset-inline:18px; font-size:13px; height:40px; }
- .boutique .boutique-footer { padding:45px 5% 24px; }
- .boutique .footer-top { display:block; }
- .boutique .footer-invite { display:flex; gap:28px; align-items:center; justify-content:space-between; }
- .boutique .footer-invite h2 { font-size:46px; }
- .boutique .footer-links { margin-top:28px; }
- .boutique .footer-links nav { font-size:13px; }
- .boutique .footer-links button:nth-child(3),.boutique .footer-links button:nth-child(4) { display:none; }
 }

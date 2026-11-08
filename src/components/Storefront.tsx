@@ -17,7 +17,6 @@ import './arabic-design.css'
 import './boutique-redesign.css'
 import CartDrawer from '@/components/CartDrawer'
 import CartPage from '@/components/CartPage'
-import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import MobileCartBar from '@/components/MobileCartBar'
 const ProductQuickView = dynamic(() => import('./ProductQuickView'))
@@ -25,6 +24,7 @@ import CategoryCircles from './CategoryCircles'
 import CategoryLink, { CategoryUrls } from './CategoryLink'
 import './category-shopping.css'
 import './store-routes.css'
+import './store-shell.css'
 import ShopSection from '@/components/ShopSection'
 import Toast, { type ToastMessage } from '@/components/Toast'
 import { cartLineLimit, cartCount as countItems, cartTotal as sumTotal, resolveCart, cartShipping } from '@/lib/cart'
@@ -38,18 +38,19 @@ import { useCartStore, useFavoritesStore } from '@/lib/stores'
 import { prepareCheckout } from '@/app/checkout'
 import type { SiteSettings } from '@/types/product'
 import { PublicProductCache } from '@/lib/public-product-cache'
-import CategorySkeleton from './CategorySkeleton'
+import DelayedStoreLoading from './DelayedStoreLoading'
 import { useProductOverlay } from './useProductOverlay'
 
 interface StorefrontProps {
   settings: SiteSettings
   children: ReactNode
+  footer: ReactNode
   categories: StoreCategory[]
   storeUnavailable?: boolean
   storeRevision?: string | null
 }
 
-export default function Storefront({ settings, children, categories, storeRevision = null, storeUnavailable = false }: StorefrontProps) {
+export default function Storefront({ settings, children, footer, categories, storeRevision = null, storeUnavailable = false }: StorefrontProps) {
   const [productCache] = useState(() => new PublicProductCache())
   const snapshot = useSyncExternalStore(productCache.subscribe, productCache.getSnapshot, productCache.getSnapshot)
   const products = snapshot.products
@@ -67,7 +68,6 @@ export default function Storefront({ settings, children, categories, storeRevisi
   useStoreRefresh(storeRevision, observeRevision)
   const [searchOpen, setSearchOpen] = useState(false)
   const [cartError, setCartError] = useState<string | null>(null)
-  const [searchError, setSearchError] = useState<string | null>(null)
   const searchQuery = searchParams.get('q') ?? ''
   const groups = useMemo(() => storeCollections(categories, []), [categories])
   const cataloguePage = navigation.activePath !== '/'
@@ -115,18 +115,6 @@ export default function Storefront({ settings, children, categories, storeRevisi
     return () => { disposed = true; window.clearInterval(timer); window.removeEventListener('focus', hydrate); window.removeEventListener('online', hydrate) }
   }, [cartIds, favoriteIds, pathname, snapshot.revision, cartOpen, productCache])
 
-  useEffect(() => {
-    if (!searchOpen || !snapshot.revision) return
-    let disposed = false
-    const refreshSearch = () => {
-      if (!document.hidden) void productCache.load().then(() => { if (!disposed) setSearchError(null) }).catch(() => {
-        if (!disposed) setSearchError('تعذّر تحميل البحث. حاول مجددًا.')
-      })
-    }
-    refreshSearch()
-    const timer = window.setInterval(refreshSearch, 15_000)
-    return () => { disposed = true; window.clearInterval(timer) }
-  }, [productCache, snapshot.revision, searchOpen])
 
 
   const submitSearch = useCallback((value: string) => {
@@ -179,7 +167,7 @@ export default function Storefront({ settings, children, categories, storeRevisi
 
   const addSceneProduct = useCallback(
     (productId: string, variantId: string | null) => {
-      addProduct(productId, variantId, 1)
+      return addProduct(productId, variantId, 1)
     },
     [addProduct],
   )
@@ -238,7 +226,7 @@ export default function Storefront({ settings, children, categories, storeRevisi
       const section = document.getElementById(id)
       if (!section) { navigation.push(id === 'home' ? '/' : `/#${id}`); return }
       section.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
-      window.history.replaceState(null, '', `#${id}`)
+      window.history.replaceState(window.history.state, '', `#${id}`)
     },
     [navigation],
   )
@@ -309,7 +297,8 @@ export default function Storefront({ settings, children, categories, storeRevisi
     const groups = storeCollections(data?.categories ?? categories, products)
     const pageUnavailable = data?.unavailable ?? storeUnavailable
     const collection = findCollection(groups, slug ?? null)
-    const isMainCategory = categories.some(category => category.slug === slug && category.parent_slug === null)
+    const hasChildren = Boolean(collection?.children.length)
+    const departmentOnly = hasChildren && categories.some(category => category.slug === slug && category.parent_slug === null)
     const product = mode === 'product' ? products.find(p => p.slug === slug) : undefined
     const from = searchParams.get('from')
     const candidate = from ? findCollection(groups, from) : undefined
@@ -322,19 +311,20 @@ export default function Storefront({ settings, children, categories, storeRevisi
     return (      <>
 {mode === "product" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link><span>/</span>{productCategory && <><Link href={productCategory.href ?? collectionHref(productCategory.id)}>{productCategory.label}</Link><span>/</span></>}<span aria-current="page">{title}</span></nav>}
 {mode === "category" && <nav className="store-breadcrumbs" aria-label="مسار التصفح" dir="rtl"><Link href="/">الرئيسية</Link>{ancestry.map(category => <span key={category.slug}> / <CategoryLink slug={category.slug} aria-current={category.slug === slug ? 'page' : undefined}>{category.name_ar}</CategoryLink></span>)}</nav>}
-{mode === "category" && isMainCategory && <><CategoryCircles page groups={collection?.children ?? []} title={collection?.label} />{!collection?.children.length && <p className="category-empty">لا توجد أقسام فرعية حاليًا</p>}</>}
+{mode === "category" && hasChildren && <CategoryCircles page groups={collection?.children ?? []} title={collection?.label} />}
 {mode === "product" && product && <ProductQuickView inline product={product} cartItems={cart} selectedVariantId={variantChoice[product.id] ?? null} onSelectVariant={(id, variant) => setVariantChoice(v => ({...v, [id]:variant}))} currency={settings.currency} isFavorite={favoriteSet.has(product.id)} settings={settings} onClose={() => navigation.push("/categories")} onToggleFavorite={toggleFavorite} onAddToCart={(p, variant, quantity) => addProduct(p.id, variant, quantity)} />}
 {mode === "cart" && <CartPage loadError={cartError} lines={lines} settings={settings} onRemove={remove} onIncrement={increment} onDecrement={decrement} onCheckout={checkout} onBrowse={() => navigation.push("/categories")} />}
 
         {mode === "home" && children}
 
-        {(mode === "favorites" || (mode === "category" && !isMainCategory)) ? <ShopSection
+        {(mode === "favorites" || (mode === "category" && !departmentOnly)) ? <ShopSection
           cart={cart}
           key={pathname}
           products={visible}
           groups={groups}
           initialCategory={slug}
           currency={settings.currency}
+           whatsappNumber={settings.whatsappNumber}
           pageTitle={title}
           query={searchQuery}
           unavailable={pageUnavailable}
@@ -358,13 +348,7 @@ export default function Storefront({ settings, children, categories, storeRevisi
       <a href="#store-content" className="skip-link">انتقلي إلى المنتجات</a>
 
       <Header
-        onSearch={async () => {
-          try {
-            await productCache.load()
-            setSearchError(null)
-            setSearchOpen(true)
-          } catch { notify('تعذّر تحميل البحث. حاول مجددًا.', 'error') }
-        }}
+        onSearch={() => setSearchOpen(true)}
         settings={settings}
         cartCount={totalCount}
         favoriteCount={favorites.length}
@@ -376,14 +360,9 @@ export default function Storefront({ settings, children, categories, storeRevisi
 
       <main id="store-content"><HomepageServices.Provider value={{ productCache, currency: settings.currency, onAddToCart: addSceneProduct, onScrollTo: scrollTo, onOpenDetails: setQuickViewId }}>{children}</HomepageServices.Provider></main>
 
-      <Footer
-        settings={settings}
-        groups={groups}
-        onScrollTo={scrollTo}
-        onSubscribe={() => notify('تم تسجيل بريدك. سنتواصل قريبًا.')}
-      />
+      {footer}
 
-      {searchOpen && <SearchOverlay loadError={searchError} products={snapshot.searchProducts ?? []} currency={settings.currency} initialQuery={searchQuery} onClose={() => setSearchOpen(false)} onSubmit={submitSearch} onSelect={id => { setSearchOpen(false); openProduct(id) }} />}
+      {searchOpen && <SearchOverlay currency={settings.currency} onClose={() => setSearchOpen(false)} onSubmit={submitSearch} onSelect={product => { setSearchOpen(false); navigation.push(`/products/${encodeURIComponent(product.slug)}`) }} />}
       <CartDrawer
         loadError={cartError}
         side={cartSide}
@@ -426,8 +405,8 @@ export default function Storefront({ settings, children, categories, storeRevisi
   )
 }
 
-export interface StorePageProps { mode: 'home' | 'categories' | 'category' | 'product' | 'cart' | 'favorites'; routePath: string; slug?: string; data?: StoreCatalogue; children?: ReactNode }
-const HomepageServices = createContext<{ productCache: PublicProductCache; currency: string; onAddToCart: (id: string, variant: string | null) => void; onScrollTo: (id: string) => void; onOpenDetails: (id: string) => void } | null>(null)
+export interface StorePageProps { mode: 'home' | 'categories' | 'category' | 'product' | 'cart' | 'favorites'; routePath: string; dataQuery?: string; slug?: string; data?: StoreCatalogue; children?: ReactNode }
+const HomepageServices = createContext<{ productCache: PublicProductCache; currency: string; onAddToCart: (id: string, variant: string | null) => boolean; onScrollTo: (id: string) => void; onOpenDetails: (id: string) => void } | null>(null)
 export function useHomepageServices() { const value = useContext(HomepageServices); if (!value) throw new Error('Homepage requires store services'); return value }
 const StoreDataContext = createContext<((data: StoreCatalogue | undefined) => void) | null>(null)
 const StorePageContext = createContext<((props: StorePageProps) => ReactNode) | null>(null)
@@ -435,8 +414,9 @@ export function StorePage(props: StorePageProps) {
   const render = useContext(StorePageContext)
   const register = useContext(StoreDataContext)
   const { activePath } = useStoreNavigation()
-  const active = props.routePath === activePath
+  const params = useSearchParams()
+  const active = props.routePath === activePath && (props.dataQuery === undefined || props.dataQuery === (params.get('q') ?? '').trim().slice(0, 120))
   useEffect(() => { if (active) register?.(props.data) }, [register, props.data, active])
   if (!render) throw new Error('StorePage requires the store layout')
-  return active ? <><span hidden data-store-route={props.routePath} data-store-mode={props.mode} />{render(props)}</> : <CategorySkeleton />
+  return active ? <><span hidden data-store-route={props.routePath} data-store-mode={props.mode} />{render(props)}</> : <DelayedStoreLoading path={activePath} />
 }

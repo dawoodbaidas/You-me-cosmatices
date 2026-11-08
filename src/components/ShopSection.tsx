@@ -4,14 +4,13 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import CategoryLink from './CategoryLink'
 import BoutiqueDialog from './BoutiqueDialog'
-import { ProductGridSkeleton } from './StoreSkeleton'
 import type { CartItem, Product } from '@/types/product'
 import ProductCard from './ProductCard'
 import productStyles from './ProductCard.module.css'
 import { productPricing } from '@/lib/pricing'
 import { isProductOutOfStock } from '@/lib/cart'
 import { matchesProduct } from '@/lib/search'
-import { ArrowIcon } from './icons'
+import { ArrowIcon, CloseIcon } from './icons'
 import type { Collection } from '@/lib/taxonomy'
 
 const INITIAL_VISIBLE = 12
@@ -22,6 +21,7 @@ interface ShopSectionProps {
   cart: CartItem[]
   products: Product[]
   currency: string
+  whatsappNumber?: string
   pageTitle?: string
   query: string
   unavailable?: boolean
@@ -33,7 +33,7 @@ interface ShopSectionProps {
   onOpenDetails: (productId: string) => void
 }
 
-export default function ShopSection({ initialCategory = 'all', cart, products, currency, pageTitle, query, unavailable = false, favorites, selectedVariants, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ShopSectionProps) {
+export default function ShopSection({ initialCategory = 'all', cart, products, currency, whatsappNumber, pageTitle, query, unavailable = false, favorites, selectedVariants, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ShopSectionProps) {
   const sentinel = useRef<HTMLDivElement>(null)
   const category = initialCategory
   const [pagination, setPagination] = useState({ key: '', count: INITIAL_VISIBLE })
@@ -89,7 +89,7 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
   const visibleCount = Math.max(pagination.key === viewKey ? pagination.count : INITIAL_VISIBLE, restore?.count ?? 0)
   const rendered = visible.slice(0, visibleCount)
   const favoriteSet = new Set(favorites)
-  useEffect(() => { if (!restore) return; const frame = requestAnimationFrame(() => { window.scrollTo({top: restore.y, behavior:'instant'}); setRestore(null); setPagination({key:viewKey, count:Math.max(INITIAL_VISIBLE, restore.count)}) }); return () => cancelAnimationFrame(frame) }, [restore, viewKey])
+  useEffect(() => { if (!restore) return; const frame = requestAnimationFrame(() => { setRestore(null); setPagination({key:viewKey, count:Math.max(INITIAL_VISIBLE, restore.count)}) }); return () => cancelAnimationFrame(frame) }, [restore, viewKey])
 
   useEffect(() => {
     window.dispatchEvent(new Event('boutique:layout'))
@@ -134,7 +134,7 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
     <p className={productStyles.hint}>اضغط مطوّلًا على أي صورة لتكبيرها، واضغط على القسيمة للإضافة إلى السلة</p>
     <BoutiqueDialog open={filtersOpen} onClose={() => setFiltersOpen(false)} label="تصفية المنتجات" className="filter-dialog">
     <div className="shop-filter-sheet" dir="rtl" style={{ '--filter-top': `${filterPosition.top}px`, '--filter-right': `${filterPosition.right}px` } as CSSProperties}>
-      <div className="filter-sheet-head"><h2 id="filter-title">تصفية المنتجات</h2><button type="button" onClick={() => setFiltersOpen(false)} aria-label="إغلاق التصفية">×</button></div>
+      <div className="filter-sheet-head"><h2 id="filter-title">تصفية المنتجات</h2><button type="button" onClick={() => setFiltersOpen(false)} aria-label="إغلاق التصفية"><CloseIcon /></button></div>
       <form onSubmit={event => { event.preventDefault(); applyDraft() }} className="shop-filter-form">
     <label><input type="checkbox" checked={draft.available} onChange={event => setDraft(current => ({ ...current, available: event.target.checked }))} /> المتوفر الآن</label>
     <label><input type="checkbox" checked={draft.discounted} onChange={event => setDraft(current => ({ ...current, discounted: event.target.checked }))} /> عليه خصم</label>
@@ -153,8 +153,9 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
               deferImage={!pageTitle || index >= 4}
               quantity={cart.find(item => item.productId === product.id && item.variantId === (selectedVariants[product.id] ?? product.variants[0]?.id ?? null))?.quantity ?? 0}
               currency={currency}
+              whatsappNumber={whatsappNumber}
               isFavorite={favoriteSet.has(product.id)}
-              selectedVariantId={selectedVariants[product.id] ?? product.variants[0]?.id ?? null}
+              selectedVariantId={selectedVariants[product.id] ?? null}
               onSelectVariant={onSelectVariant}
               onToggleFavorite={onToggleFavorite}
               onAddToCart={onAddToCart}
@@ -162,7 +163,7 @@ export default function ShopSection({ initialCategory = 'all', cart, products, c
             />)}
           </div>
 
-          {rendered.length < visible.length && <div ref={sentinel} className="shop-more"><ProductGridSkeleton />
+          {rendered.length < visible.length && <div ref={sentinel} className="shop-more">
             <p><strong>{rendered.length}</strong> من {visible.length}</p>
             <button className="shop-more-button" onClick={showMore}>
               <span>عرض المزيد</span>

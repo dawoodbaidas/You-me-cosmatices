@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Local evidence, scratch scripts and installed agent skill assets.
     "artifacts/**",
+    ".image-migration-reports/**",
     "scratch/**",
     "skills/**",
   ]),

@@ -6,13 +6,6 @@ import { useEffect } from 'react'
 // browser zoom and the two editorial scenes always use their native behavior.
 export default function StoreScroll() {
   useEffect(() => {
-    const restoreCategory = (event: PopStateEvent) => {
-      const y = event.state?.categoryScrollY
-      if (event.state?.categoryScrollUrl === location.pathname + location.search && typeof y === 'number' && Number.isFinite(y)) {
-        try { sessionStorage.setItem('store-return', JSON.stringify({ url: event.state.categoryScrollUrl, y, count: event.state.categoryScrollCount ?? 12 })) } catch {}
-      }
-    }
-    window.addEventListener('popstate', restoreCategory)
     const media = matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)')
     let target = 0, lastWheel = 0, smoothing = false
     const cancel = () => {
@@ -59,7 +52,6 @@ export default function StoreScroll() {
     window.addEventListener('pointerdown', cancel)
     window.addEventListener('store:navigate', cancel)
     return () => {
-      window.removeEventListener('popstate', restoreCategory)
       cancel()
       media.removeEventListener('change', update)
       window.removeEventListener('wheel', wheel)

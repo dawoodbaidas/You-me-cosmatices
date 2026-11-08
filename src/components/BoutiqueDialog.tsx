@@ -24,6 +24,14 @@ export default function BoutiqueDialog({ open, onClose, label, className, childr
     const scrollbar = window.innerWidth - document.documentElement.clientWidth
     const focused = document.activeElement as HTMLElement | null
     element.showModal()
+    const viewport = window.visualViewport
+    const resize = () => {
+      element.style.setProperty('--dialog-height', `${viewport?.height ?? window.innerHeight}px`)
+      element.style.setProperty('--dialog-top', `${viewport?.offsetTop ?? 0}px`)
+    }
+    resize()
+    viewport?.addEventListener('resize', resize)
+    viewport?.addEventListener('scroll', resize)
     element.querySelector<HTMLElement>('[data-dialog-autofocus]')?.focus({ preventScroll: true })
     const sheet = element.firstElementChild
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -35,6 +43,8 @@ export default function BoutiqueDialog({ open, onClose, label, className, childr
     return () => {
       sheet?.getAnimations().forEach(animation => animation.cancel())
       element.close()
+      viewport?.removeEventListener('resize', resize)
+      viewport?.removeEventListener('scroll', resize)
       document.body.style.overflow = previous
       document.body.style.paddingRight = previousPadding
       focused?.focus({ preventScroll: true })
@@ -44,6 +54,7 @@ export default function BoutiqueDialog({ open, onClose, label, className, childr
     const button = (event.target as HTMLElement).closest('button')
     if (button?.classList.contains('quickview-close') || button?.closest('.cart-heading')) { event.stopPropagation(); close() }
   }} onCancel={event => { event.preventDefault(); close() }} onKeyDown={event => {
+    if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(); return }
     if (event.key !== 'Tab') return
     const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), [tabindex="0"]')).filter(element => element.getClientRects().length > 0)
     const target = event.shiftKey ? controls.at(-1) : controls[0]

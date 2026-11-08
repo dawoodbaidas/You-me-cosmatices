@@ -2,9 +2,11 @@
 
 import Link from './StoreNavigation'
 import { usePathname } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
-import { BagIcon, HeartIcon } from './icons'
-import { formatJod } from '@/lib/format'
+import { useEffect, useRef } from 'react'
+import { BagIcon, CheckIcon, HeartIcon, WhatsappIcon } from './icons'
+import { useAddFeedback } from './useAddFeedback'
+import { whatsappLink } from '@/lib/whatsapp'
+import { formatAmount, formatJod } from '@/lib/format'
 import { productPricing } from '@/lib/pricing'
 import { cartLineLimit, isProductOutOfStock } from '@/lib/cart'
 import StockBadge from './StockBadge'
@@ -15,6 +17,7 @@ import styles from './ProductCard.module.css'
 interface ProductCardProps {
   product: Product
   currency: string
+  whatsappNumber?: string
   deferImage?: boolean
   eager: boolean
   quantity: number
@@ -26,50 +29,30 @@ interface ProductCardProps {
   onOpenDetails: (productId: string) => void
 }
 
-export default function ProductCard({ product, currency, eager, deferImage = false, quantity, isFavorite, selectedVariantId, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ProductCardProps) {
+export default function ProductCard({ product, currency, whatsappNumber, eager, deferImage = false, quantity, isFavorite, selectedVariantId, onSelectVariant, onToggleFavorite, onAddToCart, onOpenDetails }: ProductCardProps) {
   const pathname = usePathname()
-  const [added, setAdded] = useState(false)
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState('')
-  const adding = useRef(false)
-  const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const {added,pending,error,setError,run,reset}=useAddFeedback()
+  const variantSelect=useRef<HTMLSelectElement>(null)
   const card = useRef<HTMLElement>(null)
   const animations = useRef<Animation[]>([])
   const flyers = useRef<HTMLElement[]>([])
   useEffect(() => () => {
-    if (feedbackTimer.current) clearTimeout(feedbackTimer.current)
     animations.current.forEach(animation => animation.cancel())
     flyers.current.forEach(element => element.remove())
   }, [])
-  const variant = product.variants.find(item => item.id === selectedVariantId) ?? product.variants[0] ?? null
+  const variant = product.variants.find(item => item.id === selectedVariantId) ?? (product.variants.length===1?product.variants[0]:null)
+  const needsChoice=product.variants.length>1&&!variant
   const { price, oldPrice, discount } = productPricing(product, variant)
   const soldOut = isProductOutOfStock(product)
-  const disabled = cartLineLimit(product, [], variant?.id ?? null) <= 0
+  const disabled = soldOut || product.isActive===false || (!needsChoice && quantity >= cartLineLimit(product, [], variant?.id ?? null))
   const add = async () => {
-    if (adding.current || disabled) return false
-    adding.current = true
-    setPending(true)
-    setError('')
-    try {
-      const result = await onAddToCart(product.id, variant?.id ?? null)
-      if (result === false) throw new Error('Addition rejected')
-      setAdded(true)
-      if (feedbackTimer.current) clearTimeout(feedbackTimer.current)
-      feedbackTimer.current = setTimeout(() => setAdded(false), 1200)
-      return true
-    } catch {
-      setError('تعذّرت الإضافة. تحقّق من الكمية المتاحة وحاول مجددًا.')
-      return false
-    } finally {
-      adding.current = false
-      setPending(false)
-    }
+    if(disabled)return false
+    if(needsChoice){setError('اختر النوع أولًا.');variantSelect.current?.focus();return false}
+    return run(()=>onAddToCart(product.id,variant?.id??null))
   }
   const addFromTag = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
-    if (quantity > 0) {
-      if (onAddToCart(product.id, variant?.id ?? null) === false) return
-    } else if (await add() === false) return
+    if (await add() === false) return
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const tag = card.current?.querySelector<HTMLElement>(`[data-price-tag]`)
     if (!tag) return
@@ -104,19 +87,20 @@ export default function ProductCard({ product, currency, eager, deferImage = fal
         <button className={styles.wishlist} aria-label={isFavorite ? 'إزالة من المفضلة' : 'إضافة إلى المفضلة'} aria-pressed={isFavorite} onClick={() => onToggleFavorite(product.id)}><HeartIcon /></button>
       </div>
       <div className={styles.tagAnchor}><div className={styles.tagIdle}><button data-price-tag className={styles.tag} disabled={disabled || pending} onClick={addFromTag} aria-label={`أضف قطعة من ${product.nameAr} إلى السلة بسعر ${formatJod(price, currency)}`}>
-        <span className={styles.paper}><span className={styles.hole} /><strong>{new Intl.NumberFormat('ar-JO', { maximumFractionDigits: 3 }).format(price)}</strong><small>د.أ</small>{oldPrice != null && <del>{oldPrice}</del>}</span>
-      </button></div>{quantity > 0 && <span className={styles.count}><span aria-hidden="true">{new Intl.NumberFormat('ar-JO').format(quantity)}</span><span className="sr-only"> عدد القطع في السلة {quantity}</span></span>}</div>
+        <span className={styles.paper}><span className={styles.hole} /><strong dir="ltr">{formatAmount(price)}</strong><small>{currency.toUpperCase() === 'JOD' ? 'د.أ' : currency}</small>{oldPrice != null && <del dir="ltr">{formatAmount(oldPrice)}</del>}</span>
+      </button></div></div>
     </div>
     <div className={styles.details}>
       <div className={styles.info}>
-        <p className={styles.category}>{variant?.label ?? product.categoryLabel}{discount && product.isNew && <span className={styles.newBadge}>جديد</span>}</p>
         <h3 className={styles.title}><Link prefetch={false} onNavigate={event => { event.preventDefault(); onOpenDetails(product.id) }} href={"/products/" + encodeURIComponent(product.slug) + (pathname.startsWith("/category/") ? "?from=" + encodeURIComponent(decodeURIComponent(pathname.split("/")[2])) : "")}>{product.nameAr}</Link></h3>
-        {product.variants.length > 1 && <label className={styles.variant}>النوع<select disabled={pending} aria-label={`نوع ${product.nameAr}`} value={variant?.id ?? ''} onChange={e => onSelectVariant(product.id, e.target.value)}>{product.variants.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>}
+        <p className={styles.category}>{variant?.label ?? product.categoryLabel}{discount && product.isNew && <span className={styles.newBadge}>جديد</span>}</p>
+        {product.variants.length > 1 && <label className={styles.variant}>النوع<select ref={variantSelect} disabled={pending} aria-label={`نوع ${product.nameAr}`} value={variant?.id ?? ''} onChange={e => {reset();onSelectVariant(product.id, e.target.value)}}><option value="" disabled>اختر النوع</option>{product.variants.map(item => <option key={item.id} value={item.id} disabled={item.isActive===false}>{item.label}</option>)}</select></label>}
       </div>
       <div className={styles.purchase}>
-        <button className={styles.add} disabled={pending || quantity > 0 || disabled} aria-busy={pending} onClick={add} aria-live="polite">
-          <BagIcon />{soldOut ? 'نفد من المخزون' : pending ? 'جارٍ الإضافة…' : quantity > 0 ? added ? 'تمت الإضافة ✓' : 'في السلة ✓' : disabled ? 'غير متوفر' : 'أضف إلى السلة'}
+        <button className={styles.add} disabled={pending || disabled} aria-busy={pending} onClick={add} aria-live="polite">
+          {added?<CheckIcon/>:<BagIcon />}<span>{soldOut ? 'نفد من المخزون' : pending ? 'جارٍ الإضافة…' : added ? 'تمت الإضافة' : disabled ? 'غير متوفر' : 'أضف إلى السلة'}</span>
         </button>
+        {whatsappNumber&&<a className={styles.whatsapp} href={whatsappLink(whatsappNumber,`مرحبًا، أود الاستفسار عن ${product.nameAr}`)} onClick={event=>{event.currentTarget.href=whatsappLink(whatsappNumber,`مرحبًا، أود الاستفسار عن ${product.nameAr}\n${new URL('/products/'+encodeURIComponent(product.slug),location.origin).href}`)}} target="_blank" rel="noopener noreferrer" aria-label={`اسأل عن ${product.nameAr} على واتساب`}><WhatsappIcon/></a>}
         {error && <p className={styles.addError} role="alert">{error}</p>}
       </div>
     </div>

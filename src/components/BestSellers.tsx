@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import { useCallback, useMemo, useRef, useState, type CSSProperties } from 'react'
 import Price from './Price'
 import { productPricing } from '@/lib/pricing'
 import { clamp, interpolatePalette, showcasePosition, type ScenePalette } from '@/lib/scene-palette'
@@ -14,11 +14,21 @@ import { PRODUCT_IMAGE_SIZES } from '@/lib/product-media'
 import { prefetchProductDetails } from './CachedProductImage'
 import { cartLineLimit, isProductOutOfStock } from '@/lib/cart'
 import StockBadge from './StockBadge'
+import { useAddFeedback } from './useAddFeedback'
 
 const DEFAULT_PALETTE: ScenePalette = { bgA: [248, 245, 239], bgB: [236, 229, 216] }
 
+function ScenePurchase({product,onAdd,onOpen}:{product:Product;onAdd:(id:string,variant:string|null)=>boolean;onOpen:(id:string)=>void}) {
+  const {pending,added,error,run}=useAddFeedback()
+  const disabled=cartLineLimit(product,[],product.variants[0]?.id??null)<=0
+  return <><button disabled={disabled||pending} aria-busy={pending} onClick={()=>{
+    if(product.variants.length>1){onOpen(product.id);return}
+    void run(()=>onAdd(product.id,product.variants[0]?.id??null))
+  }}>{disabled?'نفد من المخزون':pending?'جارٍ الإضافة…':added?'تمت الإضافة ✓':'أضف إلى السلة'}</button>{error&&<p role="alert">{error}</p>}</>
+}
+
 export default function BestSellers({ products, currency, onAddToCart, onOpenDetails }: {
-  products: Product[]; currency: string; onAddToCart: (id: string, variant: string | null) => void; onOpenDetails: (id: string) => void
+  products: Product[]; currency: string; onAddToCart: (id: string, variant: string | null) => boolean; onOpenDetails: (id: string) => void
 }) {
   const root = useRef<HTMLElement>(null)
   const items = products
@@ -28,8 +38,7 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
   }), [items])
   const [active, setActive] = useState(0)
   const [visited, setVisited] = useState<string[]>(() => items.slice(0, 2).flatMap(item => productSceneAsset(item)?.src ?? item.imageUrl ?? []))
-  const [added, setAdded] = useState(false)
-  const activeRef = useRef(0), manual = useRef<number | null>(null), timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const activeRef = useRef(0), manual = useRef<number | null>(null)
 
   const draw = useCallback(({ progress, reduced, width }: SceneFrame) => {
     const element = root.current
@@ -70,12 +79,10 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
       ])])
       activeRef.current = index
       setActive(index)
-      setAdded(false)
     }
   }, [items, palettes])
   const redraw = useSceneFrame(root, draw)
 
-  useEffect(() => () => { if (timer.current) clearTimeout(timer.current) }, [])
 
   const select = (index: number) => {
     const element = root.current
@@ -123,13 +130,7 @@ export default function BestSellers({ products, currency, onAddToCart, onOpenDet
           {item.description && <p>{item.description}</p>}
           <div className={styles.showcaseBuy}>
             <Price value={productPricing(item, item.variants[0]).price} oldPrice={productPricing(item, item.variants[0]).oldPrice} currency={currency} />
-            <button disabled={cartLineLimit(item, [], item.variants[0]?.id ?? null) <= 0} onClick={() => {
-              if (cartLineLimit(item, [], item.variants[0]?.id ?? null) <= 0) return
-              onAddToCart(item.id, item.variants[0]?.id ?? null)
-              setAdded(true)
-              if (timer.current) clearTimeout(timer.current)
-              timer.current = setTimeout(() => setAdded(false), 1600)
-            }}>{isProductOutOfStock(item) ? 'نفد من المخزون' : added && index === active ? 'تمت الإضافة ✓' : 'أضف للسلة'}</button>
+            <ScenePurchase product={item} onAdd={onAddToCart} onOpen={onOpenDetails} />
           </div>
         </div>)}
       </div>

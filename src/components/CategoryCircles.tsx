@@ -38,7 +38,7 @@ export default function CategoryCircles({ groups, compact = false, selected, tit
   }, [compact])
   const Container = compact ? 'nav' : 'section'
   const stories = groups
-  return <Container id={compact ? undefined : 'shop'} ref={section} className={compact ? 'category-circles store-departments' : `category-circles${page ? ' category-page-circles' : ''}`} aria-label={compact ? 'أقسام المتجر' : undefined} dir="rtl">
+  return <Container id={compact || page ? undefined : 'shop'} ref={section} className={compact ? 'category-circles store-departments' : `category-circles${page ? ' category-page-circles' : ''}`} aria-label={compact ? 'أقسام المتجر' : undefined} dir="rtl">
     {!compact && <>{title ? <h1>{title}</h1> : <h2>تسوّق <span>حسب القسم</span></h2>}<p>اختر القسم اللي يناسبك</p></>}
     <div ref={row} className="category-circle-grid">{stories.map((group, index) => {
       const src = group.imageUrl ?? null

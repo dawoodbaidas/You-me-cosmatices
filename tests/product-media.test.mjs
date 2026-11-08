@@ -1,6 +1,18 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { loadedProductImage, rememberProductImage, productImageFrame, rememberProductImageFrame } from '../src/lib/product-media.ts'
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { modules } from './helpers/load-app.mjs'
+
+test('catalogue and detail images preserve complete artwork before decoded framing', () => {
+  const load = modules({ 'next/image': { __esModule: true, default: ({ style }) => createElement('img', { style, alt: '' }) } })
+  const Media = load('@/components/ProductMedia').default
+  for (const [options, fit] of [[{ listing: true }, 'contain'], [{}, 'contain'], [{ listing: true, mode: 'contain' }, 'contain']]) {
+    const html = renderToStaticMarkup(createElement(Media, { src: '/test.webp', alt: 'Product', sizes: '100px', ...options }))
+    assert.ok(html.includes(`object-fit:${fit}`))
+  }
+})
 
 test('media records preserve exact source identity, larger decoded renditions and framing', () => {
   const source = 'https://images.test/original.webp?v=1'

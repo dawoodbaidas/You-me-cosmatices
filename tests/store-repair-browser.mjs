@@ -1,0 +1,85 @@
+import assert from 'node:assert/strict'
+import { mkdir } from 'node:fs/promises'
+import { poll, pause } from './helpers/cdp-browser.mjs'
+import { pathToFileURL } from 'node:url'
+const { default: puppeteer } = await import(pathToFileURL('C:/Users/ONE BY ONE/AppData/Local/npm-cache/_npx/0f94ee7615faf582/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js'))
+async function launchBrowser() {
+ const chrome=await puppeteer.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',timeout:20000})
+ const listeners=[]
+ return {listen(fn){listeners.push(fn)},close:()=>chrome.close(),async page(width){
+  const context=await chrome.createBrowserContext(),page=await context.newPage();await page.setViewport({width,height:900});const cdp=await page.createCDPSession()
+  page.on('pageerror',e=>listeners.forEach(fn=>fn({method:'Runtime.exceptionThrown',params:{exceptionDetails:{text:e.message}}})))
+  page.on('request',r=>listeners.forEach(fn=>fn({method:'Network.requestWillBeSent',params:{request:{url:r.url()}}})))
+  return {evaluate:s=>page.evaluate(s),call:(m,p)=>cdp.send(m,p),navigate:async u=>{await page.goto(u,{waitUntil:'domcontentloaded'});await pause(700)},click:s=>page.evaluate(s=>document.querySelector(s).click(),s),screenshot:path=>page.screenshot({path}),close:()=>context.close()}
+ }}
+}
+const origin=process.argv[2], browser=await launchBrowser()
+await mkdir('artifacts/store-repair',{recursive:true})
+const errors=[], requests=[]
+browser.listen(e=>{if(e.method==='Runtime.exceptionThrown')errors.push(e.params.exceptionDetails.text);if(e.method==='Network.requestWillBeSent')requests.push(e.params.request.url)})
+try {
+ for(const width of [320,360,390,430,768,1280]) {
+  const p=await browser.page(width)
+  await p.navigate(origin)
+  await poll(()=>p.evaluate(`!!document.querySelector('.nav-search')`))
+  await pause(1700)
+  const background=await p.evaluate(`getComputedStyle(document.querySelector('.shop-header')).backgroundColor`)
+  await p.evaluate(`scrollTo(0,1200)`);await pause(200)
+  assert.equal(await p.evaluate(`getComputedStyle(document.querySelector('.shop-header')).backgroundColor`),background)
+  await p.click('.nav-search');await poll(()=>p.evaluate(`!!document.querySelector('.search-dialog[open]')`))
+  const before=requests.filter(u=>u.includes('/api/store/products')).length
+  await pause(500)
+  assert.equal(requests.filter(u=>u.includes('/api/store/products')).length,before)
+  assert.equal(await p.evaluate(`document.querySelectorAll('.search-result').length`),0)
+  await p.call('Input.insertText',{text:'mist'})
+  await poll(()=>p.evaluate(`document.querySelectorAll('.search-result').length>0`))
+  assert.ok(await p.evaluate(`fetch('/api/store/products?q=mist').then(r=>r.json()).then(rows=>rows.every(p=>p.nameEn.toLowerCase().includes('mist')))`))
+  await p.screenshot(`artifacts/store-repair/search-${width}.png`)
+  await p.call('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await p.call('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27})
+  await poll(()=>p.evaluate(`!document.querySelector('dialog[open]')`))
+  assert.notEqual(await p.evaluate(`document.body.style.overflow`),'hidden')
+  await p.navigate(origin+'/categories')
+  const links=await p.evaluate(`[...document.querySelectorAll('main .category-circle-link')].map(a=>a.getAttribute('href'))`)
+  assert.equal(links.length,3)
+  await p.navigate(origin+links[1])
+  assert.equal(await p.evaluate(`document.querySelectorAll('#shop article').length`),0)
+  const child=await p.evaluate(`document.querySelector('main .category-circle-link').getAttribute('href')`)
+  await p.navigate(origin+child)
+  assert.equal(await p.evaluate(`document.querySelectorAll('#shop article').length`),2)
+  const leaf=await p.evaluate(`document.querySelector('main .category-circle-link').getAttribute('href')`)
+  await p.navigate(origin+leaf)
+  await poll(()=>p.evaluate(`document.querySelectorAll('#shop article').length===3`))
+  await p.navigate(origin+links[0])
+  await poll(()=>p.evaluate(`document.querySelectorAll('#shop article').length>0`))
+  assert.ok(await p.evaluate(`document.documentElement.scrollWidth<=innerWidth`),`overflow ${width}`)
+  await p.screenshot(`artifacts/store-repair/products-${width}.png`)
+  await p.click('#shop article [data-price-tag]')
+  await poll(()=>p.evaluate(`document.querySelector('.header-bag span')?.textContent==='1'`))
+  assert.ok(await p.evaluate(`document.querySelector('#shop article').innerText.includes('في السلة')||document.querySelector('#shop article').innerText.includes('تمت الإضافة')`))
+  await p.click('#shop article a')
+  await poll(()=>p.evaluate(`!!document.querySelector('.quickview-dialog[open]')`))
+  await p.screenshot(`artifacts/store-repair/detail-${width}.png`)
+  await p.call('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await p.call('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27})
+  await poll(()=>p.evaluate(`!document.querySelector('.quickview-dialog[open]')`))
+  await p.click('.filter-open');await poll(()=>p.evaluate(`!!document.querySelector('.filter-dialog[open]')`))
+  await p.click('.shop-filter-form label');await p.click('.filter-sheet-actions button[type=submit]')
+  await poll(()=>p.evaluate(`location.search.includes('available=1')&&!document.querySelector('.filter-dialog[open]')`))
+  await p.navigate(origin+'/cart')
+  await poll(()=>p.evaluate(`!!document.querySelector('[data-testid=cart-items]')`))
+  assert.equal(await p.evaluate(`document.querySelector('.mobile-shopping-bar').getAttribute('aria-hidden')`),'true')
+  if(width<768) assert.equal(await p.evaluate(`getComputedStyle(document.querySelector('[aria-label="ملخص الطلب"]')).position`),'static')
+  await p.click('[data-testid=cart-items] button[aria-label^="زيادة"]')
+  await poll(()=>p.evaluate(`document.querySelector('.header-bag span')?.textContent==='2'`))
+  await p.navigate(origin+'/cart')
+  await poll(()=>p.evaluate(`document.querySelector('.header-bag span')?.textContent==='2'`))
+  assert.ok(await p.evaluate(`document.documentElement.scrollWidth<=innerWidth`),`cart overflow ${width}`)
+  await p.screenshot(`artifacts/store-repair/cart-${width}.png`)
+  await p.click('[data-testid=cart-items] button[aria-label^="حذف"]')
+  await poll(()=>p.evaluate(`!!document.querySelector('[data-testid=cart-empty]')`))
+  await p.navigate(origin+links[2]);assert.equal(await p.evaluate(`document.querySelectorAll('#shop article').length`),0)
+  console.log('PASS',width,'header, empty search network, results, categories, product, filters, cart persistence/removal, overflow')
+  await p.close()
+ }
+ assert.deepEqual(errors,[])
+ console.log('No runtime exceptions; screenshots in artifacts/store-repair')
+} finally {await browser.close()}

@@ -166,7 +166,7 @@ test('rendered product cards place new/discount badges correctly in all four com
     assert.equal(html.includes('class="badge"'), isNew || discountEnabled)
     assert.equal(html.includes('class="newBadge"'), isNew && discountEnabled)
     assert.equal(html.includes('-20%'), discountEnabled)
-    assert.equal(html.includes('<del>10</del>'), discountEnabled)
+    assert.equal(html.includes('<del dir="ltr">10.00</del>'), discountEnabled)
     if (isNew && !discountEnabled) assert.ok(html.includes('class="badge">جديد</span>'))
   }
 })

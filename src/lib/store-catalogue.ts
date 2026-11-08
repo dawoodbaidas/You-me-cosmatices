@@ -3,6 +3,7 @@ import { unstable_cache } from 'next/cache'
 import { mapProduct, mapSettings } from './products/map'
 import type { StoreCatalogue, StoreCategory } from '@/types/store'
 import type { SiteSettings } from '@/types/product'
+import { searchFilters } from './search'
 
 export const STORE_CATALOGUE_TAG = 'store-catalogue'
 export const EMPTY_STORE_SETTINGS: SiteSettings = {
@@ -103,7 +104,7 @@ async function readProducts(filters: Record<string, string>, revision: string | 
   })
 }
 
-export const getStoreProducts = cache(async (kind: 'all' | 'ids' | 'slug' | 'category', value = ''): Promise<StoreCatalogue> => {
+export const getStoreProducts = cache(async (kind: 'all' | 'ids' | 'slug' | 'category' | 'search', value = ''): Promise<StoreCatalogue> => {
   const navigation = await getStoreNavigation()
   if (navigation.unavailable || !navigation.revision) return navigation
   try {
@@ -113,6 +114,9 @@ export const getStoreProducts = cache(async (kind: 'all' | 'ids' | 'slug' | 'cat
       if (!ids.length) return navigation
       if (ids.length > 100 || ids.some(id => !/^[0-9a-f-]{36}$/i.test(id))) throw new Error('Invalid product IDs')
       filters = { id: `in.(${ids.join(',')})` }
+    } else if (kind === 'search') {
+      filters = searchFilters(value)
+      if (filters.limit === '0') return navigation
     } else if (kind === 'slug') filters = { slug: `eq.${value}` }
     else if (kind === 'category') {
       // A separate filter relation preserves the complete membership relation.
