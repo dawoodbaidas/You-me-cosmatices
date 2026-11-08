@@ -72,7 +72,7 @@ test('stock UI renders Arabic controls, overlay badges, disabled purchase action
   assert.match(hero, /نفد من المخزون/)
   assert.match(hero, /data-hero-product/, 'sold-out selected Hero remains visible')
   const best = render('@/components/BestSellers', { products: [sold], currency: 'JOD' })
-  assert.match(best, /<button disabled="">نفد من المخزون/)
+  assert.match(best, /<button\b[^>]*disabled=""[^>]*>نفد من المخزون/)
   const lines = resolveCart([{ productId: sold.id, variantId: null, quantity: 1 }], [sold])
   const page = render('@/components/CartPage', { lines, settings })
   assert.match(page, /role="alert"/)

@@ -137,7 +137,7 @@ export default function MobileHero({ products, onScrollTo, onOpenDetails }: {
           }} onPointerEnter={() => prefetchProductDetails(product.imageUrl)} onFocus={() => prefetchProductDetails(product.imageUrl)}>
           <span className={styles.productShadow} aria-hidden="true" />
           {isProductOutOfStock(product) && <StockBadge overlay />}
-          <SceneProductImage product={product} preload={index === 0} mobileWeight={index === 0 ? 1 : index < 3 ? .85 : .7} sizes={PRODUCT_IMAGE_SIZES.hero}
+          <SceneProductImage product={product} preload={index === 0} eager mobileWeight={index === 0 ? 1 : index < 3 ? .85 : .7} sizes={PRODUCT_IMAGE_SIZES.hero}
             onLoad={index === 0 && asset ? image => setMaskImage({ source: asset.src, url: image.currentSrc }) : undefined} />
           {index === 0 && asset && <svg className={styles.shine} viewBox={`${asset.bounds.x} ${asset.bounds.y} ${asset.bounds.width} ${asset.bounds.height}`} preserveAspectRatio="none" aria-hidden="true">
             <defs><clipPath id={`${maskId}-clip`}><rect x={asset.bounds.x} y={asset.bounds.y} width={asset.bounds.width} height={asset.bounds.height} /></clipPath>

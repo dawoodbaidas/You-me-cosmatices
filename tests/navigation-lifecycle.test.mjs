@@ -47,7 +47,7 @@ test('scene teardown prevents queued observers or an already dispatched RAF from
   const element={addEventListener(){},removeEventListener(){},querySelector(){return null},getBoundingClientRect(){return {top:0}},offsetHeight:900,clientWidth:390}
   try{
     Object.assign(globalThis,{window:{addEventListener(){},removeEventListener(){}},document:{hidden:false,addEventListener(){},removeEventListener(){}},matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}),IntersectionObserver:Observer,ResizeObserver:Observer,requestAnimationFrame:fn=>{frames.set(++count,fn);return count},cancelAnimationFrame:id=>frames.delete(id)})
-    const load=modules({react:{useEffect:fn=>{cleanup=fn()},useRef:value=>({current:value}),useCallback:fn=>fn}})
+    const load=modules({react:{useEffect:fn=>{const result=fn();if(result)cleanup=result},useEffectEvent:fn=>fn,useRef:value=>({current:value}),useCallback:fn=>fn}})
     load('@/components/useSceneFrame').useSceneFrame({current:element},()=>draws++,true)
     const dispatched=frames.get(1)
     cleanup()

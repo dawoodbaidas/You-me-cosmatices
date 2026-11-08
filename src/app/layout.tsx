@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import { Cormorant_Garamond, Montserrat } from 'next/font/google'
 import './globals.css'
+import IntroCurtain from '@/components/IntroCurtain'
+import '@/components/IntroCurtain.css'
 
 const tajawal = localFont({
   src: [
@@ -61,8 +63,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" data-scroll-behavior="smooth" className={`${tajawal.variable} ${cormorant.variable} ${montserrat.variable}`}>
-      <body className="min-h-screen bg-cream text-cocoa antialiased">{children}</body>
+    <html lang="ar" dir="rtl" suppressHydrationWarning data-scroll-behavior="smooth" className={`${tajawal.variable} ${cormorant.variable} ${montserrat.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `try{document.documentElement.dataset.intro=matchMedia('(prefers-reduced-motion: reduce)').matches||sessionStorage.getItem('intro-played')?'skip':'pending'}catch{document.documentElement.dataset.intro='pending'}` }} />
+      </head>
+      <body className="min-h-screen bg-cream text-cocoa antialiased">
+        <IntroCurtain />
+        <div className="intro-content">{children}</div>
+      </body>
     </html>
   )
 }

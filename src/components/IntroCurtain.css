@@ -1,0 +1,71 @@
+html, a, button { -webkit-tap-highlight-color: transparent; }
+*:focus { outline: none; }
+*:focus-visible { outline: 2px solid #B7673A !important; outline-offset: 3px; }
+a { color: inherit; text-decoration: none; }
+button, input:not([type="checkbox"]):not([type="radio"]) { appearance: none; -webkit-appearance: none; }
+input[type="checkbox"], input[type="radio"] { accent-color: #B7673A; }
+[class*="ring-blue-"] { --tw-ring-color: #B7673A !important; }
+[class*="border-blue-"] { border-color: #B7673A !important; }
+[class*="outline-blue-"] { outline-color: #B7673A !important; }
+[class*="shadow-blue-"] { --tw-shadow-color: #B7673A !important; }
+
+/* Supersede the previous home-only decoration without changing its component. */
+[data-home-entrance] { display: none !important; }
+html[data-intro="pending"] body { overflow: hidden; }
+html[data-intro="skip"] #intro, html[data-intro="done"] #intro { display: none; }
+#intro {
+  position: fixed; inset: 0; height: 100dvh; z-index: 9999;
+  pointer-events: none; overflow: clip;
+}
+#intro .pn {
+  position: absolute; top: 0; bottom: 0; width: 50.5%;
+  background: #FDF6F1; border: 0; outline: 0; box-shadow: none;
+  will-change: transform;
+}
+#intro .l { left: 0; }
+#intro .r { right: 0; }
+#intro .splash {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.intro-lockup { display: flex; align-items: center; gap: 18px; direction: ltr; }
+.intro-butterfly { height: 112px; width: auto; opacity: 0; }
+.intro-words { text-align: center; }
+.intro-name { font: 700 58px/1.1 var(--font-cormorant), serif; letter-spacing: 2px; white-space: nowrap; opacity: 0; }
+.intro-name span {
+  display: inline-block; background: linear-gradient(#D9895A, #A2542A);
+  background-clip: text; -webkit-background-clip: text; color: transparent;
+}
+.intro-subtitle { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
+.intro-subtitle span { font: 500 14px/1.4 var(--font-montserrat), sans-serif; letter-spacing: 7px; color: #A2542A; opacity: 0; }
+.intro-subtitle i { width: 30px; height: 1px; background: #B7673A; transform: scaleX(0); }
+#intro.playing .intro-butterfly { animation: intro-butterfly .9s cubic-bezier(.2,.9,.3,1.2) both; }
+#intro.playing .intro-name { animation: intro-fade 1.2s .5s both; }
+#intro.playing .intro-name span { animation: intro-gather 1.2s .5s both; }
+#intro.playing .intro-subtitle span { animation: intro-fade .6s 1s both; }
+#intro.playing .intro-subtitle i { animation: intro-rule .7s 1s both; }
+#intro.playing .intro-lockup { animation: intro-away .6s 2.7s both; }
+#intro.playing .l { animation: intro-left 1.3s 3.1s cubic-bezier(.77,0,.18,1) both; }
+#intro.playing .r { animation: intro-right 1.3s 3.1s cubic-bezier(.77,0,.18,1) both; }
+html[data-intro="playing"] .intro-content { animation: intro-fade .8s 3.7s backwards; }
+@keyframes intro-butterfly { from { opacity: 0; transform: scale(.6) rotate(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes intro-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes intro-gather { from { transform: translateX(var(--spread)); } to { transform: translateX(0); } }
+@keyframes intro-rule { to { transform: scaleX(1); } }
+@keyframes intro-away { to { opacity: 0; transform: scale(1.06); } }
+@keyframes intro-left { to { transform: translateX(-101%); } }
+@keyframes intro-right { to { transform: translateX(101%); } }
+@media (max-width: 767px) {
+  .intro-lockup { gap: 12px; }
+  .intro-butterfly { height: 78px; }
+  .intro-name { font-size: 38px; }
+  .intro-subtitle span { font-size: 10px; letter-spacing: 5px; }
+  .intro-subtitle i { width: 18px; }
+}
+@media (max-width: 399px) { .intro-subtitle i { display: none; } }
+@media (max-width: 339px) { .intro-subtitle { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  #intro { display: none; }
+  html[data-intro="pending"] body { overflow: revert; }
+  html[data-intro="playing"] .intro-content { animation: none; }
+}

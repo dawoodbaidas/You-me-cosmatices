@@ -1,7 +1,7 @@
 'use client'
 
 import CachedProductImage from './CachedProductImage'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { productSceneAsset } from '@/lib/scene-products'
 import { mobileSubjectScale } from '@/lib/mobile-scene-geometry'
 import type { Product } from '@/types/product'
@@ -14,15 +14,6 @@ export default function SceneProductImage({ product, preload = false, eager = fa
   const frame = useRef<HTMLSpanElement>(null)
   const imageBox = useRef<HTMLSpanElement>(null)
   const fit = useRef<() => void>(() => {})
-  const [ready, setReady] = useState(preload || eager)
-  useEffect(() => {
-    if (ready || !frame.current) return
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setReady(true); observer.disconnect() }
-    }, { rootMargin: '600px 100px' })
-    observer.observe(frame.current)
-    return () => observer.disconnect()
-  }, [ready])
   const asset = productSceneAsset(product)
   const bounds = asset?.bounds
   const src = asset?.src ?? product.imageUrl
@@ -82,9 +73,9 @@ export default function SceneProductImage({ product, preload = false, eager = fa
       width: `${asset.width / bounds.width * 100}%`, height: `${asset.height / bounds.height * 100}%`,
       left: `${-bounds.x / bounds.width * 100}%`, top: `${-bounds.y / bounds.height * 100}%`,
     } : { inset: 0 }}>
-      {ready && <CachedProductImage src={src} alt={product.nameAr} sizes={sizes} preload={preload}
+      <CachedProductImage src={src} alt={product.nameAr} sizes={sizes} preload={preload}
         loading={eager && !preload ? 'eager' : undefined}
-        className={asset ? undefined : styles.plainImage} onLoad={loaded} />}
+        className={asset ? undefined : styles.plainImage} onLoad={loaded} />
     </span>
   </span>
 }

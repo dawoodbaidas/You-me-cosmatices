@@ -33,15 +33,15 @@
 .boutique .filter-open { position:relative; display:inline-flex; min-height:42px; align-items:center; justify-content:center; gap:8px; padding:0 14px; border:1px solid var(--shop-line); color:var(--shop-ink); font-size:12px; }
 .boutique .filter-open svg { width:17px; height:17px; color:var(--shop-gold); }
 .boutique .filter-open i { display:grid; width:18px; height:18px; place-items:center; border-radius:50%; background:var(--shop-ink); color:white; font-size:10px; font-style:normal; }
-.boutique .filter-dialog[open] { position:fixed; inset:0; width:100%; height:100%; max-width:none; max-height:none; margin:0; padding:0; border:0; background:transparent; }
+.boutique .filter-dialog[open] { position:fixed; inset:var(--dialog-top,0px) 0 auto; width:100%; height:var(--dialog-height,100dvh); max-width:none; max-height:none; margin:0; padding:0; border:0; background:transparent; }
 .boutique .filter-dialog::backdrop { background:#1d201b75; backdrop-filter:blur(3px); }
-.boutique .shop-filter-sheet { position:absolute; top:min(var(--filter-top),calc(100dvh - 320px)); right:var(--filter-right); width:min(460px,calc(100vw - 32px)); max-height:calc(100dvh - 48px); overflow:auto; padding:24px; border:1px solid var(--shop-line); border-radius:20px; background:var(--shop-ivory); color:var(--shop-ink); box-shadow:0 24px 80px #20201630; }
+.boutique .shop-filter-sheet { --sheet-top:clamp(12px,var(--filter-top),max(12px,calc(var(--dialog-height,100dvh) - 400px))); position:absolute; top:var(--sheet-top); right:var(--filter-right); width:min(460px,calc(100vw - 32px)); max-height:calc(var(--dialog-height,100dvh) - var(--sheet-top) - 12px); overflow:auto; padding:24px; border:1px solid var(--shop-line); border-radius:20px; background:var(--shop-ivory); color:var(--shop-ink); box-shadow:0 24px 80px #20201630; }
 .boutique .filter-sheet-head { display:flex; align-items:center; justify-content:space-between; padding-bottom:20px; border-bottom:1px solid var(--shop-line); }
 .boutique .filter-sheet-head h2 { font-size:22px; font-weight:500; }
 .boutique .filter-sheet-head button { display:grid; place-items:center; width:44px; height:44px; flex:none; color:var(--shop-ink); border:1px solid var(--shop-line); border-radius:50%; }
 .boutique .filter-sheet-head button svg { width:20px; height:20px; }
 .boutique .shop-filter-form > label { display:flex; min-height:58px; align-items:center; gap:12px; border-bottom:1px solid var(--shop-line); color:var(--shop-ink); font-size:14px; }
-.boutique .shop-filter-sheet input { width:18px; height:18px; accent-color:#69705c; }
+.boutique .shop-filter-sheet input { width:18px; height:18px; flex-shrink:0; accent-color:#B7673A; }
 .boutique .filter-sheet-actions { display:grid; grid-template-columns:1fr 1.35fr; gap:10px; padding-top:20px; }
 .boutique .filter-sheet-actions button { display:flex; align-items:center; justify-content:center; min-width:0; padding-inline:12px; text-align:center; border-radius:12px; min-height:48px; border:1px solid var(--shop-line); color:var(--shop-ink); }
 .boutique .filter-sheet-actions button:last-child { border-color:var(--shop-ink); background:var(--shop-ink); color:#fffdf7; }
@@ -174,7 +174,7 @@
   .boutique .shop-count { margin-inline-end:auto; }
   .boutique .catalog-sort { gap:0; font-size:0; flex:1; }
   .boutique .catalog-sort select,.boutique .filter-open { height:44px; min-height:44px; min-width:112px; padding-inline:12px; font-size:12px; }
-  .boutique .shop-filter-sheet { inset:auto 0 0; transform:none; width:100%; max-height:min(78dvh,620px); padding:20px 20px calc(20px + env(safe-area-inset-bottom)); border:0; border-radius:26px 26px 0 0; box-shadow:0 -18px 60px #20201630; animation:filter-rise .25s ease-out; }
+  .boutique .shop-filter-sheet { inset:auto 0 0; transform:none; width:100%; max-height:min(calc(var(--dialog-height,100dvh) - 12px - env(safe-area-inset-top)),620px); padding:20px 20px calc(20px + env(safe-area-inset-bottom)); border:0; border-radius:26px 26px 0 0; box-shadow:0 -18px 60px #20201630; animation:filter-rise .25s ease-out; }
   .boutique .filter-sheet-head { padding-bottom:14px; }
   .boutique .shop-filter-form > label { min-height:54px; }
   .boutique .quickview-dialog[open] { place-items:end center; padding:0; }
