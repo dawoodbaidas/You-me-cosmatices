@@ -17,9 +17,13 @@ export function publicDatabaseConfig() {
   return url && key ? { url, headers: { apikey: key, Authorization: `Bearer ${key}` } } : null
 }
 
-// This tiny, uncached revision prevents prefetched pages and browser back/forward
-// from using an old cached catalogue after a committed administrator mutation.
-export const readStoreRevision = cache(async (): Promise<string | null> => {
+// The revision guards catalogue freshness, yet reading it from Supabase on every
+// request made each HEAD/GET/RSC pay a full network roundtrip before anything
+// else (16-900ms variance in the logs). Cache it for only 5 seconds, tagged with
+// the catalogue tag: committed administrator mutations run revalidateTag
+// (src/lib/store-cache.ts) so a mutation still invalidates it immediately, and
+// the client revision poll keeps prefetched pages correct in the meantime.
+const readStoreVersionUncached = unstable_cache(async (): Promise<string | null> => {
   const config = publicDatabaseConfig()
   if (!config) return null
   const response = await fetch(`${config.url}/rest/v1/store_revision?id=eq.1&select=version`, { headers: config.headers, cache: 'no-store' })
@@ -27,7 +31,9 @@ export const readStoreRevision = cache(async (): Promise<string | null> => {
   const rows = await response.json() as { version: number | string }[]
   if (!rows[0]) throw new Error('Store revision missing')
   return String(rows[0].version)
-})
+}, ['store-revision'], { revalidate: 5, tags: [STORE_CATALOGUE_TAG] })
+
+export const readStoreRevision = cache(async (): Promise<string | null> => readStoreVersionUncached())
 
 export async function readStoreCatalogue(fresh = false): Promise<StoreCatalogue> {
   const empty: StoreCatalogue = { products: [], categories: [], settings: EMPTY_STORE_SETTINGS, revision: null, unavailable: false }

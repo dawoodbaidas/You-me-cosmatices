@@ -2,6 +2,34 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import {modules} from './helpers/load-app.mjs'
 
+test('navigation accepts the first tap, suppresses duplicates and allows returning before commit', () => {
+  const names = ['window', 'location', 'history', 'document']
+  const saved = names.map(name => [name, Object.getOwnPropertyDescriptor(globalThis, name)])
+  const pushed = [], intents = []
+  try {
+    Object.assign(globalThis, {
+      location: new URL('https://store.test/categories'),
+      history: { state: {}, replaceState() {} },
+      document: { getElementById: () => null },
+      window: { scrollY: 0, scrollTo() {}, dispatchEvent() {} },
+    })
+    const load = modules({
+      react: { createContext: () => ({ Provider: 'provider' }), useCallback: fn => fn, useMemo: fn => fn(), useRef: current => ({ current }), useState: value => [value, next => intents.push(next)], useEffect() {}, useLayoutEffect() {} },
+      'next/navigation': { usePathname: () => '/categories', useRouter: () => ({ push: href => pushed.push(href) }) },
+    })
+    const navigation = load('@/components/StoreNavigation').StoreNavigation({ children: null }).props.value
+    navigation.push('/categories/one')
+    navigation.push('/categories/one')
+    navigation.push('/categories/two')
+    navigation.push('/categories')
+    navigation.push('/categories/one')
+    assert.deepEqual(pushed, ['/categories/one', '/categories/two', '/categories', '/categories/one'])
+    assert.equal(intents[2].to, null, 'returning to the committed route clears the abandoned intent')
+  } finally {
+    for (const [name, descriptor] of saved) if (descriptor) Object.defineProperty(globalThis, name, descriptor); else delete globalThis[name]
+  }
+})
+
 test('route-aware links report only actual non-cancelled client navigations', () => {
   const begun=[]
   const load=modules({

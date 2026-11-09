@@ -1,0 +1,270 @@
+[
+  {
+    "width": 360,
+    "slow": false,
+    "lcp": 1132,
+    "cls": 0,
+    "shiftTotal": 0,
+    "shifts": [],
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 5305.6999999999825,
+        "started": 1.400000000023283,
+        "visible": 27.20000000001164,
+        "committed": 403.20000000001164
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 5755,
+        "started": 0.29999999998835847,
+        "visible": 8.5,
+        "committed": 949.1000000000058
+      }
+    ]
+  },
+  {
+    "width": 360,
+    "slow": true,
+    "lcp": 1704,
+    "cls": 0.3688888888888889,
+    "shiftTotal": 0.3688888888888889,
+    "shifts": [
+      {
+        "at": 8169.099999999977,
+        "value": 0.3688888888888889,
+        "sources": [
+          {
+            "element": "FOOTER",
+            "class": "Footer-module__S6Hkya__footer",
+            "from": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            },
+            "to": {
+              "x": 0,
+              "y": 568.46875,
+              "width": 360,
+              "height": 331.53125,
+              "top": 568.46875,
+              "right": 360,
+              "bottom": 900,
+              "left": 0
+            }
+          }
+        ]
+      }
+    ],
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 7544.899999999994,
+        "started": 1.1999999999825377,
+        "visible": 26.79999999998836,
+        "committed": 623.6000000000058
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 8238.199999999983,
+        "started": 0.39999999999417923,
+        "visible": 7.800000000017462,
+        "committed": 374.30000000001746
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "slow": false,
+    "lcp": 0,
+    "cls": 0,
+    "shiftTotal": 0,
+    "shifts": [],
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 4770,
+        "started": 0.7000000000116415,
+        "visible": 32.70000000001164,
+        "committed": 408.5
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 5225.100000000006,
+        "started": 0.39999999999417923,
+        "visible": 9,
+        "committed": 350.5
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "slow": true,
+    "lcp": 1664,
+    "cls": 0.35444444444444445,
+    "shiftTotal": 0.35444444444444445,
+    "shifts": [
+      {
+        "at": 8180.6999999999825,
+        "value": 0.35444444444444445,
+        "sources": [
+          {
+            "element": "FOOTER",
+            "class": "Footer-module__S6Hkya__footer",
+            "from": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            },
+            "to": {
+              "x": 0,
+              "y": 581,
+              "width": 390,
+              "height": 319,
+              "top": 581,
+              "right": 390,
+              "bottom": 900,
+              "left": 0
+            }
+          }
+        ]
+      }
+    ],
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 7560.799999999988,
+        "started": 0.5,
+        "visible": 13.89999999999418,
+        "committed": 619.6000000000058
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 8205.5,
+        "started": 0.29999999998835847,
+        "visible": 4.399999999994179,
+        "committed": 327.6000000000058
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "slow": false,
+    "lcp": 0,
+    "cls": 0.010694715711805556,
+    "shiftTotal": 0.010694715711805556,
+    "shifts": [
+      {
+        "at": 309.70000000001164,
+        "value": 0.010694715711805556,
+        "sources": [
+          {
+            "element": "DIV",
+            "class": "splash",
+            "from": {
+              "x": 0,
+              "y": 0,
+              "width": 1425,
+              "height": 900,
+              "top": 0,
+              "right": 1425,
+              "bottom": 900,
+              "left": 0
+            },
+            "to": {
+              "x": 0,
+              "y": 0,
+              "width": 1425,
+              "height": 900,
+              "top": 0,
+              "right": 1425,
+              "bottom": 900,
+              "left": 0
+            }
+          }
+        ]
+      }
+    ],
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 4634.100000000006,
+        "started": 0.5,
+        "visible": 36.29999999998836,
+        "committed": 351.29999999998836
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 5004.299999999988,
+        "started": 0.3000000000174623,
+        "visible": 4.400000000023283,
+        "committed": 858.6000000000058
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "slow": true,
+    "lcp": 1636,
+    "cls": 0.10847197732807679,
+    "shiftTotal": 0.10847197732807679,
+    "shifts": [
+      {
+        "at": 8351.200000000012,
+        "value": 0.10847197732807679,
+        "sources": [
+          {
+            "element": "FOOTER",
+            "class": "Footer-module__S6Hkya__footer",
+            "from": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            },
+            "to": {
+              "x": 0,
+              "y": 717,
+              "width": 1425,
+              "height": 183,
+              "top": 717,
+              "right": 1425,
+              "bottom": 900,
+              "left": 0
+            }
+          }
+        ]
+      }
+    ],
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 7818.100000000006,
+        "started": 0.6999999999825377,
+        "visible": 15.39999999999418,
+        "committed": 533.3999999999942
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 8380.299999999988,
+        "started": 0.6000000000058208,
+        "visible": 8.300000000017462,
+        "committed": 321.6000000000058
+      }
+    ]
+  }
+]

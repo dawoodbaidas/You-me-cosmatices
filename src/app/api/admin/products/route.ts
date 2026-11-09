@@ -3,7 +3,7 @@ import { invalidateStoreCatalogue } from '@/lib/store-cache'
 import { createClient } from '@/lib/supabase/server'
 import { authorizeAdminRequest, boundedFormData } from '@/lib/admin-request'
 import { MAX_UPLOAD_BYTES, UUID, validateProduct } from '@/lib/products/editor'
-import { approvedProductImage, IMAGE_BUCKET, managedImagePath } from '@/lib/products/images'
+import { approvedProductImage, originalProductImage, IMAGE_BUCKET, managedImagePath } from '@/lib/products/images'
 
 export const runtime = 'nodejs'
 
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   try {
     const denied = await authorizeAdminRequest(request)
     if (denied) return denied
-    const form = await boundedFormData(request)
+    const form = await boundedFormData(request, MAX_UPLOAD_BYTES * 2)
     const raw = form.get('product')
     if (typeof raw !== 'string' || raw.length > 100_000) return reply(false, 'بيانات المنتج غير صالحة.', 400)
     const draft: unknown = JSON.parse(raw)
@@ -36,6 +36,7 @@ export async function POST(request: Request) {
     const supabase = await createClient()
     const file = form.get('image')
     let imageUrl: string | undefined
+    let previewId: string | undefined
     if (file instanceof File && file.size) {
       if (file.size > MAX_UPLOAD_BYTES) return reply(false, 'حجم الصورة الأقصى 4 MB.', 413)
       if (form.get('image_confirmed') !== 'true') return reply(false, 'اعتمدي الصورة قبل حفظ المنتج.', 400)
@@ -47,9 +48,26 @@ export async function POST(request: Request) {
       const { error } = await supabase.storage.from(IMAGE_BUCKET).upload(path, image, { contentType: 'image/webp', cacheControl: '31536000', upsert: false })
       if (error) return reply(false, 'تعذر رفع الصورة. تحققي من إعداد مخزن الصور والصلاحيات ثم حاولي مجدداً.', 400)
       imageUrl = supabase.storage.from(IMAGE_BUCKET).getPublicUrl(path).data.publicUrl
+      const originalFile = form.get('original_image') ?? (form.get('image_processed') === 'true' ? null : file)
+      let originalUrl: string | undefined
+      if (originalFile instanceof File && originalFile.size) {
+        if (originalFile.size > MAX_UPLOAD_BYTES) return reply(false, 'حجم الصورة الأصلية أكبر من 4 MB.', 413)
+        const original = await originalProductImage(Buffer.from(await originalFile.arrayBuffer()))
+        const originalPath = `products/${product.id}/${randomUUID()}.${original.extension}`
+        const saved = await supabase.storage.from(IMAGE_BUCKET).upload(originalPath, original.bytes, { contentType: original.contentType, cacheControl: '31536000', upsert: false })
+        if (saved.error) return reply(false, 'تعذر حفظ الصورة الأصلية. لم يتم تغيير المنتج.', 400)
+        originalUrl = supabase.storage.from(IMAGE_BUCKET).getPublicUrl(originalPath).data.publicUrl
+      } else if (updatedAt) {
+        const current = await supabase.from('products').select('original_image_url,image_url').eq('id', product.id).eq('updated_at', updatedAt).single()
+        if (!current.error) originalUrl = current.data.original_image_url ?? current.data.image_url
+      }
+      if (!originalUrl) return reply(false, 'الصورة الأصلية مطلوبة. حدّثي الصفحة وأعيدي المحاولة.', 409)
+      previewId = randomUUID()
+      const preview = await supabase.from('product_image_previews').insert({ id: previewId, product_id: product.id, expected_updated_at: updatedAt, original_url: originalUrl, processed_url: imageUrl })
+      if (preview.error) return reply(false, 'تعذر حفظ مرجع الصورة الأصلية. لم يتم تغيير المنتج.', 400)
     }
-    const { data, error } = await supabase.rpc('admin_save_product', {
-      p_product: { ...product, ...(imageUrl ? { image_url: imageUrl } : {}), ...(UUID.test(String(form.get('image_preview_id'))) ? { image_preview_id: form.get('image_preview_id') } : {}), ...(form.get('restore_image') === 'true' ? { restore_image: true } : {}) },
+    const { error } = await supabase.rpc('admin_save_product', {
+      p_product: { ...product, ...(imageUrl ? { image_url: imageUrl } : {}), ...(previewId ? { image_preview_id: previewId } : {}), ...(form.get('restore_image') === 'true' ? { restore_image: true } : {}) },
       p_variants: variants,
       p_expected_updated_at: updatedAt,
     })
@@ -59,9 +77,9 @@ export async function POST(request: Request) {
       if (imageUrl && ['23505', '23514', '23503', '22023', '22P02', '40001', '42501', 'PGRST202'].includes(error.code)) await removeOldImage(imageUrl, product.id)
       return reply(false, error.code === '40001' ? 'تم تعديل المنتج في جلسة أخرى. حدّثي الصفحة قبل الحفظ.' : error.code === '23505' ? 'الرابط المختصر أو اسم النوع مستخدم بالفعل. راجعي القائمة قبل إعادة المحاولة.' : 'تعذر حفظ المنتج. تحققي من الاتصال وتطبيق الترحيل 004 ثم حدّثي القائمة قبل إعادة المحاولة.', 409)
     }
-    const cleaned = !imageUrl || await removeOldImage(data.previous_image, product.id)
+    // Replacements retain prior sources and originals; no automatic media deletion.
     invalidateStoreCatalogue()
-    return reply(true, cleaned ? 'تم حفظ المنتج والصورة والأنواع بنجاح.' : 'تم الحفظ. تعذر تنظيف الصورة القديمة؛ يمكن حذفها لاحقاً من المخزن.')
+    return reply(true, 'تم حفظ المنتج والصورة والأنواع بنجاح.')
   } catch (error) {
     return reply(false, error instanceof Error && /[\u0600-\u06ff]/.test(error.message) ? error.message : 'تعذر إتمام الطلب. تحققي من الاتصال ثم حدّثي القائمة قبل إعادة المحاولة.', 400)
   }

@@ -16,7 +16,7 @@
 .details { display:flex; flex:1; flex-direction:column; padding-top:12px; min-width:0; }.info { flex:1; padding-inline-end:58px; padding-bottom:12px; min-height:88px; min-width:0; }
 .card .title { margin:0 0 4px; font-size:clamp(13px,3.6vw,17px); line-height:1.6; font-weight:800; }.title a { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; overflow-wrap:anywhere; unicode-bidi:plaintext; text-align:start; font:inherit; color:inherit; }
 .card .category { font-size:12px; line-height:1.5; color:#554c43; overflow-wrap:anywhere; }
-.variant { display:grid; gap:4px; margin-top:6px; font-size:11px; }.variant select { width:100%; min-width:0; max-width:100%; min-height:36px; padding:4px; border:1px solid #d9cbb9; border-radius:8px; background:#faf6ef; font-size:11px; }
+.variant { display:grid; gap:4px; margin-top:6px; font-size:12px; }.variant select { width:100%; min-width:0; max-width:100%; min-height:44px; padding:6px; border:1px solid #b7a58d; color:#271c14; border-radius:8px; background:#faf6ef; font-size:12px; }
 .purchase { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:auto; width:100%; }
 .card .add { flex:1; min-width:0; min-height:44px; display:flex; justify-content:center; align-items:center; gap:5px; border:1px solid #392817; border-radius:999px; background:#fff6e8; color:#251b12; padding:7px 5px; font-size:clamp(10px,2.8vw,13px); line-height:1.3; font-weight:800; }
 .add svg { width:17px; height:17px; flex:none; }.whatsapp { width:44px; height:44px; display:grid; place-items:center; flex:none; border:1px solid #493c2f; border-radius:50%; color:#263629; }.whatsapp svg { width:21px; height:21px; }

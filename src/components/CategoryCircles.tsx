@@ -21,7 +21,7 @@ export default function CategoryCircles({ groups, compact = false, selected, tit
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (!entry.isIntersecting) return
-      entry.target.animate([{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 600, delay: Number((entry.target as HTMLElement).dataset.index) % 2 * 90, fill: 'backwards', easing: 'ease-out' })
+      entry.target.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: 'ease-out' })
       observer.unobserve(entry.target)
     }), { threshold: .15 })
     section.current?.querySelectorAll('.category-circle-link').forEach(element => observer.observe(element))
@@ -43,7 +43,7 @@ export default function CategoryCircles({ groups, compact = false, selected, tit
     <div ref={row} className="category-circle-grid">{stories.map((group, index) => {
       const src = group.imageUrl ?? null
       return <CategoryLink className="category-circle-link" key={group.id} slug={group.id === 'all' ? null : group.id} data-index={index} aria-current={compact && selected === group.id ? 'page' : undefined}>
-        <div className={'category-orb tone-' + index % 4}><CategoryImage src={src} alt={group.label} eager={compact && index < 4} sizes={compact ? '(min-width:768px) 64px, 52px' : '(min-width:1024px) 210px, (min-width:768px) 140px, 160px'} /></div>
+        <div className={'category-orb tone-' + index % 4}><CategoryImage src={src} alt={group.label} eager={compact && index < 4} priority={index === 0 && (page || compact)} sizes={compact ? '(min-width:768px) 64px, 52px' : '(min-width:1024px) 210px, (min-width:768px) 140px, 160px'} /></div>
         <strong>{group.label}</strong>
       </CategoryLink>
     })}</div>

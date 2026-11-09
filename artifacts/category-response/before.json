@@ -1,0 +1,134 @@
+[
+  {
+    "width": 360,
+    "slow": false,
+    "lcp": 620,
+    "cls": 0,
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 4989.20000000007,
+        "started": 1.400000000023283,
+        "visible": 381.69999999995343,
+        "committed": 381.69999999995343
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 5460.70000000007,
+        "started": 0.40000000002328306,
+        "visible": 307.5999999999767,
+        "committed": 385.4000000000233
+      }
+    ]
+  },
+  {
+    "width": 360,
+    "slow": true,
+    "lcp": 1440,
+    "cls": 0.1061195987654321,
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 7677.199999999953,
+        "started": 0.9000000000232831,
+        "visible": 623.1000000000931,
+        "committed": 623.1000000000931
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 8356,
+        "started": 1.099999999976717,
+        "visible": 312.9000000000233,
+        "committed": 385
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "slow": false,
+    "lcp": 0,
+    "cls": 0,
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 4842.29999999993,
+        "started": 0.7000000000698492,
+        "visible": 372.5,
+        "committed": 372.5
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 5298.199999999953,
+        "started": 0.30000000004656613,
+        "visible": 315.69999999995343,
+        "committed": 340.5999999999767
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "slow": true,
+    "lcp": 1660,
+    "cls": 0.3070291666666667,
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 7538.20000000007,
+        "started": 0.6999999999534339,
+        "visible": 626,
+        "committed": 626
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 8248.20000000007,
+        "started": 0.2999999999301508,
+        "visible": 317,
+        "committed": 355.79999999993015
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "slow": false,
+    "lcp": 0,
+    "cls": 0.010694715711805556,
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 4917.900000000023,
+        "started": 3,
+        "visible": 422.9000000000233,
+        "committed": 442.29999999993015
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 5445.5,
+        "started": 1,
+        "visible": 340.9000000000233,
+        "committed": 341
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "slow": true,
+    "lcp": 1664,
+    "cls": 0.20071282657576195,
+    "clicks": [
+      {
+        "path": "/categories/%D8%B1%D8%AC%D8%A7%D9%84%D9%8A-2",
+        "at": 7872.5,
+        "started": 0.8999999999068677,
+        "visible": 544.5,
+        "committed": 544.5999999999767
+      },
+      {
+        "path": "/categories/%D9%86%D8%B3%D8%A7%D8%A6%D9%8A-2",
+        "at": 8458.899999999907,
+        "started": 0.5,
+        "visible": 316.4000000000233,
+        "committed": 901.3000000000466
+      }
+    ]
+  }
+]

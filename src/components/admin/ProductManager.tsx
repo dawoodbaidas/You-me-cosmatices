@@ -160,7 +160,7 @@ export function FullProductEditor({ product, categories, onCancel, onSaved, onEr
     setPending(true)
     const body = new FormData()
     body.set('product', JSON.stringify(draft))
-    if (imageChoice.processed) { body.set('image', imageChoice.processed, 'product.webp'); body.set('image_processed', 'true') }
+    if (imageChoice.processed) { body.set('image', imageChoice.processed, 'product.webp'); body.set('image_processed', 'true'); if (imageChoice.file) body.set('original_image', imageChoice.file) }
     else if (imageChoice.file) body.set('image', imageChoice.file)
     if (imageChoice.processed || imageChoice.file) body.set('image_confirmed', 'true')
     if (imageChoice.restore) body.set('restore_image', 'true')

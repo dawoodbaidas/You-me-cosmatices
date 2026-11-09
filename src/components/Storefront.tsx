@@ -19,7 +19,7 @@ import CartDrawer from '@/components/CartDrawer'
 import CartPage from '@/components/CartPage'
 import Header from '@/components/Header'
 import MobileCartBar from '@/components/MobileCartBar'
-const ProductQuickView = dynamic(() => import('./ProductQuickView'))
+import ProductQuickView from './ProductQuickView'
 import CategoryCircles from './CategoryCircles'
 import CategoryLink, { CategoryUrls } from './CategoryLink'
 import './category-shopping.css'

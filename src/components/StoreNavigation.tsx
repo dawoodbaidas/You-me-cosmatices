@@ -7,7 +7,7 @@ import { createContext, useCallback, useContext, useEffect, useLayoutEffect, use
 function pathOf(href: string) { return new URL(href, 'http://store.local').pathname.replace(/\/$/, '') || '/' }
 const NavigationContext = createContext<{
   activePath: string
-  begin: (href: string, restore?: boolean) => void
+  begin: (href: string, restore?: boolean) => boolean
   push: (href: string) => void
 } | null>(null)
 
@@ -26,8 +26,17 @@ export function StoreNavigation({ children }: { children: ReactNode }) {
   // reactivate when Back later returns to its original source pathname.
   if (intent.pathname !== pathname) setIntent({ pathname, to: null })
   const begin = useCallback((href: string, restore = false) => {
+    // Cold/warm proof: the span click→data-ready ends when the committed route
+    // lands (useLayoutEffect below). Debug-only in development.
+    if (process.env.NODE_ENV !== 'production' && !restore) try { performance.mark('store:nav-begin') } catch { }
     const target=new URL(href,location.href)
-    if(target.pathname===pathname)return
+    if (!restore && pending.current?.path === target.pathname && target.pathname !== pathname) return false
+    if(target.pathname===pathname){
+      stopRestoring.current()
+      pending.current=null
+      setIntent({pathname,to:null})
+      return true
+    }
     stopRestoring.current()
     if(!restore)savePosition()
     const saved=restore?history.state?.storeScroll:null
@@ -36,6 +45,7 @@ export function StoreNavigation({ children }: { children: ReactNode }) {
     window.dispatchEvent(new Event('store:navigate'))
     if (!restore && pathOf(href) !== pathOf(pathname)) window.scrollTo({ top: 0, behavior: 'instant' })
     setIntent({ pathname, to: pathOf(href) })
+    return true
   }, [pathname,savePosition])
   useEffect(() => {
     const back = () => begin(window.location.pathname, true)
@@ -57,6 +67,10 @@ export function StoreNavigation({ children }: { children: ReactNode }) {
   useLayoutEffect(()=>{
     if(committedPath.current!==pathname){
       committedPath.current=pathname
+      if (process.env.NODE_ENV !== 'production') try {
+        performance.mark('store:data-ready')
+        if (performance.getEntriesByName('store:nav-begin').length) performance.measure('store:navigate', 'store:nav-begin', 'store:data-ready')
+      } catch { }
       const saved=history.state?.storeScroll
       if(pending.current?.path!==pathname&&saved?.url===location.pathname+location.search&&Number.isFinite(saved.y))pending.current={path:pathname,y:saved.y,hash:''}
     }
@@ -81,7 +95,7 @@ export function StoreNavigation({ children }: { children: ReactNode }) {
     restore()
     return disconnect
   },[pathname,activePath])
-  const value = useMemo(() => ({ activePath, begin, push: (href: string) => { begin(href); router.push(href,{scroll:pathOf(href)===pathname}) } }), [activePath, begin, router,pathname])
+  const value = useMemo(() => ({ activePath, begin, push: (href: string) => { if (begin(href)) router.push(href,{scroll:pathOf(href)===pathname}) } }), [activePath, begin, router,pathname])
   return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>
 }
 
@@ -100,6 +114,6 @@ export default function StoreLink({ href, onNavigate, ...props }: ComponentProps
   return <Link {...props} scroll={props.scroll??(pathOf(target)===pathname)} href={href} onNavigate={event => {
     let prevented = false
     onNavigate?.({ preventDefault() { prevented = true; event.preventDefault() } })
-    if (!prevented) navigation?.begin(typeof href === 'string' ? href : href.pathname ?? '/')
+    if (!prevented && navigation?.begin(typeof href === 'string' ? href : href.pathname ?? '/') === false) event.preventDefault()
   }} />
 }

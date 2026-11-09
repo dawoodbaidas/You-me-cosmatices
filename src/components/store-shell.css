@@ -1,10 +1,12 @@
 .boutique.store-shell { display:flex; flex-direction:column; min-height:100svh; padding-bottom:0; background:#faf6ef; }
-.store-shell > #store-content { flex:1; min-width:0; }
+.store-shell > #store-content { flex:1; min-width:0; min-height:100svh; }
 .store-shell > footer { flex-shrink:0; }
 .store-shell .world-header.shop-header { background:#faf6ef; color:#271c14; }
 .store-shell .catalog-toolbar { max-width:1444px; margin-inline:auto; }
 .store-shell .catalog-sort select,.store-shell .filter-open { min-height:44px; border-radius:999px; background:transparent; }
 @media(max-width:767px) {
+ .store-shell:has(.mobile-shopping-bar.is-visible) #store-content { padding-bottom:var(--mobile-cart-clearance,calc(84px + env(safe-area-inset-bottom))); }
+ .store-shell:has(.mobile-shopping-bar.is-visible) #store-content button { scroll-margin-bottom:var(--mobile-cart-clearance,calc(84px + env(safe-area-inset-bottom))); }
  .store-shell > footer { padding-bottom:calc(100px + env(safe-area-inset-bottom)); }
  .boutique.store-shell .mobile-shopping-bar { left:12px; right:auto; width:min(270px,calc(100vw - 24px)); bottom:calc(12px + env(safe-area-inset-bottom)); border-radius:999px; -webkit-backdrop-filter:none; backdrop-filter:none; }
  .boutique.store-shell .mobile-shopping-bar > button { border-radius:999px; border:1px solid #c9a16c; background:#fff6e8; color:#302114; min-height:62px; padding:8px 14px; }

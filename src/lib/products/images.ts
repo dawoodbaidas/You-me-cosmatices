@@ -11,12 +11,13 @@ export async function originalProductImage(input: Buffer) {
   return { bytes: input, extension: format[0], contentType: format[1] }
 }
 
-/** All approved uploads become lossless WebP; never upscale the API preview. */
+/** Bound new display renditions; the separately stored original remains untouched. */
 export async function approvedProductImage(input: Buffer, requireTransparency: boolean) {
   await originalProductImage(input)
   const result = await sharp(input, { limitInputPixels: 50_000_000, failOn: 'warning', animated: false })
     .rotate()
-    .webp({ lossless: true, effort: 4 }).toBuffer()
+    .resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
+    .webp({ quality: 84, alphaQuality: 100, effort: 4 }).toBuffer()
   if (requireTransparency) {
     const alpha = (await sharp(result).stats()).channels[3]
     if (!alpha || alpha.min === 255 || alpha.max === 0) throw new Error('الصورة المعالجة لا تحتوي منتجاً بخلفية شفافة صالحة.')

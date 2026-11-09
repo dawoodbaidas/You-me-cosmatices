@@ -1,0 +1,38 @@
+[
+  {
+    "width": 360,
+    "cache": "cold",
+    "quickView": 40.92859999999973,
+    "duplicateDataRequests": 0
+  },
+  {
+    "width": 360,
+    "cache": "warm",
+    "quickView": 24.24649999999974,
+    "duplicateDataRequests": 0
+  },
+  {
+    "width": 390,
+    "cache": "cold",
+    "quickView": 53.39849999999933,
+    "duplicateDataRequests": 0
+  },
+  {
+    "width": 390,
+    "cache": "warm",
+    "quickView": 33.46149999999943,
+    "duplicateDataRequests": 0
+  },
+  {
+    "width": 1440,
+    "cache": "cold",
+    "quickView": 41.00840000000062,
+    "duplicateDataRequests": 0
+  },
+  {
+    "width": 1440,
+    "cache": "warm",
+    "quickView": 37.11079999999856,
+    "duplicateDataRequests": 0
+  }
+]

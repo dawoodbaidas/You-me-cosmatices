@@ -42,7 +42,7 @@ function SourceImage({ src, onLoad, onError, style, ...props }: Props) {
       className={props.className} style={style} loading="eager" data-image-preview="true"
       onLoad={event => { if (sufficient) onLoad?.(event.currentTarget) }}
       onError={() => { if (sufficient) onError?.() }} />}
-    {!sufficient && !(failed && preview) && <Image {...props} alt={preview && !ready ? '' : props.alt} src={src} fill quality={PRODUCT_IMAGE_QUALITY}
+    {!sufficient && !(failed && preview) && <Image {...props} decoding="async" alt={preview && !ready ? '' : props.alt} src={src} fill quality={PRODUCT_IMAGE_QUALITY}
       style={{ ...style, ...(preview && !ready ? { opacity: 0 } : {}) }}
       onLoad={event => {
         const image = event.currentTarget
@@ -50,6 +50,7 @@ function SourceImage({ src, onLoad, onError, style, ...props }: Props) {
         rememberProductImage(src, { currentSrc: image.currentSrc, width: image.naturalWidth, height: image.naturalHeight })
         setReady(true)
         onLoad?.(image)
+        if (!preview && !matchMedia('(prefers-reduced-motion: reduce)').matches) image.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 140 })
       }} onError={() => { setFailed(true); if (!preview) onError?.() }} />}
   </>
 }
