@@ -272,3 +272,5 @@ Added for production:
 ### Product images and remove.bg
 
 The admin uses one-click remove.bg preview removal, explicit result/original approval, and the existing Supabase save flow. Set the server-only `REMOVE_BG_API_KEY` in `.env.local` and restart Next.js. Only the approved image is saved as alpha-preserving WebP; preview resolution is never upscaled. Local models and manual editing tools have been removed. See [setup, behavior, limits and verification](docs/product-images.md).
+
+Use the actual provider-issued key as the value, never the variable name or placeholder text. Configure the hosted server environment separately. If Netlify flags the variable identifier in these docs and server code, follow the [secret-scanning configuration checks](docs/product-images.md#netlify-secret-scanning-failure); keep scanning enabled.
