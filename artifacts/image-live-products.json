@@ -1,0 +1,47 @@
+[
+  {
+    "id": "8e0e4cb1-1ff2-49ae-b7a3-f209107500a4",
+    "slug": "b_pink7",
+    "image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/8e0e4cb1-1ff2-49ae-b7a3-f209107500a4/bdc7cf0c-8eda-4075-9250-70d27a06110d.webp",
+    "original_image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/8e0e4cb1-1ff2-49ae-b7a3-f209107500a4/5de24621-0d98-4777-a744-de56be5ce710.png",
+    "processed_image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/8e0e4cb1-1ff2-49ae-b7a3-f209107500a4/bdc7cf0c-8eda-4075-9250-70d27a06110d.webp",
+    "image_verifications": {},
+    "updated_at": "2026-11-11T19:52:31.907519+00:00"
+  },
+  {
+    "id": "76129398-7876-456a-8317-71a41b56d014",
+    "slug": "cherry_mist",
+    "image_url": null,
+    "original_image_url": null,
+    "processed_image_url": null,
+    "image_verifications": {},
+    "updated_at": "2026-11-11T20:29:49.646341+00:00"
+  },
+  {
+    "id": "7419186a-b228-49aa-be32-358038a76d47",
+    "slug": "bag_darkgray",
+    "image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/7419186a-b228-49aa-be32-358038a76d47/314d4bea-eec8-4ae1-81b7-2de87a755cfe.webp",
+    "original_image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/7419186a-b228-49aa-be32-358038a76d47/3efaae8c-4996-43fb-8b1b-d8f3e4172a79.png",
+    "processed_image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/7419186a-b228-49aa-be32-358038a76d47/314d4bea-eec8-4ae1-81b7-2de87a755cfe.webp",
+    "image_verifications": {},
+    "updated_at": "2026-11-11T16:42:26.727403+00:00"
+  },
+  {
+    "id": "0e02019c-5f1d-4c15-b7ed-472c9d68e8e2",
+    "slug": "wallet_brown",
+    "image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/0e02019c-5f1d-4c15-b7ed-472c9d68e8e2/8a215313-1d74-4b42-be4f-f234614c94cf.webp",
+    "original_image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/0e02019c-5f1d-4c15-b7ed-472c9d68e8e2/91347e04-269a-4c34-82bc-6306ef326285.png",
+    "processed_image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/0e02019c-5f1d-4c15-b7ed-472c9d68e8e2/8a215313-1d74-4b42-be4f-f234614c94cf.webp",
+    "image_verifications": {},
+    "updated_at": "2026-11-11T16:45:02.325023+00:00"
+  },
+  {
+    "id": "ad07786c-2268-4c20-96b4-129cf6931e5b",
+    "slug": "frankel_blak",
+    "image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/ad07786c-2268-4c20-96b4-129cf6931e5b/22d77c92-730c-4789-bb27-26da641d9046.webp",
+    "original_image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/ad07786c-2268-4c20-96b4-129cf6931e5b/156bc5bd-051b-434c-a8cf-f0bf6c85473d.png",
+    "processed_image_url": "https://fvlzpttappitjxuzfehc.supabase.co/storage/v1/object/public/product-images/products/ad07786c-2268-4c20-96b4-129cf6931e5b/22d77c92-730c-4789-bb27-26da641d9046.webp",
+    "image_verifications": {},
+    "updated_at": "2026-11-11T16:25:46.316435+00:00"
+  }
+]

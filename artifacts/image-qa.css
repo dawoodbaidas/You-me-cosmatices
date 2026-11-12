@@ -1,0 +1,266 @@
+/* src/components/admin/ProductImageEditor.module.css */
+.ProductImageEditor_editor {
+  background: #fbf8f2;
+  border: 1px solid #e8dfd2;
+  border-radius: 22px;
+  padding: 20px;
+  color: #513c30;
+  min-width: 0;
+}
+.ProductImageEditor_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.ProductImageEditor_eyebrow {
+  font-size: .7rem;
+  color: #947359;
+  font-weight: 700;
+}
+.ProductImageEditor_header h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 5px 0;
+}
+.ProductImageEditor_header p {
+  font-size: .8rem;
+  line-height: 1.9;
+  color: #806c5d;
+}
+.ProductImageEditor_badge {
+  font-size: .7rem;
+  border: 1px solid #e2d6c5;
+  background: #f2eadf;
+  padding: 7px 12px;
+  border-radius: 30px;
+}
+.ProductImageEditor_upload {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: right;
+  background: #fffdf9;
+  border: 1px dashed #cbb9a2;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px 0;
+  cursor: pointer;
+}
+.ProductImageEditor_upload:hover {
+  background: #f4eee4;
+}
+.ProductImageEditor_upload strong {
+  display: block;
+  font-size: .85rem;
+  overflow-wrap: anywhere;
+}
+.ProductImageEditor_upload small {
+  display: block;
+  font-size: .72rem;
+  color: #8b7664;
+  line-height: 1.8;
+  margin-top: 6px;
+}
+.ProductImageEditor_uploadIcon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  font-size: 1.7rem;
+  background: #f0e8dc;
+}
+.ProductImageEditor_previews {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+.ProductImageEditor_previews figure {
+  border: 1px solid #e7ddcf;
+  border-radius: 16px;
+  background: #fffdf9;
+  overflow: hidden;
+  min-width: 0;
+  margin: 0;
+}
+.ProductImageEditor_previews figcaption {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  font-size: .78rem;
+  font-weight: 700;
+}
+.ProductImageEditor_previews figcaption span {
+  font-size: .65rem;
+  font-weight: 400;
+  color: #8b7664;
+}
+.ProductImageEditor_preview {
+  position: relative;
+  aspect-ratio: 1;
+  background: repeating-conic-gradient(#e7e2db 0% 25%, #fff 0% 50%) 0 / 20px 20px;
+}
+.ProductImageEditor_preview img {
+  padding: 16px;
+}
+.ProductImageEditor_actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.ProductImageEditor_primary,
+.ProductImageEditor_secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid #dcd0c0;
+}
+.ProductImageEditor_primary {
+  background: #513c30;
+  border-color: #513c30;
+  color: white;
+}
+.ProductImageEditor_secondary {
+  background: #fffdf9;
+}
+.ProductImageEditor_primary:hover {
+  background: #6a5140;
+}
+.ProductImageEditor_secondary:hover {
+  background: #f1e9dd;
+}
+.ProductImageEditor_editor button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.ProductImageEditor_editor button:focus-visible {
+  outline: 3px solid #b89b76;
+  outline-offset: 3px;
+}
+.ProductImageEditor_spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff66;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ProductImageEditor_spin 1s linear infinite;
+}
+@keyframes ProductImageEditor_spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ProductImageEditor_hint,
+.ProductImageEditor_success,
+.ProductImageEditor_error {
+  font-size: .8rem;
+  line-height: 1.9;
+  margin-top: 14px;
+}
+.ProductImageEditor_hint {
+  color: #806b58;
+}
+.ProductImageEditor_success {
+  color: #3c6b55;
+}
+.ProductImageEditor_error {
+  color: #963e34;
+  background: #faeae4;
+  border: 1px solid #e9c7bc;
+  padding: 14px;
+  border-radius: 12px;
+}
+.ProductImageEditor_reset {
+  font-size: .72rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #826449;
+  margin-top: 14px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.ProductImageEditor_footer {
+  border-top: 1px solid #e7ddcf;
+  margin-top: 18px;
+  padding-top: 14px;
+  font-size: .7rem;
+  color: #8a7767;
+  line-height: 1.9;
+}
+@media (max-width: 600px) {
+  .ProductImageEditor_editor {
+    padding: 16px;
+    border-radius: 18px;
+  }
+  .ProductImageEditor_header .ProductImageEditor_badge {
+    display: none;
+  }
+  .ProductImageEditor_upload {
+    padding: 16px;
+  }
+  .ProductImageEditor_actions > * {
+    flex: 1;
+    min-width: 140px;
+  }
+  .ProductImageEditor_previews {
+    grid-template-columns: 1fr;
+  }
+  .ProductImageEditor_header h3 {
+    font-size: 1.05rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ProductImageEditor_spinner {
+    animation: none;
+  }
+}
+
+/* src/components/StockBadge.module.css */
+.StockBadge_badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  padding: 5px 10px;
+  border: 1px solid #d6c4b2;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+.StockBadge_unavailable {
+  background: #f3e9dd;
+  color: #765445;
+}
+.StockBadge_available {
+  background: #edf0e5;
+  color: #4d6047;
+  border-color: #ccd5bc;
+}
+.StockBadge_overlay {
+  position: absolute;
+  inset-inline: 10px;
+  bottom: 12px;
+  z-index: 3;
+  width: max-content;
+  max-width: calc(100% - 20px);
+  margin-inline: auto;
+  box-shadow: 0 2px 8px #33261b12;
+}

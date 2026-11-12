@@ -1,0 +1,26 @@
+/* Scoped to the dashboard, including its mobile menu and editor dialogs. */
+.dashboard :is(button, [role='button'], a[class*='rounded']) {
+  color: #FFFFFF;
+  background-color: #4a2e2a;
+}
+
+.dashboard :is(button, [role='button'], a[class*='rounded']) * {
+  color: #FFFFFF;
+}
+
+.dashboard :is(button, [role='button'], a[class*='rounded']):is(:hover, :active, [aria-current='page'], [aria-pressed='true']) {
+  color: #FFFFFF;
+  background-color: #3b2316;
+}
+
+.dashboard :is(button, [role='button'], a[class*='rounded']):is(:disabled, [aria-disabled='true']) {
+  color: #FFFFFF;
+  background-color: #74615b;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.dashboard :is(button, [role='button'], a[class*='rounded']):focus-visible {
+  outline: 2px solid #4a2e2a;
+  outline-offset: 3px;
+}

@@ -7,6 +7,7 @@ import StoreBrand from '@/components/StoreBrand'
 import { CloseIcon, MenuIcon } from '@/components/icons'
 import { signOut } from '@/app/admin/actions'
 import { AdminEditingProvider, AdminLink } from './AdminEditing'
+import styles from './AdminShell.module.css'
 
 const NAV_ITEMS = [
   { href: '/admin', label: 'الرئيسية' },
@@ -55,7 +56,7 @@ function AdminShellFrame({ userEmail, children }: { userEmail: string; children:
   }, [menuOpen])
 
   return (
-    <div dir="rtl" className="min-h-screen overflow-x-hidden bg-cream">
+    <div dir="rtl" className={`${styles.dashboard} min-h-screen overflow-x-hidden bg-cream`}>
       <header className="sticky top-0 z-40 flex h-[60px] items-center justify-between gap-3 border-b border-sand bg-white/90 px-4 backdrop-blur-xl lg:hidden">
         <div className="flex min-w-0 items-center gap-2">
           <button

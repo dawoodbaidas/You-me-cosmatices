@@ -1,6 +1,26 @@
 import sharp from 'sharp'
+import { createHash } from 'node:crypto'
 
 export const IMAGE_BUCKET = 'product-images'
+
+/** Verify the final bytes, including ordinary uploads, not the filename or UI flag. */
+export async function verifyProductImage(input: Buffer) {
+  const image = sharp(input, { limitInputPixels: 50_000_000, failOn: 'warning', animated: false })
+  const metadata = await image.metadata()
+  const { data, info } = await image.toColourspace('srgb').ensureAlpha().raw().toBuffer({ resolveWithObject: true })
+  let clear = 0, visible = 0
+  for (let i = 3; i < data.length; i += info.channels) {
+    if (data[i] < 255) clear++
+    if (data[i] > 0) visible++
+  }
+  return {
+    version: 1,
+    transparent: !!metadata.hasAlpha && clear > 0 && visible > 0,
+    width: info.width, height: info.height,
+    sha256: createHash('sha256').update(input).digest('hex'),
+    verified_at: new Date().toISOString(),
+  }
+}
 
 export async function originalProductImage(input: Buffer) {
   const metadata = await sharp(input, { limitInputPixels: 50_000_000, failOn: 'warning', animated: false }).metadata()
@@ -19,8 +39,7 @@ export async function approvedProductImage(input: Buffer, requireTransparency: b
     .resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
     .webp({ quality: 84, alphaQuality: 100, effort: 4 }).toBuffer()
   if (requireTransparency) {
-    const alpha = (await sharp(result).stats()).channels[3]
-    if (!alpha || alpha.min === 255 || alpha.max === 0) throw new Error('الصورة المعالجة لا تحتوي منتجاً بخلفية شفافة صالحة.')
+    if (!(await verifyProductImage(result)).transparent) throw new Error('الصورة المعالجة لا تحتوي منتجاً بخلفية شفافة صالحة.')
   }
   return result
 }

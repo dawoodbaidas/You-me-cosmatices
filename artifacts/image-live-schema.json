@@ -1,0 +1,717 @@
+{
+  "definitions": {
+    "product_image_previews": {
+      "required": [
+        "id",
+        "product_id",
+        "original_url",
+        "processed_url",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "default": "gen_random_uuid()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "product_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "expected_updated_at": {
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "original_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "processed_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "home_sections": {
+      "required": [
+        "section",
+        "updated_at"
+      ],
+      "properties": {
+        "section": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "text",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "home_section_products": {
+      "required": [
+        "section",
+        "product_id",
+        "position"
+      ],
+      "properties": {
+        "section": {
+          "description": "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `home_sections.section`.<fk table='home_sections' column='section'/>",
+          "format": "text",
+          "type": "string"
+        },
+        "product_id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `products.id`.<fk table='products' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "position": {
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "product_variants": {
+      "required": [
+        "id",
+        "product_id",
+        "label",
+        "price",
+        "is_active",
+        "sort_order",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "id": {
+          "default": "gen_random_uuid()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "product_id": {
+          "description": "Note:\nThis is a Foreign Key to `products.id`.<fk table='products' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "label": {
+          "format": "text",
+          "type": "string"
+        },
+        "price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "is_active": {
+          "default": true,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "sort_order": {
+          "default": 0,
+          "format": "int32",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "products": {
+      "required": [
+        "id",
+        "slug",
+        "name_ar",
+        "name_en",
+        "category",
+        "category_label",
+        "price",
+        "benefits",
+        "is_active",
+        "is_featured",
+        "sort_order",
+        "created_at",
+        "updated_at",
+        "original_price",
+        "discount_enabled",
+        "is_new",
+        "is_out_of_stock",
+        "image_verifications"
+      ],
+      "properties": {
+        "id": {
+          "default": "gen_random_uuid()",
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "slug": {
+          "format": "text",
+          "type": "string"
+        },
+        "name_ar": {
+          "format": "text",
+          "type": "string"
+        },
+        "name_en": {
+          "format": "text",
+          "type": "string"
+        },
+        "description": {
+          "format": "text",
+          "type": "string"
+        },
+        "category": {
+          "format": "text",
+          "type": "string"
+        },
+        "category_label": {
+          "format": "text",
+          "type": "string"
+        },
+        "price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "old_price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "image_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "badge": {
+          "format": "text",
+          "type": "string"
+        },
+        "benefits": {
+          "format": "jsonb"
+        },
+        "is_active": {
+          "default": true,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "is_featured": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "sort_order": {
+          "default": 0,
+          "format": "int32",
+          "type": "integer"
+        },
+        "created_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "updated_at": {
+          "default": "now()",
+          "format": "timestamp with time zone",
+          "type": "string"
+        },
+        "stock_quantity": {
+          "description": "NULL = not recorded, never an invented quantity. Set by the administrator.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "original_price": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "discount_enabled": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "is_new": {
+          "default": false,
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "original_image_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "processed_image_url": {
+          "format": "text",
+          "type": "string"
+        },
+        "is_out_of_stock": {
+          "default": false,
+          "description": "Independent purchase stop; never changes stock_quantity or public visibility.",
+          "format": "boolean",
+          "type": "boolean"
+        },
+        "image_verifications": {
+          "format": "jsonb"
+        }
+      },
+      "type": "object"
+    },
+    "product_categories": {
+      "required": [
+        "product_id",
+        "category_slug"
+      ],
+      "properties": {
+        "product_id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `products.id`.<fk table='products' column='id'/>",
+          "format": "uuid",
+          "type": "string"
+        },
+        "category_slug": {
+          "description": "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `store_categories.slug`.<fk table='store_categories' column='slug'/>",
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "paths": {
+    "/rpc/admin_save_home_section": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_expected_updated_at": {
+                  "format": "timestamp with time zone",
+                  "type": "string"
+                },
+                "p_ids": {
+                  "format": "uuid[]",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "p_section": {
+                  "format": "text",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "p_section",
+                "p_ids",
+                "p_expected_updated_at"
+              ],
+              "type": "object"
+            }
+          },
+          {
+            "$ref": "#/parameters/preferParams"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) admin_save_home_section"
+        ]
+      }
+    },
+    "/rpc/admin_save_product_prices": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_expected_updated_at": {
+                  "format": "timestamp with time zone",
+                  "type": "string"
+                },
+                "p_id": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "p_old_price": {
+                  "format": "numeric",
+                  "type": "number"
+                },
+                "p_price": {
+                  "format": "numeric",
+                  "type": "number"
+                },
+                "p_variants": {
+                  "format": "jsonb"
+                }
+              },
+              "required": [
+                "p_id",
+                "p_price",
+                "p_old_price",
+                "p_variants",
+                "p_expected_updated_at"
+              ],
+              "type": "object"
+            }
+          },
+          {
+            "$ref": "#/parameters/preferParams"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) admin_save_product_prices"
+        ]
+      }
+    },
+    "/rpc/admin_save_product": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_expected_updated_at": {
+                  "format": "timestamp with time zone",
+                  "type": "string"
+                },
+                "p_product": {
+                  "format": "jsonb"
+                },
+                "p_variants": {
+                  "format": "jsonb"
+                }
+              },
+              "required": [
+                "p_product",
+                "p_variants",
+                "p_expected_updated_at"
+              ],
+              "type": "object"
+            }
+          },
+          {
+            "$ref": "#/parameters/preferParams"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) admin_save_product"
+        ]
+      }
+    },
+    "/rpc/verified_scene_image": {
+      "get": {
+        "parameters": [
+          {
+            "format": "public.products",
+            "in": "query",
+            "name": "p",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) verified_scene_image"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p": {
+                  "format": "public.products",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "p"
+              ],
+              "type": "object"
+            }
+          },
+          {
+            "$ref": "#/parameters/preferParams"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) verified_scene_image"
+        ]
+      }
+    },
+    "/rpc/admin_save_product_v4": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_expected_updated_at": {
+                  "format": "timestamp with time zone",
+                  "type": "string"
+                },
+                "p_product": {
+                  "format": "jsonb"
+                },
+                "p_variants": {
+                  "format": "jsonb"
+                }
+              },
+              "required": [
+                "p_product",
+                "p_variants",
+                "p_expected_updated_at"
+              ],
+              "type": "object"
+            }
+          },
+          {
+            "$ref": "#/parameters/preferParams"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) admin_save_product_v4"
+        ]
+      }
+    },
+    "/rpc/admin_set_product_image": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_active": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_expected_updated_at": {
+                  "format": "timestamp with time zone",
+                  "type": "string"
+                },
+                "p_id": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "p_original": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_processed": {
+                  "format": "text",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "p_id",
+                "p_expected_updated_at",
+                "p_original",
+                "p_processed",
+                "p_active"
+              ],
+              "type": "object"
+            }
+          },
+          {
+            "$ref": "#/parameters/preferParams"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) admin_set_product_image"
+        ]
+      }
+    },
+    "/rpc/record_product_image_verification": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_id": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "p_source": {
+                  "format": "text",
+                  "type": "string"
+                },
+                "p_verification": {
+                  "format": "jsonb"
+                }
+              },
+              "required": [
+                "p_id",
+                "p_source",
+                "p_verification"
+              ],
+              "type": "object"
+            }
+          },
+          {
+            "$ref": "#/parameters/preferParams"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) record_product_image_verification"
+        ]
+      }
+    },
+    "/rpc/admin_move_products": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "args",
+            "required": true,
+            "schema": {
+              "properties": {
+                "p_ids": {
+                  "format": "uuid[]",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "p_target": {
+                  "format": "text",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "p_ids",
+                "p_target"
+              ],
+              "type": "object"
+            }
+          },
+          {
+            "$ref": "#/parameters/preferParams"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "(rpc) admin_move_products"
+        ]
+      }
+    }
+  }
+}

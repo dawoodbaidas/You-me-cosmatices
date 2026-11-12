@@ -117,6 +117,7 @@ export default function ProductManager({ products, total, page, initialQuery, in
 }
 
 export function FullProductEditor({ product, categories, onCancel, onSaved, onError }: { product: Product | null; categories: StoreCategory[]; onCancel: () => void; onSaved: (r: ActionResult) => void; onError: (r: ActionResult) => void }) {
+  const formRef = useRef<HTMLFormElement>(null)
   const [id] = useState(() => product?.id ?? crypto.randomUUID())
   const [variants, setVariants] = useState<ProductDraft['variants']>(() => product?.variants.map(v => ({ id: v.id, label: v.label, price: v.price, is_active: v.isActive ?? true, sort_order: v.sortOrder ?? 0 })) ?? [])
   const [categorySlugs, setCategorySlugs] = useState<string[]>(() => product?.categorySlugs ?? [])
@@ -139,11 +140,10 @@ export function FullProductEditor({ product, categories, onCancel, onSaved, onEr
     setDirty(true)
     setVariants(current => current.map((v, i) => i === index ? { ...v, ...patch } : v))
   }
-  async function save(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (busy.current || !imageChoice.confirmed) return
+  async function save(element: HTMLFormElement, choice = imageChoice): Promise<boolean> {
+    if (busy.current || !choice.confirmed || !element.reportValidity()) return false
     setError('')
-    const form = new FormData(event.currentTarget)
+    const form = new FormData(element)
     const text = (key: string) => String(form.get(key) ?? '').trim()
     const draft: ProductDraft = {
       id, updatedAt: product?.updatedAt ?? null, slug: text('slug'), name_ar: text('name_ar'), name_en: text('name_en'),
@@ -155,22 +155,22 @@ export function FullProductEditor({ product, categories, onCancel, onSaved, onEr
       is_active: form.has('is_active'), is_featured: form.has('is_featured'), sort_order: Number(text('sort_order')),
       variants: variants.map(v => ({ ...v, label: v.label.trim() })),
     }
-    try { validateProduct(draft) } catch (e) { setError((e as Error).message); return }
+    try { validateProduct(draft) } catch (e) { setError((e as Error).message); return false }
     busy.current = true
     setPending(true)
     const body = new FormData()
     body.set('product', JSON.stringify(draft))
-    if (imageChoice.processed) { body.set('image', imageChoice.processed, 'product.webp'); body.set('image_processed', 'true'); if (imageChoice.file) body.set('original_image', imageChoice.file) }
-    else if (imageChoice.file) body.set('image', imageChoice.file)
-    if (imageChoice.processed || imageChoice.file) body.set('image_confirmed', 'true')
-    if (imageChoice.restore) body.set('restore_image', 'true')
+    if (choice.processed) { body.set('image', choice.processed, 'product.webp'); body.set('image_processed', 'true'); if (choice.file) body.set('original_image', choice.file) }
+    else if (choice.file) body.set('image', choice.file)
+    if (choice.processed || choice.file) body.set('image_confirmed', 'true')
+    if (choice.restore) body.set('restore_image', 'true')
     try {
       const response = await new Promise<ActionResult>((resolve, reject) => {
         const xhr = new XMLHttpRequest()
         xhr.open('POST', '/api/admin/products')
         xhr.timeout = 120_000
         xhr.upload.onprogress = e => setStatus(e.lengthComputable ? `جارٍ إرسال البيانات والصورة… ${Math.round(e.loaded / e.total * 100)}٪` : 'جارٍ إرسال البيانات…')
-        xhr.upload.onload = () => setStatus(imageChoice.file || imageChoice.processed ? 'جارٍ رفع الصورة وحفظ المنتج…' : 'جارٍ حفظ المنتج…')
+        xhr.upload.onload = () => setStatus(choice.file || choice.processed ? 'جارٍ رفع الصورة وحفظ المنتج…' : 'جارٍ حفظ المنتج…')
         xhr.onerror = xhr.ontimeout = () => reject(new Error('تعذر الاتصال. حدّثي القائمة للتحقق من الحفظ قبل إعادة المحاولة.'))
         xhr.onload = () => { try { resolve(JSON.parse(xhr.responseText)) } catch { reject(new Error('تعذر إتمام الطلب. حدّثي القائمة للتحقق ثم حاولي مجدداً.')) } }
         setStatus('جارٍ الحفظ…')
@@ -178,10 +178,11 @@ export function FullProductEditor({ product, categories, onCancel, onSaved, onEr
       })
       if (response.ok) { setDirty(false); onSaved(response) }
       else { setError(response.message); onError(response) }
-    } catch (e) { const message = (e as Error).message; setError(message); onError({ ok: false, message }) }
+      return response.ok
+    } catch (e) { const message = (e as Error).message; setError(message); onError({ ok: false, message }); return false }
     finally { busy.current = false; setPending(false); setStatus('') }
   }
-  return <form onSubmit={save} onChange={() => setDirty(true)} className="rounded-[24px] border border-sand bg-white p-4 md:p-6">
+  return <form ref={formRef} onSubmit={event => { event.preventDefault(); void save(event.currentTarget) }} onChange={() => setDirty(true)} className="rounded-[24px] border border-sand bg-white p-4 md:p-6">
     <h2 className="mb-5 text-xl font-extrabold">{product ? `تعديل ${product.nameAr}` : 'إضافة منتج جديد'}</h2>
     <fieldset disabled={pending} className="min-w-0 space-y-5 disabled:opacity-70">
       <EditorGroup title="المعلومات الأساسية">        <Field label="الاسم العربي"><input name="name_ar" required maxLength={250} defaultValue={product?.nameAr} /></Field>
@@ -192,7 +193,7 @@ export function FullProductEditor({ product, categories, onCancel, onSaved, onEr
         <Field label="السعر الأصلي"><input name="original_price" type="number" min={discountEnabled?'0.001':'0'} max="100000" step="0.001" required value={originalPrice} onChange={event=>setOriginalPrice(event.target.value)} /></Field>
         {discountEnabled && <Field label="السعر بعد الخصم"><input name="sale_price" type="number" min="0" max="100000" step="0.001" required value={salePrice} onChange={event=>setSalePrice(event.target.value)} /><small>{Number(originalPrice)>0 && salePrice!=='' && Number(salePrice)<Number(originalPrice) ? 'خصم '+Number(((1-Number(salePrice)/Number(originalPrice))*100).toPrecision(3))+'٪' : 'يجب أن يكون السعر المخفّض أقل من السعر الأصلي.'}</small></Field>}</EditorGroup>
       <EditorGroup title="صور المنتج"><div className="min-w-0 sm:col-span-2"><ProductImageEditor productId={id} updatedAt={product?.updatedAt} imageUrl={product?.imageUrl} originalImageUrl={product?.originalImageUrl}
-        onChange={choice => { setImageChoice(choice); setDirty(true) }} /></div></EditorGroup>
+        onChange={choice => { setImageChoice(choice); setDirty(true) }} onApprove={choice => formRef.current ? save(formRef.current, choice) : Promise.resolve(false)} /></div></EditorGroup>
       <EditorGroup title="الأقسام الرئيسية والفرعية">        <fieldset className="sm:col-span-2"><legend className="mb-2 text-sm font-bold">أقسام المنتج</legend><label className="mb-3 block"><input type="checkbox" checked={!categorySlugs.length} onChange={()=>setCategorySlugs([])} /> بدون قسم</label><div className="flex flex-wrap gap-3">{categories.map(category => <label key={category.slug} className="text-sm"><input type="checkbox" checked={categorySlugs.includes(category.slug)} onChange={event => setCategorySlugs(current => event.target.checked ? [...current, category.slug] : current.filter(slug => slug !== category.slug))} /> {adminCategoryLabel(category, categories)}{!category.is_active && ' (مخفي)'}</label>)}</div>{!categories.length && <p className="text-sm">أضف قسماً من تبويب الأقسام أولاً.</p>}</fieldset></EditorGroup>
       <EditorGroup title="المخزون والتوفر">        <Field label="المخزون (فارغ إذا لم يُسجّل)"><input name="stock_quantity" type="number" min="0" max="2147483647" step="1" defaultValue={product?.stockQuantity ?? ''} /></Field>
         <div className="rounded-2xl border border-sand bg-cream p-4 sm:col-span-2">

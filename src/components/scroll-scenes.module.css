@@ -127,6 +127,7 @@
   padding: 0;
   border: 0;
   background: none;
+  box-shadow: none;
   translate: -50% 0;
   transform-origin: 50% 100%;
   will-change: transform;
@@ -149,7 +150,10 @@
   pointer-events: auto;
   touch-action: pan-y;
 }
-.heroProduct:focus-visible .heroHitArea { outline: 2px solid var(--gold); outline-offset: 6px; border-radius: 8px; }
+/* Global button focus rings frame the entire transparent image canvas. Keep
+   keyboard focus visible on the cutout itself instead of drawing a rectangle. */
+.hero .heroProduct:focus-visible { outline: none !important; }
+.heroProduct:focus-visible .cutout { filter: drop-shadow(0 0 3px var(--gold)); }
 .heroProduct[inert] .heroHitArea { pointer-events: none; }
 
 .heroMain { z-index: 5; height: min(92%, 46svh); max-width: 48vw; width: auto; }

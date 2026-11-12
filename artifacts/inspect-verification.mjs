@@ -1,0 +1,3 @@
+﻿import env from '@next/env';import {writeFile} from 'node:fs/promises';env.loadEnvConfig(process.cwd());
+const base=process.env.NEXT_PUBLIC_SUPABASE_URL,key=process.env.SUPABASE_SECRET_KEY,headers={apikey:key,Authorization:'Bearer '+key};
+const r=await fetch(base+'/rest/v1/products?select=id,slug,image_url,original_image_url,processed_image_url,image_verifications,updated_at&limit=5',{headers});const data=await r.json();await writeFile('artifacts/image-live-products.json',JSON.stringify(data,null,2));console.log(JSON.stringify(data.map(p=>({slug:p.slug,verification:p.image_verifications,original:p.original_image_url===p.image_url,processed:p.processed_image_url===p.image_url})),null,2));

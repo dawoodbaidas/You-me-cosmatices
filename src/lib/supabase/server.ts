@@ -21,6 +21,9 @@ export async function createClient() {
   const cookieStore = await cookies()
 
   return createServerClient(url, anonKey, {
+    // Authenticated editor snapshots and their concurrency tokens must be fresh.
+    // The public catalogue uses its own explicitly revision-keyed cache.
+    global: { fetch: (input, init) => fetch(input, { ...init, cache: 'no-store' }) },
     cookies: {
       getAll() {
         return cookieStore.getAll()

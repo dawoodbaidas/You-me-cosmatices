@@ -8,6 +8,7 @@ import { invalidateStoreCatalogue } from '@/lib/store-cache'
 import { UUID } from '@/lib/products/editor'
 import { mapProduct } from '@/lib/products/map'
 import { validateCategory, type CategoryDraft } from '@/lib/category-editor'
+import { verifySceneSelection } from '@/lib/products/verification'
 
 export interface ActionResult {
   ok: boolean
@@ -210,8 +211,22 @@ export async function saveHomeSection(section: string, ids: string[], updatedAt:
   if (!(await isAdmin())) return { ok: false, message: 'غير مصرح.' }
   if (!['hero', 'bestsellers'].includes(section) || !Array.isArray(ids) || ids.length > (section === 'hero' ? 5 : 100) || ids.some(id => !UUID.test(id)) || new Set(ids).size !== ids.length || !Number.isFinite(Date.parse(updatedAt))) return { ok: false, message: 'قائمة المنتجات غير صالحة (الحد الأقصى للهيرو خمسة منتجات).' }
   const client = await createClient()
+  try { await verifySceneSelection(client, ids) }
+  catch (error) { return { ok: false, message: error instanceof Error ? error.message : 'تعذّر التحقق من صور المنتجات.' } }
   const { error } = await client.rpc('admin_save_home_section', { p_section: section, p_ids: ids, p_expected_updated_at: updatedAt })
-  if (error) return { ok: false, message: 'تعذّر الحفظ أو تغيّرت القائمة في جلسة أخرى. حدّث الصفحة ثم أعد المحاولة.' }
+  if (error) {
+    // Preserve the database conflict check; other RPC failures are not conflicts.
+    console.error('admin_save_home_section failed', { section, code: error.code, message: error.message })
+    return { ok: false, message: error.code === '40001'
+      ? 'تغيّرت القائمة في جلسة أخرى. حدّث الصفحة ثم أعد المحاولة.'
+      : error.code === '23514'
+        ? 'تحتاج اختيارات الواجهة صوراً شفافة متحققاً منها. احفظي صورة المنتج ثم أعيدي المحاولة.'
+      : error.code === '42501'
+        ? 'تعذّر الحفظ: لا توجد صلاحية لتحديث القائمة. سجّل الدخول مجددًا.'
+        : 'تعذّر حفظ القائمة. حاول مجددًا، وإذا استمر الخطأ تواصل مع مسؤول المتجر.' }
+  }
   invalidateStoreCatalogue()
+  // /admin only invalidates the dashboard index, not this nested editor.
+  revalidatePath('/admin/storefront')
   return { ok: true, message: 'تم حفظ الاختيارات والترتيب.' }
 }

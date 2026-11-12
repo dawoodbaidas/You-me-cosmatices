@@ -1,0 +1,10 @@
+﻿import env from '@next/env';
+import {writeFile} from 'node:fs/promises';
+env.loadEnvConfig(process.cwd());
+const base=process.env.NEXT_PUBLIC_SUPABASE_URL, key=process.env.SUPABASE_SECRET_KEY;
+const headers={apikey:key,Authorization:'Bearer '+key};
+const r=await fetch(base+'/rest/v1/',{headers:{...headers,Accept:'application/openapi+json'}});const schema=await r.json();
+const relevant={definitions:Object.fromEntries(Object.entries(schema.definitions??{}).filter(([k])=>/product|image|home/.test(k))),paths:Object.fromEntries(Object.entries(schema.paths??{}).filter(([k])=>/rpc.*(image|product|home)/.test(k)))};
+await writeFile('artifacts/image-live-schema.json',JSON.stringify(relevant,null,2));
+console.log('schema status',r.status);for(const [name,def] of Object.entries(relevant.definitions))console.log(name,Object.keys(def.properties??{}));
+console.log('RPCs',Object.keys(relevant.paths));
